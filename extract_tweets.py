@@ -52,11 +52,12 @@ def saveTweetsMongo(collection, tweets):
     cnt = 0
     for t in tweets:
         t['_id'] = t['id']
-        t.pop('id')
+        newTweet = {'_id':t['id'], 'text':t['full_text'], 'date':t['created_at'], 'user':t['user']['screen_name']}
         try:
-            collection.insert_one(t)
+            collection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))
             cnt += 1
         except DuplicateKeyError:
             print("{} already in DB".format(t['_id']))
     print("--- Added {} new tweets ---".format(cnt))
+

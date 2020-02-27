@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import tweepy
 import json
 from pymongo.errors import DuplicateKeyError
@@ -52,7 +54,8 @@ def saveTweetsMongo(collection, tweets):
     cnt = 0
     for t in tweets:
         t['_id'] = t['id']
-        newTweet = {'_id':t['id'], 'text':t['full_text'], 'date':t['created_at'], 'user':t['user']['screen_name']}
+        date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y')
+        newTweet = {'_id':t['id'], 'text':t['full_text'], 'date':date}
         try:
             collection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))

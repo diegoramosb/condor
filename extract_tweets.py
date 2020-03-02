@@ -2,6 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 import tweepy
 import json
+from pymongo import MongoClient
 from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 
@@ -17,6 +18,14 @@ twitterKeys = {
 auth = tweepy.OAuthHandler(twitterKeys['apiKey'], twitterKeys['apiSecret'])
 auth.set_access_token(twitterKeys['accessTokenKey'], twitterKeys['accesTokenSecret'])
 api = tweepy.API(auth)
+
+"""MongoDB connection"""
+# client = MongoClient('172.24.99.115', 27017)
+client = MongoClient('localhost', 27017)
+db = client['proyecto2020']
+tweets = db['tweets']
+users = db['usuarios']
+
 
 def extractTweetsApi(accounts, nTweets):
     """
@@ -61,52 +70,33 @@ def saveTweetsMongo(collection, tweets, user):
         try:
             collection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))
+            cnt += 1
 
         except DuplicateKeyError:
             print("{} already in DB".format(t['_id']))
-
 
         if (user.find_one({"_id": t['user']['id']})) is None:
                 newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name']}
                 user.insert_one(newuser)
     print("--- Added {} new tweets ---".format(cnt))
 
+def search_by_word(word):
+    return list(tweets.find({"$text": {"$search": word}}))
 
-
-def search_by_word(tweets, word):
-
-    txt = tweets.find({ "$text": { "$search": word}})
-
-    for texto in txt:
-        pprint(texto)
-
-def search_by_phrases(tweets, ph, user):
-
+def search_by_phrases(ph, user):
     txt = tweets.find({ "$text": { "$search": ph}})
 
     for texto in txt:
-        us= user.find({'_id': texto['userId']})
-
         pprint(texto)
-        pprint(us)
+        cursor = user.find({'_id': texto['userId']})
+        for usr in cursor:
+            pprint(usr)
 
-
-
-def search_by_user (user, name, tweets):
-
-    us = user.find({"$text": {"$search": name}})
-
+def search_by_user (name):
+    us = users.find({"$text": {"$search": name}})
     for inf in us:
-        tw = tweets.find({'userId': inf['_id']})
-        for t in tw:
-            pprint(t)
+        return list(tweets.find({'userId': inf['_id']}))
 
 
-def search_by_date (tweets,user):
-    startDate = datetime(2020, 2, 19, 0, 0, 0)
-    endDate = datetime(2020, 3, 2, 0, 0, 0)
-
-    txt = tweets.find({"date": {"$gte": startDate, "$lt": endDate}})
-
-    for texto in txt:
-        pprint(texto)
+def search_by_date (startDate, endDate):
+    return list(tweets.find({"date": {"$gte": startDate, "$lt": endDate}}))

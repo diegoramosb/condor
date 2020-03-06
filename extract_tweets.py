@@ -15,8 +15,6 @@ auth.set_access_token(twitterKeys['accessTokenKey'], twitterKeys['accesTokenSecr
 api = tweepy.API(auth)
 
 
-
-
 def extractTweetsApi(accounts, nTweets):
     """
     Extracts tweets from the selected accounts and returns a dict array containing them
@@ -32,16 +30,5 @@ def extractTweetsApi(accounts, nTweets):
             jsons.append(parsed)
     return jsons
 
-
-def searchTweets(string, tweetArray):
-    """
-    Searchs for a string in a tweet dict array
-    :param string: string to search
-    :param tweetArray: string of tweets in dict format
-    :return: the tweets with the searched string
-    """
-    ans = []
-    for tweet in tweetArray:
-        if tweet['full_text'].find(string) != -1:
-            ans.append(tweet)
-    return ans
+def searchTweetById(id):
+    return api.get_status(id)._json

@@ -41,7 +41,16 @@ def saveTweetsMongo(tweets):
     for t in tweets:
         t['_id'] = t['id']
         date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y')
-        newTweet = {'_id':t['id'], 'text':t['full_text'], 'date':date, 'userId':t['user']['id']}
+        newTweet = {
+            '_id':t['id'],
+            'url':'twitter.com/{}/status/{}'.format(t['user']['screen_name'],t['id']),
+            'text':t['full_text'],
+            'date':date,
+            'userId':t['user']['id'],
+            'retweet_count':[t['retweet_count']],
+            'favorite_count':[t['retweet_count']],
+            'request_times':[datetime.now()]
+        }
         try:
             tweetsCollection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))
@@ -54,6 +63,5 @@ def saveTweetsMongo(tweets):
                 newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name']}
                 usersCollection.insert_one(newuser)
     print("--- Added {} new tweets ---".format(cnt))
-
 
 

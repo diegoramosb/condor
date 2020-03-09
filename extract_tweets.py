@@ -30,5 +30,15 @@ def extractTweetsApi(accounts, nTweets):
             jsons.append(parsed)
     return jsons
 
+
+def extractTweetsSinceId(account, nTweets, id):
+    jsons = []
+    for status in tweepy.Cursor(api.user_timeline, screen_name=account, tweet_mode="extended", since_id=id-1).items(nTweets):
+        jsonStr = json.dumps(status._json)
+        parsed = json.loads(jsonStr)
+        jsons.append(parsed)
+    return jsons
+
+
 def searchTweetById(id):
     return api.get_status(id)._json

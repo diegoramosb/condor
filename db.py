@@ -78,3 +78,4 @@ def updateTweets(tweets):
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"favorite_count": t["favorite_count"]}})
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"request_times": datetime.now()}})
     print("--- Updated {} tweets ---".format(len(tweets)))
+

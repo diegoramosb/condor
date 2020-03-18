@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
-
-
 @Component({
-  selector: 'app-bubble-chart',
-  templateUrl: './bubble-chart.component.html',
-  styleUrls: ['./bubble-chart.component.css']
+  selector: 'app-my-bar-chart',
+  templateUrl: './my-bar-chart.component.html',
+  styleUrls: ['./my-bar-chart.component.css']
 })
-export class BubbleChartComponent implements OnInit {
-
-
+export class MyBarChartComponent implements OnInit {
   constructor() { }
   public barChartOptions = {
     scaleShowVerticalLines: false,

@@ -12,6 +12,6 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   public getBubbleData(url?: string) {
-    return this.httpClient.get(`${this.apiUrl}/bubble`)
+    return this.httpClient.get(`${this.apiUrl}/graphs`)
   }
 }

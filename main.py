@@ -2,6 +2,7 @@ from extract_tweets import *
 from pprint import pprint
 from db import *
 from graphs import *
+import pprint
 
 accounts = ['@ELTIEMPO', '@elespectador', '@RevistaSemana']
 word = "coronavirus"
@@ -26,10 +27,10 @@ updateTweetsToday()
 # pprint(search_by_user(username))
 # pprint(search_by_date(datetime(2020, 3, 1, 0, 0, 0), datetime(2020, 3, 2, 23, 59, 0)))
 
-tweet= search_by_keywords(word)
-showWordFrequency(word)
-showFavsRtsBubble(word)
+print(search_by_keywords(word))
+show_word_frequency(word)
+show_favs_rts(word)
 
-showHistoricoFvsRts(tweet[1])
+
 
 print("done")

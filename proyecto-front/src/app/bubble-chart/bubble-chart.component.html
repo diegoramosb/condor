@@ -1,1 +1,8 @@
-<canvas id="myChart" width="600" height="400"></canvas>
+<div style="display: block;">
+  <canvas baseChart
+    [datasets]="bubbleChartData"
+    [options]="bubbleChartOptions"
+    [legend]="bubbleChartLegend"
+    [chartType]="bubbleChartType">
+  </canvas>
+</div>

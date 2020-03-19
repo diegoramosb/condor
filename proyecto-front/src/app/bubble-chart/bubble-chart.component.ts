@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
-
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { Color } from 'ng2-charts';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -9,19 +10,47 @@ import { Chart } from 'chart.js';
 })
 export class BubbleChartComponent implements OnInit {
 
-
-  constructor() { }
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
+  public bubbleChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      xAxes: [{
+        ticks: {
+          min: 0,
+          max: 30,
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 30,
+        }
+      }]
+    }
   };
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
-  public barChartLegend = true;
-  public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+  public bubbleChartType: ChartType = 'bubble';
+  public bubbleChartLegend = true;
+
+  public bubbleChartData: ChartDataSets[] = [
+    {
+      data: [
+        { x: 20, y: 10, r: 15 },
+      ],
+      label: 'Nombre 1',
+    },
+    {
+      data: [
+        { x: 10, y: 16, r: 10 },
+      ],
+      label: 'Nombre 2',
+    },
   ];
+
+  constructor(private apiService: ApiService) { }
+
   ngOnInit() {
+    this.apiService.getBubbleData().subscribe((res) => {
+      console.log(res)
+    })
   }
+
 }

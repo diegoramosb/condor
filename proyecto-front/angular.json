@@ -2,7 +2,6 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-
   "projects": {
     "proyecto-front": {
       "projectType": "application",
@@ -25,10 +24,11 @@
               "src/assets"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": [
-                    "node_modules/chart.js/dist/Chart.js",
+              "node_modules/chart.js/dist/Chart.js",
               "node_modules/hammerjs/hammer.min.js"
             ]
           },
@@ -123,6 +123,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "proyecto-front"
 }

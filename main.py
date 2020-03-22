@@ -27,9 +27,12 @@ updateTweetsToday()
 # pprint(search_by_user(username))
 # pprint(search_by_date(datetime(2020, 3, 1, 0, 0, 0), datetime(2020, 3, 2, 23, 59, 0)))
 
-print(search_by_keywords(word))
-show_word_frequency(word)
-show_favs_rts(word)
+#pprint(search_by_keywords(word))
+#show_word_frequency(word)
+#show_favs_rts(word)
+
+search_most_common_words(word)
+
 
 
 

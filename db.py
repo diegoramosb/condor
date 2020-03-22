@@ -36,6 +36,39 @@ def search_tweets_after(startDate):
 def searchUserId(id):
     return list(usersCollection.find({'_id': id}))
 
+def search_most_common_words(word):
+
+    agr =[
+        {
+            "$match": {
+                "$text": {
+                    "$search": word
+                }
+            }
+        },
+        {
+            "$project": {
+                "words": {"$split": ["$text", " "]},
+
+            }
+        },
+        {
+            "$unwind": "$words"
+
+        },
+        {
+            "$group": {
+                "_id": "$words",
+                "count": {"$sum": 1}
+
+            }
+        }
+
+    ]
+    pprint(list(tweetsCollection.aggregate(agr)))
+    return list(tweetsCollection.aggregate(agr))
+
+
 
 def saveTweetsMongo(tweets):
     """

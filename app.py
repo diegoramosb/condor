@@ -1,5 +1,4 @@
 from flask import Flask,render_template
-
 from graphs import graph
 
 app = Flask(__name__)

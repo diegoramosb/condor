@@ -15,29 +15,52 @@ export class BubbleComponent implements OnInit {
       xAxes: [{
         ticks: {
           min: 0,
-          max: 30,
+          max: 50,
         }
       }],
       yAxes: [{
         ticks: {
           min: 0,
-          max: 30,
+          max: 200,
         }
       }]
     }
   };
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartLegend = true;
+  public barChartColors: Color[] = [
+    {
+      backgroundColor: "rgba(29, 161, 243, 0.5)",
+      hoverBackgroundColor: "rgba(29, 161, 243, 1)"
+    },
+    {
+      backgroundColor: "rgba(25, 207, 134, 0.5)",
+      hoverBackgroundColor: "rgba(25, 207, 134, 1)"
+    },
+    {
+      backgroundColor: "rgba(232, 28, 79, 0.5)",
+      hoverBackgroundColor: "rgba(232, 28, 79, 1)"
+    },
+  ];
 
   public bubbleChartData: ChartDataSets[] = [
     {
       data: [
-        { x: 10, y: 10, r: 10 },
-        { x: 15, y: 5, r: 15 },
-        { x: 26, y: 12, r: 23 },
-        { x: 7, y: 8, r: 8 },
+        { x: 50, y: 123, r: 10 },
       ],
-      label: 'Series A',
+      label: 'Cuenta1',
+    },
+    {
+      data: [
+        { x: 15, y: 89, r: 5 },
+      ],
+      label: 'Cuenta2',
+    },
+    {
+      data: [
+        { x: 24, y: 150, r: 16 },
+      ],
+      label: 'Cuenta3',
     },
   ];
 

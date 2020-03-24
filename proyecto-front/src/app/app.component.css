@@ -1,5 +1,8 @@
-.graphComponent {
-    
+
+
+#asdf {
+    border-color: black;
+    border-style: solid;
 }
 
 .graphCard {
@@ -7,4 +10,51 @@
     margin-bottom: 10px;
     margin-left: 5px;
     margin-right: 5px;
+    height: 280px;
+    /* width: inherit; */
+}
+
+#graphCardHeader {
+    height: 50px;
+}
+
+#cardBody {
+}
+
+
+.drawer {
+    /* background-color: #f4c2c2; */
+    background-color:white;
+}
+
+.wordSearch {
+    margin-left: 4px;
+}
+
+mat-drawer-content {
+    background-color: #e6e6e6;
+    height: 100vh;
+}
+
+mat-drawer {
+    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+mat-grid-tile {
+    background-color: black;
+    margin: 5px
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+button {
+    background-color: #1da1f3;
+    color: white;
 }

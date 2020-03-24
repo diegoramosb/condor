@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { Label, Color } from 'ng2-charts';
 
 @Component({
   selector: 'app-bar-historic',
@@ -12,14 +12,24 @@ export class BarHistoricComponent implements OnInit {
   public barChartOptions: ChartOptions = {
     responsive: true,
   };
-  public barChartLabels: Label[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public barChartLabels: Label[] = ['8:00', '10:00', '15:00'];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
+  public barChartColors: Color[] = [
+    {
+      backgroundColor: "rgba(25, 207, 134, 0.5)",
+      hoverBackgroundColor: "rgba(25, 207, 134, 1)"
+    },
+    {
+      backgroundColor: "rgba(232, 28, 79, 0.5)",
+      hoverBackgroundColor: "rgba(232, 28, 79, 1)"
+    },
+  ];
 
   public barChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+    { data: [65, 123, 286], label: 'Retweets' },
+    { data: [121, 374, 562], label: 'Likes' }
   ];
 
   constructor() { }

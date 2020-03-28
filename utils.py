@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from flask import Response
 import json
 
@@ -15,4 +16,11 @@ def list_to_json(lista):
     respuesta = []
     for l in lista:
         respuesta.append(obj_to_json(l,False))
-    return json.dumps(respuesta)
+    return json.dumps(respuesta, cls=DateTimeEncoder)
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)

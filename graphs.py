@@ -29,6 +29,23 @@ def show_word_frequency(word):
     plt.title('Número de menciones de "{}"'.format(word))
     plt.show()
 
+@graph.route('/tweetsbyword', methods=['GET'])
+def show_tweets_by_word():
+    word = request.args.get('word')
+    tweets= search_by_keywords(word)
+
+    tweets_response = utils.list_to_json(tweets)
+    return utils.JSONResponse(tweets_response)
+
+
+@graph.route('/tweetsbyuser', methods=['GET'])
+def show_tweets_by_user():
+    user = request.args.get('user')
+    tweets= search_by_user(user)
+
+    tweets_response = utils.list_to_json(tweets)
+    return utils.JSONResponse(tweets_response)
+
 
 @graph.route('/graphs', methods=['GET'])
 def show_favs_rts():

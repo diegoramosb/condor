@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color } from 'ng2-charts';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-bubble',
@@ -64,9 +65,10 @@ export class BubbleComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+    this.apiService.getBubbleData()
   }
 
 }

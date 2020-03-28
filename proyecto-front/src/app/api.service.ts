@@ -7,11 +7,11 @@ import { BubbleData } from './models/bubble-data'
 })
 export class ApiService {
 
-  apiUrl: string = '25.25.171.136'
+  apiUrl: string = 'http://localhost:9090'
 
   constructor(private httpClient: HttpClient) {}
 
   public getBubbleData(url?: string) {
-    return this.httpClient.get(`${this.apiUrl}/graphs?word=coronavirus`)
+    return this.httpClient.get(`${this.apiUrl}/`).subscribe(ans => {console.log(ans)})
   }
 }

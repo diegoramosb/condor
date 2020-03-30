@@ -17,7 +17,6 @@ import { BarHistoricComponent } from './bar-historic/bar-historic.component';
 import { BubbleComponent } from './bubble/bubble.component';
 import { GraphComponent } from './graph/graph.component';
 import { WordFreqComponent } from './word-freq/word-freq.component';
-import { D3GraphComponent } from './d3-graph/d3-graph.component';
 
 @NgModule({
   declarations: [
@@ -25,9 +24,8 @@ import { D3GraphComponent } from './d3-graph/d3-graph.component';
     BarHistoricComponent,
     BubbleComponent,
     GraphComponent,
-    WordFreqComponent,
-    D3GraphComponent
-  ],
+    WordFreqComponent
+    ],
   imports: [
     BrowserModule,
     HttpClientModule,

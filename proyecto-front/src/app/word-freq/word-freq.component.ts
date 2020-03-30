@@ -11,7 +11,17 @@ export class WordFreqComponent implements OnInit {
 
   public barChartOptions: ChartOptions = {
     responsive: true,
-    
+    legend: {
+      display: false
+    },
+    scales: {
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: "Frecuencia"
+        }
+      }]
+    }
   };
   public barChartLabels: Label[] = ['Palabra1', 'Palabra2', 'Palabra3', 'Palabra4', 'Palabra5', 'Palabra6', 'Palabra7'];
   public barChartType: ChartType = 'horizontalBar';

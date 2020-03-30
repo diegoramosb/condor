@@ -11,6 +11,14 @@ export class BarHistoricComponent implements OnInit {
 
   public barChartOptions: ChartOptions = {
     responsive: true,
+    scales: {
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: "Hora de consulta"
+        }
+      }]
+    }
   };
   public barChartLabels: Label[] = ['8:00', '10:00', '15:00'];
   public barChartType: ChartType = 'bar';

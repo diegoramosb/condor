@@ -11,17 +11,32 @@ export class GraphComponent implements OnInit {
 
   public scatterChartOptions: ChartOptions = {
     responsive: true,
+    legend: {
+      display: false
+    },
+    tooltips: {
+      intersect: false,
+      mode: "nearest"
+    },
     scales: {
       xAxes: [{
+        gridLines: {
+          display: false
+        },
         ticks: {
           min: 0,
           max: 50,
+          display: false
         }
       }],
       yAxes: [{
+        gridLines: {
+          display: false
+        },
         ticks: {
           min: 0,
           max: 10,
+          display: false
         }
       }]
     }
@@ -57,7 +72,8 @@ export class GraphComponent implements OnInit {
       label: 'Palabra1',
       type: 'line',
       fill: false,
-      borderColor: "#E9F50F",
+      borderColor: "grey",
+      pointBackgroundColor: "rgba(0, 0, 0, 0)",
       pointRadius: 0
     },
     {
@@ -65,7 +81,8 @@ export class GraphComponent implements OnInit {
       label: 'Palabra2',
       type: 'line',
       fill: false,
-      borderColor: "#F50FDE",
+      borderColor: "grey",
+      pointBackgroundColor: "rgba(0, 0, 0, 0)",
       pointRadius: 0
     },
   ];

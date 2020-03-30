@@ -14,12 +14,20 @@ export class BubbleComponent implements OnInit {
     responsive: true,
     scales: {
       xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: "Retweets"
+        },
         ticks: {
           min: 0,
           max: 50,
         }
       }],
       yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: "Likes"
+        },
         ticks: {
           min: 0,
           max: 200,

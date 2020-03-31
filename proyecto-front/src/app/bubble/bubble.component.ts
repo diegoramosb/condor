@@ -76,7 +76,7 @@ export class BubbleComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.apiService.getBubbleData()
+    // this.apiService.getBubbleData()
   }
 
 }

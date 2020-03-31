@@ -15,12 +15,14 @@ def updateTweetsToday():
     for t in tweets:
         updatedTweets.append(searchTweetById(t["_id"]))
     updateTweets(updatedTweets)
+    for t in updatedTweets:
+        print(t["id"])
+    print("-----------")
 
 updateTweetsToday()
 
-
-#tweets = extractTweetsApi([accounts[0]], 10)
-#saveTweetsMongo(tweets)
+# tweets = extractTweetsApi(accounts, 20)
+# saveTweetsMongo(tweets)
 
 #results = search_by_word(word)
 # print(search_by_string(string))
@@ -31,7 +33,7 @@ updateTweetsToday()
 #show_word_frequency(word)
 #show_favs_rts(word)
 
-search_most_common_words(word)
+# search_most_common_words(word)
 
 
 

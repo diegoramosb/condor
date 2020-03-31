@@ -4,8 +4,8 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 
 """MongoDB connection"""
-# client = MongoClient('172.24.99.115', 27017)
-client = MongoClient('localhost', 27017)
+client = MongoClient('172.24.99.115', 27017)
+# client = MongoClient('localhost', 27017)
 db = client['proyecto2020']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']

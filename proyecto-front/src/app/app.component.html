@@ -23,64 +23,18 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <mat-card class="graphCard">
-            <div class="row" id="graphCardHeader">
-              <div class="col-md-6">
-                <button style="margin-left: 4px; margin-top: 6px;" mat-button>Actualizar</button>
-              </div>
-            </div>
-            <div class="row">
-              <span class="col-md-1"></span>
-              <app-bar-historic></app-bar-historic>
-              <span class="col-md-1"></span>
-            </div>
-          </mat-card>
+          <app-bar-historic></app-bar-historic>
         </div>
         <div class="col-md-6">
-          <mat-card class="graphCard">
-            <div class="row" id="graphCardHeader">
-              <mat-form-field class="wordSearch">
-                <mat-label>Buscar por palabra</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </div>
-            <div class="row">
-              <span class="col-md-1"></span>
-              <app-bubble></app-bubble>
-              <span class="col-md-1"></span>
-            </div>
-          </mat-card>
+          <app-bubble></app-bubble>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <mat-card class="graphCard">
-            <div class="row" id="graphCardHeader">
-              <div class=col-md-6>
-                <mat-form-field class="wordSearch">
-                  <mat-label>Buscar por palabra</mat-label>
-                  <input matInput>
-                </mat-form-field>
-              </div>
-              <div class="col-md-1">
-                <mat-checkbox>Palabra1</mat-checkbox>
-              </div>
-            </div>
-            <div class="row" id="cardBody">
-              <span class="col-md-1"></span>
-              <app-graph></app-graph>
-              <span class="col-md-1"></span>
-            </div>
-          </mat-card>
+          <app-graph></app-graph>
         </div>
         <div class="col-md-6">
-          <mat-card class="graphCard">
-            <div class="row" id="cardBody">
-              <span class="col-md-1"></span>
-              <app-word-freq></app-word-freq>
-              <span class="col-md-1"></span>
-            </div>
-          </mat-card>
+          <app-word-freq></app-word-freq>
         </div>
       </div>
     </div>

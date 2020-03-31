@@ -1,9 +1,18 @@
-<div>
-  <canvas baseChart responsive=true height="220px" width="450px"
-    [datasets]="bubbleChartData"
-    [options]="bubbleChartOptions"
-    [legend]="bubbleChartLegend"
-    [chartType]="bubbleChartType"
-    [colors]="barChartColors">
-  </canvas>
-</div>
+<mat-card class="graphCard">
+  <div class="row" id="graphCardHeader">
+    <mat-form-field class="wordSearch">
+      <mat-label>Buscar por palabra</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <span class="col-md-1"></span>
+    <div>
+      <canvas baseChart responsive=true height="220px" width="450px" [datasets]="bubbleChartData"
+        [options]="bubbleChartOptions" [legend]="bubbleChartLegend" [chartType]="bubbleChartType"
+        [colors]="barChartColors">
+      </canvas>
+    </div>
+    <span class="col-md-1"></span>
+  </div>
+</mat-card>

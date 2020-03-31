@@ -48,23 +48,26 @@ export class BarHistoricComponent implements OnInit {
     { data: [], label: 'Likes' }
   ];
 
+  public text = "";
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
   }
 
   onEnter(word: string) {
-    var labels = []; 
+    var labels = [];
     var likes = [];
     var retweets = [];
     this.apiService.getHistoricData(word).subscribe((data: []) => {
-      data.forEach(element => {
+      this.text = data['text'];
+      data['hist'].forEach(element => {
         labels.push(element['hour'])
         likes.push(element['numFavs'])
         retweets.push(element['numRts'])
       });
     });
     this.barChartLabels = labels;
-    this.barChartData = [{data: retweets, label:'Retweets'}, {data: likes, label:'Likes'}];
+    this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
   }
 }

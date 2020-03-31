@@ -3,12 +3,16 @@
     <div class=col-md-6>
       <mat-form-field class="wordSearch">
         <mat-label>Buscar por palabra</mat-label>
-        <input matInput>
+        <input #box (keyup.enter)="onEnter(box.value)" matInput>
       </mat-form-field>
     </div>
-    <div class="col-md-1">
-      <mat-checkbox>Palabra1</mat-checkbox>
-    </div>
+    <!-- <div *ngFor="let row of wordGroup()">
+      <div *ngFor="let word of row">
+        <div class="col-md-1">
+          <mat-checkbox>{{word}}</mat-checkbox>
+        </div>
+      </div>
+    </div> -->
   </div>
   <div class="row" id="cardBody">
     <span class="col-md-1"></span>

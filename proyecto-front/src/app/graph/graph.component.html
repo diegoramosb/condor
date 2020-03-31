@@ -1,7 +1,22 @@
-<div>
-  <canvas baseChart responsive=true height="220px" width="450px"s
-    [datasets]="scatterChartData"
-    [options]="scatterChartOptions"
-    [chartType]="scatterChartType">
-  </canvas>
-</div>
+<mat-card class="graphCard">
+  <div class="row" id="graphCardHeader">
+    <div class=col-md-6>
+      <mat-form-field class="wordSearch">
+        <mat-label>Buscar por palabra</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+    <div class="col-md-1">
+      <mat-checkbox>Palabra1</mat-checkbox>
+    </div>
+  </div>
+  <div class="row" id="cardBody">
+    <span class="col-md-1"></span>
+    <div>
+      <canvas baseChart responsive=true height="220px" width="450px" s [datasets]="scatterChartData"
+        [options]="scatterChartOptions" [chartType]="scatterChartType">
+      </canvas>
+    </div>
+    <span class="col-md-1"></span>
+  </div>
+</mat-card>

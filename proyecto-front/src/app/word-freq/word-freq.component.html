@@ -1,11 +1,17 @@
-<div>
-  <canvas baseChart responsive=true height="270px" width="450px"
-    [datasets]="barChartData"
-    [labels]="barChartLabels"
-    [options]="barChartOptions"
-    [plugins]="barChartPlugins"
-    [legend]="barChartLegend"
-    [chartType]="barChartType"
-    [colors]="barChartColors">
-  </canvas>
-</div>
+<mat-card class="graphCard">
+  <div class="row" id="cardBody">
+    <span class="col-md-1"></span>
+    <div>
+      <canvas baseChart responsive=true height="270px" width="450px"
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [chartType]="barChartType"
+        [colors]="barChartColors">
+      </canvas>
+    </div>
+    <span class="col-md-1"></span>
+  </div>
+</mat-card>

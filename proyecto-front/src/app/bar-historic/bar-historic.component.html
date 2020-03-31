@@ -1,11 +1,21 @@
-<div>
-  <canvas baseChart responsive=true height="220px" width="450px"
-    [datasets]="barChartData"
-    [labels]="barChartLabels"
-    [options]="barChartOptions"
-    [plugins]="barChartPlugins"
-    [legend]="barChartLegend"
-    [chartType]="barChartType"
-    [colors]="barChartColors">
-  </canvas>
-</div>
+<mat-card class="graphCard">
+  <div class="row" id="graphCardHeader">
+    <mat-form-field class="wordSearch">
+      <mat-label>Buscar por palabra</mat-label>
+      <input #box (keyup.enter)="onEnter(box.value)" matInput>
+    </mat-form-field>
+    <div class="col-md-6">
+      <button style="margin-left: 4px; margin-top: 6px;" mat-button>Actualizar</button>
+    </div>
+  </div>
+  <div class="row">
+    <span class="col-md-1"></span>
+    <div>
+      <canvas baseChart responsive=true height="220px" width="450px" [datasets]="barChartData" [labels]="barChartLabels"
+        [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType"
+        [colors]="barChartColors">
+      </canvas>
+    </div>
+    <span class="col-md-1"></span>
+  </div>
+</mat-card>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-bar-historic',
@@ -17,10 +18,17 @@ export class BarHistoricComponent implements OnInit {
           display: true,
           labelString: "Hora de consulta"
         }
-      }]
+      }],
+      yAxes: [
+        {
+          ticks: {
+            min: 0
+          }
+        }
+      ]
     }
   };
-  public barChartLabels: Label[] = ['8:00', '10:00', '15:00'];
+  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
@@ -36,13 +44,27 @@ export class BarHistoricComponent implements OnInit {
   ];
 
   public barChartData: ChartDataSets[] = [
-    { data: [65, 123, 286], label: 'Retweets' },
-    { data: [121, 374, 562], label: 'Likes' }
+    { data: [], label: 'Retweets' },
+    { data: [], label: 'Likes' }
   ];
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
   }
 
+  onEnter(word: string) {
+    var labels = []; 
+    var likes = [];
+    var retweets = [];
+    this.apiService.getHistoricData(word).subscribe((data: []) => {
+      data.forEach(element => {
+        labels.push(element['hour'])
+        likes.push(element['numFavs'])
+        retweets.push(element['numRts'])
+      });
+    });
+    this.barChartLabels = labels;
+    this.barChartData = [{data: retweets, label:'Retweets'}, {data: likes, label:'Likes'}];
+  }
 }

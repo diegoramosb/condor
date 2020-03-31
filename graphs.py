@@ -47,7 +47,7 @@ def show_tweets_by_user():
     return utils.JSONResponse(tweets_response)
 
 
-@graph.route('/graphs', methods=['GET'])
+@graph.route('/bubble', methods=['GET'])
 def show_favs_rts():
     word = request.args.get('word')
 #x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
@@ -93,15 +93,14 @@ def show_favs_rts():
 
 
 # se pasa una palabra y un dia
-@graph.route('/chart', methods=['GET'])
+@graph.route('/historic', methods=['GET'])
 def show_chart():
     word = request.args.get('word')
     #dayy = request.args.get('day')
     tweets = search_by_keywords(word)
     tweet = tweets[-1]
 
-    pprint(tweet['_id'])
-    dat = datetime(2020, 3, 17)
+    pprint(tweets[-1])
     rts = []
     favs = []
     horas =[]
@@ -110,15 +109,16 @@ def show_chart():
     rt = tweet['retweet_count']
     fav = tweet['favorite_count']
 
-    for req in reversed(requests):
-        if req.day == dat.day:
-            horas.append(req.hour)
+    for req in requests:
+        if req.day == datetime.today().day:
+            horas.append(req.strftime("%H:%M"))
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
-    pprint(rts)
+    # pprint(rts)
     m = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
+    print(m)
 
-    pprint(json.dumps(m))
+    # pprint(json.dumps(m))
     chart_response = json.dumps(m)
     return utils.JSONResponse(chart_response)
 

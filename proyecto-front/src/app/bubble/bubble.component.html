@@ -2,7 +2,7 @@
   <div class="row" id="graphCardHeader">
     <mat-form-field class="wordSearch">
       <mat-label>Buscar por palabra</mat-label>
-      <input matInput>
+      <input #box (keyup.enter)="onEnter(box.value)" matInput>
     </mat-form-field>
   </div>
   <div class="row">

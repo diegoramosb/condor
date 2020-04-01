@@ -6,7 +6,10 @@ from statistics import mean
 from db import *
 import json
 
+from extract_tweets import searchTweetById, extractTweetsApi
+
 graph = Blueprint('graphs', __name__)
+
 
 def show_word_frequency(word):
     userIds = []
@@ -28,6 +31,8 @@ def show_word_frequency(word):
     plt.xticks(n, userNames)
     plt.title('Número de menciones de "{}"'.format(word))
     plt.show()
+
+
 
 @graph.route('/tweetsbyword', methods=['GET'])
 def show_tweets_by_word():
@@ -98,9 +103,9 @@ def show_chart():
     word = request.args.get('word')
     #dayy = request.args.get('day')
     tweets = search_by_keywords(word)
-    tweet = tweets[-1]
+    tweet = tweets[1]
 
-    pprint(tweets[-1])
+    pprint(tweets[1])
     rts = []
     favs = []
     horas =[]
@@ -108,6 +113,10 @@ def show_chart():
     requests = tweet['request_times']
     rt = tweet['retweet_count']
     fav = tweet['favorite_count']
+    _id = tweet['_id']
+    text = tweet['text']
+    userNames = []
+
 
     for req in requests:
         if req.day == datetime.today().day:
@@ -115,8 +124,11 @@ def show_chart():
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
     # pprint(rts)
-    m = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
-    print(m)
+    usr = searchUserId(tweet['userId'])
+    for username in usr:
+        
+        m = [{"hour": h, "numRts": r, "numFavs": f, "username": username['name'],"tweet": text} for h, r, f in zip(horas, rts, favs)]
+        print(m)
 
     # pprint(json.dumps(m))
     chart_response = json.dumps(m)
@@ -130,6 +142,8 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
+
+
     nube_response= utils.list_to_json(words)
     return utils.JSONResponse(nube_response)
 

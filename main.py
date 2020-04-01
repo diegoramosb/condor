@@ -21,8 +21,8 @@ def updateTweetsToday():
 
 updateTweetsToday()
 
-# tweets = extractTweetsApi(accounts, 20)
-# saveTweetsMongo(tweets)
+tweets = extractTweetsApi(accounts, 20)
+saveTweetsMongo(tweets)
 
 #results = search_by_word(word)
 # print(search_by_string(string))

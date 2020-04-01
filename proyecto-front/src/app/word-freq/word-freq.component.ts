@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-word-freq',
@@ -9,7 +10,7 @@ import { Label, Color } from 'ng2-charts';
 })
 export class WordFreqComponent implements OnInit {
 
-  public barChartOptions: ChartOptions = {
+  public freqChartOptions: ChartOptions = {
     responsive: true,
     legend: {
       display: false
@@ -19,29 +20,57 @@ export class WordFreqComponent implements OnInit {
         scaleLabel: {
           display: true,
           labelString: "Frecuencia"
+        },
+        ticks: {
+          min: 0,
+
         }
-      }]
+
+      }],
+       yAxes: [
+        {
+          ticks: {
+            min: 0
+          }
+        }
+      ]
     }
   };
-  public barChartLabels: Label[] = ['Palabra1', 'Palabra2', 'Palabra3', 'Palabra4', 'Palabra5', 'Palabra6', 'Palabra7'];
-  public barChartType: ChartType = 'horizontalBar';
-  public barChartLegend = true;
-  public barChartPlugins = [];
-  public barChartColors: Color[] = [
+  public freqChartLabels: Label[] = [];
+  public freqChartType: ChartType = 'horizontalBar';
+  public freqChartLegend = true;
+  public freqChartPlugins = [];
+  public freqChartColors: Color[] = [
     {
       backgroundColor: "rgba(29, 161, 243, 0.5)",
       hoverBackgroundColor: "rgba(29, 161, 243, 1)"
     }
   ];
 
-  public barChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40, 10], 
-      label: "Frecuencia"}
+  public freqChartData: ChartDataSets[] = [
+
+    { data: [], label: 'Frecuencia' },
   ];
 
-  constructor() { }
+   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
   }
 
+  onEnter(word: string) {
+     var palabras = [];
+     var count = [];
+
+      this.apiService.getFrecuencyChartData(word).subscribe((data: []) => {
+        data.forEach(element => {
+          palabras.push(element['_id'])
+          count.push(element['count'])
+
+        });
+      });
+      this.freqChartLabels = palabras;
+      console.log(palabras)
+      console.log(count)
+      this.freqChartData = [{data: count, label:'Frecuencia'}];
+    }
 }

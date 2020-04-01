@@ -1,15 +1,16 @@
 <mat-card class="graphCard">
-  <div class="row" id="cardBody">
+  <div class="row" id="graphCardHeader">
+    <mat-form-field class="wordSearch">
+      <mat-label>Buscar por palabra</mat-label>
+      <input #box (keyup.enter)="onEnter(box.value)" matInput>
+    </mat-form-field>
+  </div>
+  <div class="row">
     <span class="col-md-1"></span>
     <div>
-      <canvas baseChart responsive=true height="270px" width="450px"
-        [datasets]="barChartData"
-        [labels]="barChartLabels"
-        [options]="barChartOptions"
-        [plugins]="barChartPlugins"
-        [legend]="barChartLegend"
-        [chartType]="barChartType"
-        [colors]="barChartColors">
+      <canvas baseChart responsive=true width="450px" [datasets]="freqChartData"
+        [options]="freqChartOptions" [legend]="freqChartLegend" [chartType]="freqChartType"  [labels]="freqChartLabels"
+        [colors]="freqChartColors"  [plugins]="freqChartPlugins">
       </canvas>
     </div>
     <span class="col-md-1"></span>

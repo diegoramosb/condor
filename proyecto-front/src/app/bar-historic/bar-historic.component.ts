@@ -54,7 +54,7 @@ export class BarHistoricComponent implements OnInit {
   }
 
   onEnter(word: string) {
-    var labels = []; 
+    var labels = [];
     var likes = [];
     var retweets = [];
     this.apiService.getHistoricData(word).subscribe((data: []) => {

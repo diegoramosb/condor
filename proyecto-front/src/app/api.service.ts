@@ -12,11 +12,17 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   public getBubbleChartData(word: string) {
-    this.httpClient.get(`${this.apiUrl}/bubble`).subscribe(ans => { return ans })
+    var params = new HttpParams().set("word", word);
+    return this.httpClient.get(`${this.apiUrl}/bubble`+ "?word=" + word);
   }
 
   public getHistoricData(word: string) {
     var params = new HttpParams().set("word", word);
     return this.httpClient.get(`${this.apiUrl}/historic`, {params: params});
+  }
+
+  public getFrecuencyChartData(word: string){
+    var params = new HttpParams().set("word", word);
+    return this.httpClient.get(`${this.apiUrl}/nube`,{params: params});
   }
 }

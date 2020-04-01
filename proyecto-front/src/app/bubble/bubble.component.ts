@@ -20,7 +20,7 @@ export class BubbleComponent implements OnInit {
         },
         ticks: {
           min: 0,
-          max: 50,
+
         }
       }],
       yAxes: [{
@@ -30,7 +30,7 @@ export class BubbleComponent implements OnInit {
         },
         ticks: {
           min: 0,
-          max: 200,
+
         }
       }]
     }
@@ -53,30 +53,41 @@ export class BubbleComponent implements OnInit {
   ];
 
   public bubbleChartData: ChartDataSets[] = [
-    {
-      data: [
-        { x: 50, y: 123, r: 10 },
-      ],
-      label: 'Cuenta1',
-    },
-    {
-      data: [
-        { x: 15, y: 89, r: 5 },
-      ],
-      label: 'Cuenta2',
-    },
-    {
-      data: [
-        { x: 24, y: 150, r: 16 },
-      ],
-      label: 'Cuenta3',
-    },
+
+     { data: [], label: ''},
   ];
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
     // this.apiService.getBubbleData()
+  }
+
+  onEnter(word: string) {
+
+    var x:number;
+    var labels = '';
+    var info = [];
+    var y:number;
+    var r:number;
+
+    this.apiService.getBubbleChartData(word).subscribe((data: []) => {
+
+      data.forEach((element:[]) => {
+        labels=(element['label'])
+
+        x=element['data']['x']
+        y=element['data']['y']
+        r=element['data']['z']
+
+        info = [{x:x, y:y, r:r}]
+
+      });
+    });
+
+    var m=  [{data:info, label:labels}]
+    this.bubbleChartData = m
+    console.log(m)
   }
 
 }

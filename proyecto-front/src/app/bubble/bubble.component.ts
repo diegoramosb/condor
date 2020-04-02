@@ -65,29 +65,26 @@ export class BubbleComponent implements OnInit {
 
   onEnter(word: string) {
 
-    var x:number;
-    var labels = '';
-    var info = [];
-    var y:number;
-    var r:number;
-
     this.apiService.getBubbleChartData(word).subscribe((data: []) => {
+        var x:number;
+        var info = [];
+        var y:number;
+        var r:number;
+      data.forEach((element) => {
 
-      data.forEach((element:[]) => {
-        labels=(element['label'])
-
-        x=element['data']['x']
+        x=(element['data']['x'])
         y=element['data']['y']
         r=element['data']['z']
 
-        info = [{x:x, y:y, r:r}]
+        info.push({data:[{x:x, y:y, r:r}], label:element['label']})
 
       });
+
+      this.bubbleChartData = info
+      console.log(info)
     });
 
-    var m=  [{data:info, label:labels}]
-    this.bubbleChartData = m
-    console.log(m)
+
   }
 
 }

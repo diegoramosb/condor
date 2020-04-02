@@ -4,9 +4,12 @@
       <mat-label>Buscar por palabra</mat-label>
       <input #box (keyup.enter)="onEnter(box.value)" matInput>
     </mat-form-field>
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
       <button style="margin-left: 4px; margin-top: 6px;" mat-button>Actualizar</button>
-    </div>
+    </div> -->
+  </div>
+  <div class="row">
+    <p>{{text}}</p>
   </div>
   <div class="row">
     <span class="col-md-1"></span>

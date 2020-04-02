@@ -21,8 +21,24 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/historic`, {params: params});
   }
 
-  public getFrecuencyChartData(word: string){
+
+  public getFrecuencyChartData(word: string) {
     var params = new HttpParams().set("word", word);
-    return this.httpClient.get(`${this.apiUrl}/nube`,{params: params});
+    return this.httpClient.get(`${this.apiUrl}/nube`, {params: params});
+  }
+
+  public getGraphData(words: string[]) {
+    var params = "?";
+    for(var i = 0; i < words.length; i++) {
+      if(i < words.length - 1) {
+        params += "words=" + words[i] + "&";
+      }
+      else {
+        params += "words=" + words[i];
+      }
+    }
+
+    return this.httpClient.get(`${this.apiUrl}/grafo` + params);
+
   }
 }

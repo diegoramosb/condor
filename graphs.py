@@ -119,19 +119,19 @@ def show_chart():
 
 
     for req in requests:
-        if req.day == datetime.today().day:
+        if req.day == datetime(2020, 3, 30).day:
             horas.append(req.strftime("%H:%M"))
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
     # pprint(rts)
-    usr = searchUserId(tweet['userId'])
-    for username in usr:
-        
-        m = [{"hour": h, "numRts": r, "numFavs": f, "username": username['name'],"tweet": text} for h, r, f in zip(horas, rts, favs)]
-        print(m)
+
+
+    ans = {"text": tweet["text"]}
+    ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
+    print(ans)
 
     # pprint(json.dumps(m))
-    chart_response = json.dumps(m)
+    chart_response = json.dumps(ans)
     return utils.JSONResponse(chart_response)
 
 

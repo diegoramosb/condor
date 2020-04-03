@@ -121,7 +121,7 @@ def show_chart():
 
 
     for req in requests:
-        if req.day == datetime(2020, 3, 30).day:
+        if req.day == datetime(2020, 4, 1).day:
             horas.append(req.strftime("%H:%M"))
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
@@ -144,9 +144,20 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
+    ids = []
+    for obj in words:
+        ids.append(obj['_id'].lower())
+    filtered = utils.remove_stop_words(ids)
+    ans = []
+    for obj in words:
+        if obj['_id'].lower() in filtered:
+            ans.append(obj)
+    ans2 = []
+    for item in ans:
+        if item['count'] >= 3 and word not in item['_id']:
+            ans2.append(item)
+    nube_response= utils.list_to_json(ans2)
 
-
-    nube_response= utils.list_to_json(words)
     return utils.JSONResponse(nube_response)
 
 
@@ -171,6 +182,7 @@ def show_grafo_cuentas_palabras():
 
             if t['userId'] not in userIds:
                 userIds.append(t['userId'])
+
 
             word.append(w)
         #pprint(userIds)

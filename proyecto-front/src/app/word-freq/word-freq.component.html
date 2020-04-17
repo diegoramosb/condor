@@ -1,11 +1,19 @@
 <mat-card class="graphCard">
   <div class="row" id="graphCardHeader">
-    <mat-form-field class="wordSearch">
+    <div class="col-md-10">
+      <h3 class="cardTitle" *ngIf="showing==true">Frecuencia de palabras relacionadas</h3>
+    </div>
+    <div class="col-md-2">
+      <a href="">
+        <img src="/assets/settings-24px.svg">
+      </a>  
+    </div>
+    <!-- <mat-form-field class="wordSearch">
       <mat-label>Buscar por palabra</mat-label>
       <input #box (keyup.enter)="onEnter(box.value)" matInput>
-    </mat-form-field>
+    </mat-form-field> -->
   </div>
-  <div class="row">
+  <div class="row" id=cardBody *ngIf="showing==true">
     <span class="col-md-1"></span>
     <div>
       <canvas baseChart responsive=true width="450px" [datasets]="freqChartData"
@@ -14,5 +22,8 @@
       </canvas>
     </div>
     <span class="col-md-1"></span>
+  </div>
+  <div class="row" id="cardBody" *ngIf="showing==false" style="text-align: center;">
+    <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
   </div>
 </mat-card>

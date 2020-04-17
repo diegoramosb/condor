@@ -50,6 +50,8 @@ export class BarHistoricComponent implements OnInit {
 
   public text = "";
 
+  public showing = false;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {

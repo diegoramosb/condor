@@ -57,6 +57,8 @@ export class BubbleComponent implements OnInit {
      { data: [], label: ''},
   ];
 
+  public showing = false;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {

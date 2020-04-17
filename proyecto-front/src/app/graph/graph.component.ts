@@ -19,6 +19,9 @@ export class GraphComponent implements OnInit {
     },
     {
       backgroundColor: "rgba(232, 28, 79, 1)"
+    },
+    {
+      backgroundColor: "rgba(250, 28, 79, 1)"
     }
   ];
 
@@ -127,67 +130,38 @@ export class GraphComponent implements OnInit {
   }
 
   getWords(words: string[]) {
-    var nodes = [];
-    var accounts = [];
-    var graph = [];
-    this.apiService.getGraphData(words).subscribe((data: []) => {
-      var n = data.length;
-      var pi = Math.PI;
-      var r = 4;
-      for (var i = 0; i < n; i++) {
-        var cuenta1 = data[i]['cuenta1'];
-        var cuenta2 = data[i]['cuenta2'];
-        var x1 = (Math.sin(i / (n+1) * 2 * pi) * r + 10);
-        var y1 = (Math.cos(i / (n+1) * 2 * pi) * r + 10);
-        var x2 = (Math.sin((i + 1) / (n+1) * 2 * pi) * r + 10);
-        var y2 = (Math.cos((i + 1) / (n+1) * 2 * pi) * r + 10);
-        if (!accounts.includes(cuenta1)) {
-          let obj = {
-            data: [
-              { x: x1, y: y1, r: 10 }
-            ],
-            label: cuenta1,
-            type: "bubble",
-            backgroundColor: this.barChartColors[i]['backgroundColor']
-          };
-          nodes.push(obj);
-          graph.push(obj);
-        }
-        
-        if (!accounts.includes(cuenta2)) {
-          let obj = {
-            data: [
-              { x: x2, y: y2, r: 10 }
-            ],
-            label: cuenta2,
-            type: "bubble",
-            backgroundColor: this.barChartColors[i+1]['backgroundColor']
-          };
-          nodes.push(obj);
-          graph.push(obj);
-        }
-        var start = nodes[i]['data'][0];
-        var end = nodes[i + 1]['data'][0];
-        let obj = {
+
+    this.apiService.getGraphData(words).subscribe((result: []) => {
+      var graph = []
+      var i = 0;
+      result['nodes'].forEach(node => {
+        graph.push({
           data: [
-            { x: start['x'], y: start['y'] },
-            { x: end['x'], y: end['y'] }
+            { x: node['x'], y: node['y'], r: 10 }
           ],
-          label: data[i]['palabra'],
+          label: node['cuenta'],
+          type: 'bubble',
+          backgroundColor: this.barChartColors[i]
+        })
+        i++;
+      });
+      result['links'].forEach(link => {
+        graph.push({
+          data: [
+            { x: link['origen']['x'], y: link['origen']['y'] },
+            { x: link['destino']['x'], y: link['destino']['y'] },
+          ],
+          label: link['palabra'],
           pointRadius: 0,
           type: "line",
           fill: false,
           borderColor: "grey"
-        };
-        graph.push(obj);
-      }
-    });
+        })
+      })
 
-    this.scatterChartData.pop();
-    this.scatterChartData = graph;
-    var asdf = [{x:1}, {x:1}, {x:1}]
-    console.log(nodes);
-    console.log(graph);
+      this.scatterChartData = graph;
+      console.log(graph);
+    });
   }
 
 }

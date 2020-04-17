@@ -47,6 +47,9 @@ export class WordFreqComponent implements OnInit {
     }
   ];
 
+
+  mySubscription: any;
+
   public freqChartData: ChartDataSets[] = [
 
     { data: [], label: 'Frecuencia' },
@@ -55,6 +58,7 @@ export class WordFreqComponent implements OnInit {
    constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+
   }
 
   onEnter(word: string) {
@@ -73,4 +77,5 @@ export class WordFreqComponent implements OnInit {
       console.log(count)
       this.freqChartData = [{data: count, label:'Frecuencia'}];
     }
+    
 }

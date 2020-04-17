@@ -1,11 +1,11 @@
 from pymongo import MongoClient
 from pprint import pprint
 from pymongo.errors import DuplicateKeyError
-from datetime import datetime
+from datetime import datetime, timedelta
 
 """MongoDB connection"""
-client = MongoClient('172.24.99.115', 27017)
-# client = MongoClient('localhost', 27017)
+#client = MongoClient('172.24.99.115', 27017)
+client = MongoClient('localhost', 27017)
 db = client['proyecto2020']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
@@ -80,17 +80,49 @@ def saveTweetsMongo(tweets):
 
     for t in tweets:
         t['_id'] = t['id']
-        date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y')
-        newTweet = {
-            '_id': t['id'],
-            'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
-            'text': t['full_text'],
-            'date': date,
-            'userId': t['user']['id'],
-            'retweet_count': [t['retweet_count']],
-            'favorite_count': [t['favorite_count']],
-            'request_times': [datetime.now()]
-        }
+
+        date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y') - timedelta(hours=5)
+
+
+        if t['entities'] is None:
+            if t['entities']['media'] is None:
+
+                newTweet = {
+                    '_id': t['id'],
+                    'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                    'text': t['full_text'],
+                    'date': date,
+                    'userId': t['user']['id'],
+                    'retweet_count': [t['retweet_count']],
+                    'favorite_count': [t['favorite_count']],
+                    'request_times': [datetime.now()]
+            }
+
+            else:
+
+                media = t['entities']['media'][0]['media_url']
+                newTweet = {
+                    '_id': t['id'],
+                    'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                    'text': t['full_text'],
+                    'media_link': media,
+                    'date': date,
+                    'userId': t['user']['id'],
+                    'retweet_count': [t['retweet_count']],
+                    'favorite_count': [t['favorite_count']],
+                    'request_times': [datetime.now()]
+            }
+        else:
+            newTweet = {
+                '_id': t['id'],
+                'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                'text': t['full_text'],
+                'date': date,
+                'userId': t['user']['id'],
+                'retweet_count': [t['retweet_count']],
+                'favorite_count': [t['favorite_count']],
+                'request_times': [datetime.now()]
+            }
         try:
             tweetsCollection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))
@@ -100,7 +132,7 @@ def saveTweetsMongo(tweets):
             print("{} already in DB".format(t['_id']))
 
         if (usersCollection.find_one({"_id": t['user']['id']})) is None:
-            newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name']}
+            newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
             usersCollection.insert_one(newuser)
     print("--- Added {} new tweets ---".format(cnt))
 

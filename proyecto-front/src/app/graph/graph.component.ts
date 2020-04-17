@@ -10,6 +10,8 @@ import { ApiService } from '../api.service';
 })
 export class GraphComponent implements OnInit {
 
+  public showing = false;
+
   public barChartColors: Color[] = [
     {
       backgroundColor: "rgba(29, 161, 243, 1)"

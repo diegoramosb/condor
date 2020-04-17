@@ -12,11 +12,16 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon'
 import { LayoutModule } from '@angular/cdk/layout';
 import { BarHistoricComponent } from './bar-historic/bar-historic.component';
 import { BubbleComponent } from './bubble/bubble.component';
 import { GraphComponent } from './graph/graph.component';
 import { WordFreqComponent } from './word-freq/word-freq.component';
+import { TweetsComponent } from './tweets/tweets.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { GraphCardComponent } from './graph-card/graph-card.component';
+import { GraphDirective } from './graph.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,11 @@ import { WordFreqComponent } from './word-freq/word-freq.component';
     BarHistoricComponent,
     BubbleComponent,
     GraphComponent,
-    WordFreqComponent
+    WordFreqComponent,
+    TweetsComponent,
+    DashboardComponent,
+    GraphCardComponent,
+    GraphDirective
     ],
   imports: [
     BrowserModule,
@@ -39,6 +48,7 @@ import { WordFreqComponent } from './word-freq/word-freq.component';
     MatInputModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatIconModule,
     LayoutModule
   ],
   providers: [],

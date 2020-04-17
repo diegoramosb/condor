@@ -36,6 +36,7 @@ export class WordFreqComponent implements OnInit {
       ]
     }
   };
+  public showing = false;
   public freqChartLabels: Label[] = [];
   public freqChartType: ChartType = 'horizontalBar';
   public freqChartLegend = true;

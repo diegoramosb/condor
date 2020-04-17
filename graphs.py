@@ -5,6 +5,8 @@ import utils
 from statistics import mean
 from db import *
 import json
+from itertools import combinations
+from math import sin, cos, pi
 
 from extract_tweets import searchTweetById, extractTweetsApi
 
@@ -119,7 +121,7 @@ def show_chart():
 
 
     for req in requests:
-        if req.day == datetime(2020, 3, 30).day:
+        if req.day == datetime(2020, 4, 1).day:
             horas.append(req.strftime("%H:%M"))
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
@@ -142,9 +144,20 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
+    ids = []
+    for obj in words:
+        ids.append(obj['_id'].lower())
+    filtered = utils.remove_stop_words(ids)
+    ans = []
+    for obj in words:
+        if obj['_id'].lower() in filtered:
+            ans.append(obj)
+    ans2 = []
+    for item in ans:
+        if item['count'] >= 3 and word not in item['_id']:
+            ans2.append(item)
+    nube_response= utils.list_to_json(ans2)
 
-
-    nube_response= utils.list_to_json(words)
     return utils.JSONResponse(nube_response)
 
 
@@ -155,13 +168,13 @@ def show_grafo_cuentas_palabras():
     words = request.args.getlist('words')
     #pprint(words)
 
-    userIds = []
-    word = []
 
     m =[]
-
+    accounts = []
     for w in words:
         userNames = []
+        userIds = []
+        word = []
 
         tweets_by_word = search_by_keywords(w)
 
@@ -170,33 +183,41 @@ def show_grafo_cuentas_palabras():
             if t['userId'] not in userIds:
                 userIds.append(t['userId'])
 
+
             word.append(w)
         #pprint(userIds)
         #pprint(word)
         if len(userIds)>1:
-
-            for userId in userIds:
-                usr = searchUserId(userId)
+            for i in range(len(userIds)):
+                usr = searchUserId(userIds[i])
                 for username in usr:
                     userNames.append(username['name'])
+                    if username['name'] not in accounts:
+                        accounts.append(username['name'])
+            
+            usersComb = combinations(userNames, 2)
+            for a in usersComb:
+                m += [{"cuenta1": a[0], "cuenta2": a[1], "palabra": w}]
 
-            userNames[:] = [','.join(userNames[:])]
-
-            for a in userNames:
-                cuenta1 = a.split(",")[0]
-                cuenta2 = a.split(",")[1]
-
-                m += [{"cuenta1": cuenta1, "cuenta2": cuenta2, "palabra": w}]
-
-        userIds = []
-        word = []
-
-    pprint(m)
-    pprint(json.dumps(m))
-    grafo_response = json.dumps(m)
+    n = len(accounts)
+    r = 4
+    nodes = []
+    for i in range(n):
+        x = (sin(i / (n + 1) * 2 * pi) * r + 10)
+        y = (cos(i / (n + 1) * 2 * pi) * r + 10)
+        nodo = {"cuenta": accounts[i], "x": x, "y": y}
+        nodes.append(nodo)
+        for link in m:
+            if link['cuenta1'] == nodo['cuenta']:
+                link['origen'] = {'x': x, 'y': y}
+            elif link['cuenta2'] == nodo['cuenta']:
+                link['destino'] = {'x': x, 'y': y}
+    # pprint(m)  
+    # pprint(json.dumps(m))
+    grafo_response = json.dumps({"nodes": nodes, "links": m})
     return utils.JSONResponse(grafo_response)
 
-
+    
 
 
 

@@ -38,7 +38,7 @@ def updateTweetsToday():
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():
     accounts = request.args.getlist('account')
-    tweets = extractTweetsApi(accounts, 1)
+    tweets = extractTweetsApi(accounts, 5)
     saveTweetsMongo(tweets)
 
     return 'Ok', 200

@@ -1,11 +1,19 @@
 <mat-card class="graphCard">
   <div class="row" id="graphCardHeader">
-    <div class=col-md-6>
+    <div class="col-md-10">
+      <h3 class="cardTitle" *ngIf="showing==true">Palabras relacionadas entre cuentas</h3>
+    </div>
+    <div class="col-md-2">
+      <a href="">
+        <img src="/assets/settings-24px.svg">
+      </a>  
+    </div>
+    <!-- <div class=col-md-6>
       <mat-form-field class="wordSearch">
         <mat-label>Buscar por palabra</mat-label>
         <input #box (keyup.enter)="onEnter(box.value)" matInput>
       </mat-form-field>
-    </div>
+    </div> -->
     <!-- <div *ngFor="let row of wordGroup()">
       <div *ngFor="let word of row">
         <div class="col-md-1">
@@ -14,7 +22,7 @@
       </div>
     </div> -->
   </div>
-  <div class="row" id="cardBody">
+  <div class="row" id="cardBody" *ngIf="showing==true">
     <span class="col-md-1"></span>
     <div>
       <canvas baseChart responsive=true height="220px" width="450px" s [datasets]="scatterChartData"
@@ -22,5 +30,8 @@
       </canvas>
     </div>
     <span class="col-md-1"></span>
+  </div>
+  <div class="row" id="cardBody" *ngIf="showing==false" style="text-align: center;">
+    <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
   </div>
 </mat-card>

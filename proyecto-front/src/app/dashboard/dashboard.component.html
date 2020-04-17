@@ -1,0 +1,47 @@
+<mat-drawer-container height=100%>
+    <mat-drawer class="drawer" mode="side" opened>
+      <div class="container">
+        <div class="col-md">
+          <div class="row">
+            <h1>Dashboard</h1>
+          </div>
+          <form>
+            <div class="row">
+              <mat-form-field>
+                <mat-label>Seguir cuenta</mat-label>
+                <input matInput>
+              </mat-form-field>
+            </div>
+          </form>
+        <div class="row">
+            <button mat-flat-button routerLink="/tweets">
+                Ver tweets
+            </button>
+        </div>
+        </div>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <app-graph-card></app-graph-card>
+            </div>
+            <div class="row">
+              <app-graph></app-graph>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <app-bubble></app-bubble>
+            </div>
+            <div class="row">
+              <app-word-freq></app-word-freq>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  

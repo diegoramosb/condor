@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import tweepy
 import json
 
@@ -28,6 +30,7 @@ def extractTweetsApi(accounts, nTweets):
             jsonStr = json.dumps(status._json)
             parsed = json.loads(jsonStr)
             jsons.append(parsed)
+
     return jsons
 
 

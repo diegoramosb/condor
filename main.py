@@ -5,6 +5,7 @@ from graphs import *
 import pprint
 
 accounts = ['@ELTIEMPO', '@elespectador', '@RevistaSemana']
+
 word = "coronavirus"
 string = '"Real Madrid"'
 username= "@elespectador"
@@ -21,7 +22,8 @@ def updateTweetsToday():
 
 updateTweetsToday()
 
-tweets = extractTweetsApi(accounts, 20)
+tweets = extractTweetsApi(accounts, 10)
+
 saveTweetsMongo(tweets)
 
 #results = search_by_word(word)

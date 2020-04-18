@@ -21,7 +21,6 @@ import { WordFreqComponent } from './word-freq/word-freq.component';
 import { TweetsComponent } from './tweets/tweets.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GraphCardComponent } from './graph-card/graph-card.component';
-import { GraphDirective } from './graph.directive';
 
 @NgModule({
   declarations: [
@@ -33,7 +32,6 @@ import { GraphDirective } from './graph.directive';
     TweetsComponent,
     DashboardComponent,
     GraphCardComponent,
-    GraphDirective
     ],
   imports: [
     BrowserModule,

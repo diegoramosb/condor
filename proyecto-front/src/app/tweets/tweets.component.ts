@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TweetsComponent implements OnInit {
 
+  tweets = ["a", "s", "d", "f"]
+
   constructor() { }
 
   ngOnInit(): void {

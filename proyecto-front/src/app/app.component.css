@@ -14,6 +14,10 @@
     /* width: inherit; */
 }
 
+.tweetCard {
+    margin: 10px;
+}
+
 .cardTitle {
     color: #22344e;
     font-weight: bold;
@@ -43,6 +47,7 @@ mat-drawer {
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
+    width: 20vw;
 }
 
 h1 {

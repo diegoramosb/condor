@@ -1,32 +1,6 @@
-<mat-card class="graphCard">
-  <div class="row" id="graphCardHeader">
-    <div class="col-md-10">
-      <h3 class="cardTitle" *ngIf="showing==true">Evolución de retweets y likes de la cuenta</h3>
-    </div>
-    <div class="col-md-2">
-      <a href="">
-        <img src="/assets/settings-24px.svg">
-      </a>  
-    </div>
-    <!-- <mat-form-field class="wordSearch">
-      <mat-label>Buscar por palabra</mat-label>
-      <input #box (keyup.enter)="onEnter(box.value)" matInput>
-    </mat-form-field> -->
-    <!-- <div class="col-md-6">
-      <button style="margin-left: 4px; margin-top: 6px;" mat-button>Actualizar</button>
-    </div> -->
-  </div>
-  <div class="row" class="cardBody" *ngIf="showing==true">
-    <span class="col-md-1"></span>
-    <div>
-      <canvas baseChart responsive=true height="220px" width="450px" [datasets]="barChartData" [labels]="barChartLabels"
-        [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType"
-        [colors]="barChartColors">
-      </canvas>
-    </div>
-    <span class="col-md-1"></span>
-  </div>
-  <div class="row" id="cardBody" *ngIf="showing==false" style="text-align: center;">
-    <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
-  </div>
-</mat-card>
+<div style="position: relative;">
+  <canvas baseChart responsive=true mantainAspectRatio=false [datasets]="barChartData" [labels]="barChartLabels"
+    [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType"
+    [colors]="barChartColors">
+  </canvas>
+</div>

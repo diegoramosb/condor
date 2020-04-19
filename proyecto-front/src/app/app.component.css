@@ -14,6 +14,29 @@
     /* width: inherit; */
 }
 
+/* .filtersCard {
+    margin: 10px;
+
+}
+*/
+.detailGraphCard {
+    margin: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    /* background-color: #22344e; */
+    /* padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0; */
+} 
+
+.detailFormField {
+    width: inherit;
+}
+
+.detailFormLabel {
+    font-size: 1em;
+}
+
 .tweetCard {
     margin: 10px;
 }
@@ -23,10 +46,17 @@
     font-weight: bold;
 }
 
+.detailGraphTitle {
+    text-align: center;
+    color: white;
+    margin-left: 10px;
+}
+
 #graphCardHeader {
     /* height: 50px; */
     text-align: center;
 }
+
 
 #cardBody {
 }
@@ -54,9 +84,4 @@ h1 {
     font-size: 2em;
     font-weight: bold;
     color: #f15252;
-}
-
-button {
-    background-color: #f15252;
-    color: white;
 }

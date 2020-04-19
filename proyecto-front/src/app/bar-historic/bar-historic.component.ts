@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 import { ApiService } from '../api.service';
@@ -46,10 +46,9 @@ export class BarHistoricComponent implements OnInit {
   public barChartData: ChartDataSets[] = [
     { data: [], label: 'Retweets' },
     { data: [], label: 'Likes' }
-  ];
+  ];   
 
   public text = "";
-
   public showing = false;
 
   constructor(private apiService: ApiService) { }

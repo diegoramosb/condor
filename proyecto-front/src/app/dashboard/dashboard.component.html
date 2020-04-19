@@ -1,47 +1,66 @@
 <mat-drawer-container height=100%>
-    <mat-drawer class="drawer" mode="side" opened>
-      <div class="container">
-        <div class="col-sm">
+  <mat-drawer class="drawer" mode="side" opened>
+    <div class="container">
+      <div class="col-sm">
+        <div class="row">
+          <h1>Dashboard</h1>
+        </div>
+        <form>
           <div class="row">
-            <h1>Dashboard</h1>
+            <mat-form-field>
+              <mat-label>Seguir cuenta</mat-label>
+              <input matInput>
+            </mat-form-field>
           </div>
-          <form>
-            <div class="row">
-              <mat-form-field>
-                <mat-label>Seguir cuenta</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </div>
-          </form>
+        </form>
         <div class="row">
-            <button mat-flat-button routerLink="/tweets">
-                Ver tweets
-            </button>
-        </div>
+          <button mat-flat-button routerLink="/tweets">
+            Ver tweets
+          </button>
         </div>
       </div>
-    </mat-drawer>
-    <mat-drawer-content>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="row">
-              <app-graph-card></app-graph-card>
-            </div>
-            <div class="row">
-              <app-graph></app-graph>
-            </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+            <mat-card class="graphCard">
+              <div class="row" id="graphCardHeader">
+                <div class="col-md-10">
+                  <h3 class="cardTitle" *ngIf="showingHistoric==true">Evolución de retweets y likes de la cuenta</h3>
+                </div>
+                <div class="col-md-2">
+                  <button mat-icon-button routerLink="/historic-settings" style="background-color: transparent; color: #f15252;">
+                    <mat-icon>settings</mat-icon>
+                </button>
+                </div>
+              </div>
+              <div class="row" class="cardBody" *ngIf="showingHistoric==true">
+                <span class="col-md-1"></span>
+                <app-bar-historic></app-bar-historic>
+                <span class="col-md-1"></span>
+              </div>
+              <div class="row" id="cardBody" *ngIf="showingHistoric==false" style="text-align: center;">
+                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+              </div>
+            </mat-card>
+
           </div>
-          <div class="col-md-6">
-            <div class="row">
-              <app-bubble></app-bubble>
-            </div>
-            <div class="row">
-              <app-word-freq></app-word-freq>
-            </div>
+          <div class="row">
+            <app-graph></app-graph>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <app-bubble></app-bubble>
+          </div>
+          <div class="row">
+            <app-word-freq></app-word-freq>
           </div>
         </div>
       </div>
-    </mat-drawer-content>
-  </mat-drawer-container>
-  
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

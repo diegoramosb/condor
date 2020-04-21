@@ -10,9 +10,11 @@ db = client['proyecto20203']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
 
+def return_accounts():
+    return usersCollection.find()
+
 def return_tweets():
 
-    pprint(tweetsCollection)
     return list(tweetsCollection.find().sort([('date', -1)]))
 
 def return_tweets_complete():

@@ -22,9 +22,10 @@ def updateTweetsToday():
 
 updateTweetsToday()
 
-tweets = extractTweetsApi(accounts, 10)
+#tweets = extractTweetsApi(accounts, 10)
 
-saveTweetsMongo(tweets)
+#saveTweetsMongo(tweets)
+search_by_user(username)
 
 #results = search_by_word(word)
 # print(search_by_string(string))

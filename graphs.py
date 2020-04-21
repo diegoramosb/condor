@@ -1,3 +1,5 @@
+import parser
+
 import matplotlib.pyplot as plt
 from flask import Blueprint, request
 import numpy as np
@@ -7,6 +9,9 @@ from db import *
 import json
 from itertools import combinations
 from math import sin, cos, pi
+import nltk
+
+from  jsonmerge import merge
 
 from extract_tweets import searchTweetById, extractTweetsApi
 
@@ -36,29 +41,12 @@ def show_word_frequency(word):
 
 
 
-@graph.route('/tweetsbyword', methods=['GET'])
-def show_tweets_by_word():
-    word = request.args.get('word')
-    tweets= search_by_keywords(word)
-
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
-
-
-@graph.route('/tweetsbyuser', methods=['GET'])
-def show_tweets_by_user():
-    user = request.args.get('user')
-    tweets= search_by_user(user)
-
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
-
 
 @graph.route('/bubble', methods=['GET'])
 def show_favs_rts():
     word = request.args.get('word')
 #x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
-
+    tweets = search_by_keywords(word)
     userIds = []
     usage = []
     sumFavs = []
@@ -94,9 +82,12 @@ def show_favs_rts():
     o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
 
-    pprint(json.dumps(m))
-    bubble_response = json.dumps(m)
-    return utils.JSONResponse(bubble_response)
+    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
+
+    tweets_response = utils.list_to_json(p)
+    return utils.JSONResponse(tweets_response)
+
+
 
 
 # se pasa una palabra y un dia
@@ -117,8 +108,6 @@ def show_chart():
     fav = tweet['favorite_count']
     _id = tweet['_id']
     text = tweet['text']
-    userNames = []
-
 
     for req in requests:
         if req.day == datetime(2020, 4, 1).day:
@@ -126,14 +115,13 @@ def show_chart():
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
     # pprint(rts)
-
-
     ans = {"text": tweet["text"]}
     ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
     print(ans)
 
     # pprint(json.dumps(m))
     chart_response = json.dumps(ans)
+
     return utils.JSONResponse(chart_response)
 
 
@@ -144,6 +132,7 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
+    tweets = search_by_keywords(word)
     ids = []
     for obj in words:
         ids.append(obj['_id'].lower())
@@ -156,8 +145,8 @@ def show_nube_palabra():
     for item in ans:
         if item['count'] >= 1 and word not in item['_id']:
             ans2.append(item)
-    nube_response= utils.list_to_json(ans2)
 
+    nube_response = utils.list_to_json(ans2)
     return utils.JSONResponse(nube_response)
 
 
@@ -167,7 +156,7 @@ def show_nube_palabra():
 def show_grafo_cuentas_palabras():
     words = request.args.getlist('words')
     #pprint(words)
-
+    tweets = []
 
     m =[]
     accounts = []
@@ -177,6 +166,7 @@ def show_grafo_cuentas_palabras():
         word = []
 
         tweets_by_word = search_by_keywords(w)
+        tweets += tweets_by_word
 
         for t in tweets_by_word:
 
@@ -214,8 +204,13 @@ def show_grafo_cuentas_palabras():
                 link['destino'] = {'x': x, 'y': y}
     # pprint(m)  
     # pprint(json.dumps(m))
-    grafo_response = json.dumps({"nodes": nodes, "links": m})
-    return utils.JSONResponse(grafo_response)
+    q = json.dumps({"nodes": nodes, "links": m})
+
+    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
+
+    tweets_response = utils.list_to_json(p)
+    return utils.JSONResponse(tweets_response)
+
 
     
 

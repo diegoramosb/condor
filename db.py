@@ -10,6 +10,16 @@ db = client['proyecto20203']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
 
+def return_tweets():
+
+    pprint(tweetsCollection)
+    return list(tweetsCollection.find().sort([('date', -1)]))
+
+def return_tweets_complete():
+
+    us = usersCollection.find({'_id': id})
+    for inf in us:
+        return list(tweetsCollection.find({'userId': inf['_id']}))
 
 def search_by_keywords(word):
     return list(tweetsCollection.find({"$text": {"$search": word}}))
@@ -21,6 +31,7 @@ def search_by_string(ph):
 
 def search_by_user(name):
     us = usersCollection.find({"$text": {"$search": name}})
+    pprint(us)
     for inf in us:
         return list(tweetsCollection.find({'userId': inf['_id']}))
 

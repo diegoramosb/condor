@@ -2,6 +2,7 @@ from datetime import date, datetime
 from flask import Response
 from nltk.corpus import stopwords
 import json
+import nltk
 
 
 class JSONResponse(Response):

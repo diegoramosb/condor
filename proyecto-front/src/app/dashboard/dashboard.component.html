@@ -5,17 +5,23 @@
         <div class="row">
           <h1>Dashboard</h1>
         </div>
-        <form>
           <div class="row">
             <mat-form-field style="width: 14vw;">
-              <mat-label>Buscar cuenta</mat-label>
-              <input matInput>
+              <mat-label>Seguir cuenta</mat-label>
+              <input matInput #accountInput (keyup.enter)="addAccount(accountInput.value)">
             </mat-form-field>
+            <mat-list>
+              <mat-list-item *ngFor="let account of accounts">
+                <div mat-line>{{account}}</div>
+              </mat-list-item>
+            </mat-list>
           </div>
-        </form>
         <div class="row">
           <button mat-flat-button routerLink="/tweets" style="background-color: #f15252; color: white;">
             Ver tweets
+          </button>
+          <button mat-flat-button (click)="extractTweets()" style="background-color: #f15252; color: white;">
+            Descargar nuevos tweets
           </button>
         </div>
       </div>
@@ -34,13 +40,10 @@
               </mat-card-header>
               <app-bar-historic *ngIf="showingHistoric==true"></app-bar-historic>
               <div class="row" *ngIf="showingHistoric==false" style="text-align: center;">
-                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+                <h2 style="color: grey;">¡No has configurado el gráfico! Haz click en el botón</h2>
               </div>
               <mat-card-actions>
-                <button mat-icon-button routerLink="/config-historico"
-                  style="color: #f15252;">
-                  <mat-icon>settings</mat-icon>
-                </button>
+                <button mat-button style="color: #f15252;">Configurar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -53,14 +56,11 @@
               </mat-card-header>
               <app-graph *ngIf="showingGraph==true"></app-graph>
               <div class="row" *ngIf="showingGraph==false" style="text-align: center;">
-                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+                <h2 style="color: grey;">¡No has configurado el gráfico! Haz click en el botón</h2>
               </div>
-              <mat-card-actions>
-                <button mat-icon-button routerLink="/config-historico"
-                  style="color: #f15252;">
-                  <mat-icon>settings</mat-icon>
-                </button>
-              </mat-card-actions>
+                <mat-card-actions>
+                  <button mat-button style="color: #f15252;">Configurar</button>
+                </mat-card-actions>
             </mat-card>
           </div>
         </div>
@@ -74,14 +74,11 @@
               </mat-card-header>
               <app-bubble *ngIf="showingBubble==true"></app-bubble>
               <div class="row" *ngIf="showingBubble==false" style="text-align: center;">
-                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+                <h2 style="color: grey;">¡No has configurado el gráfico! Haz click en el botón</h2>
               </div>
-              <mat-card-actions>
-                <button mat-icon-button routerLink="/config-burbuja"
-                  style="color: #f15252;">
-                  <mat-icon>settings</mat-icon>
-                </button>
-              </mat-card-actions>
+                <mat-card-actions>
+                  <button mat-button style="color: #f15252;">Configurar</button>
+                </mat-card-actions>
             </mat-card>
           </div>
           <div class="row justify-content-center">
@@ -93,14 +90,11 @@
               </mat-card-header>
               <app-word-freq *ngIf="showingFreq==true"></app-word-freq>
               <div class="row" *ngIf="showingFreq==false" style="text-align: center;">
-                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+                <h2 style="color: grey;">¡No has configurado el gráfico! Haz click en el botón</h2>
               </div>
-              <mat-card-actions>
-                <button mat-icon-button routerLink="/config-frecuencia"
-                  style="color: #f15252;">
-                  <mat-icon>settings</mat-icon>
-                </button>
-              </mat-card-actions>
+                <mat-card-actions>
+                  <button mat-button routerLink="config-frecuencia" style="color: #f15252;">Configurar</button>
+                </mat-card-actions>
             </mat-card>
           </div>
         </div>

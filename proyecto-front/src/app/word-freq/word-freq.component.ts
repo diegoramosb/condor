@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
-import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-word-freq',
@@ -27,7 +26,7 @@ export class WordFreqComponent implements OnInit {
         }
 
       }],
-       yAxes: [
+      yAxes: [
         {
           ticks: {
             min: 0
@@ -37,7 +36,7 @@ export class WordFreqComponent implements OnInit {
     }
   };
   public showing = false;
-  public freqChartLabels: Label[] = [];
+  // public freqChartLabels: Label[] = [];
   public freqChartType: ChartType = 'horizontalBar';
   public freqChartLegend = true;
   public freqChartPlugins = [];
@@ -47,36 +46,34 @@ export class WordFreqComponent implements OnInit {
       hoverBackgroundColor: "rgba(29, 161, 243, 1)"
     }
   ];
+  public height: string;
 
 
   mySubscription: any;
 
-  public freqChartData: ChartDataSets[] = [
+  @Input() freqChartData: ChartDataSets[];
 
-    { data: [], label: 'Frecuencia' },
-  ];
+  @Input() freqChartLabels: [];
 
-   constructor(private apiService: ApiService) { }
+  // public freqChartData: ChartDataSets[] = [
 
-  ngOnInit() {
+  //   { data: [], label: 'Frecuencia' },
+  // ];
 
+  constructor() {
   }
 
-  onEnter(word: string) {
-     var palabras = [];
-     var count = [];
+  ngOnInit() {
+    this.getHeigth()
+  }
 
-      this.apiService.getFrecuencyChartData(word).subscribe((data: []) => {
-        data.forEach(element => {
-          palabras.push(element['_id'])
-          count.push(element['count'])
-
-        });
-      });
-      this.freqChartLabels = palabras;
-      console.log(palabras)
-      console.log(count)
-      this.freqChartData = [{data: count, label:'Frecuencia'}];
+  getHeigth() {
+    if(this.freqChartLabels.length == 0) {
+      this.height = "400"
     }
-    
+    else {
+      this.height = (this.freqChartLabels.length * 5).toString()
+    }
+  }
+
 }

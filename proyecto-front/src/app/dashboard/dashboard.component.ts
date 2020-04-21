@@ -8,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   public showingHistoric = true;
-  public showingBubbles = false;
-  public showingGraph = false;
-  public showingFreq = false;
+  public showingBubble = true;
+  public showingGraph = true;
+  public showingFreq = true;
 
   constructor() { }
 

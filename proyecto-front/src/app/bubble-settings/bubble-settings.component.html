@@ -11,9 +11,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-1">
-            <button mat-icon-button routerLink="" style="color: #f15252;">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
+          <button mat-icon-button routerLink="" style="color: #f15252;">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
         </div>
         <div class="col-md-10">
           <mat-card class="filtersCard" style="margin-top: 10px;">
@@ -28,42 +28,43 @@
                     <input matInput #wordInput (keyup.enter)="addWord(wordInput.value)">
                   </mat-form-field>
                   <mat-list>
-                      <mat-list-item *ngFor="let word of selectedWords">
-                          <div mat-line>{{word}}</div>
-                          <button mat-icon-button (click)="removeWord(word)">
-                              <mat-icon>clear</mat-icon>
-                          </button>
-                      </mat-list-item>
+                    <mat-list-item *ngFor="let word of selectedWords">
+                      <div mat-line>{{word}}</div>
+                      <button mat-icon-button (click)="removeWord(word)">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                    </mat-list-item>
                   </mat-list>
                 </div>
                 <div class="col-md-4">
                   <mat-form-field class="detailFormField">
                     <mat-label class="detailFormLabel">Elegir cuentas</mat-label>
                     <mat-select>
-                      <mat-option value="option" *ngFor="let account of accounts" (click)="addAccount(account)">{{account}}</mat-option>
+                      <mat-option value="option" *ngFor="let account of accounts" (click)="addAccount(account)">
+                        {{account}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-list>
                     <mat-list-item *ngFor="let account of selectedAccounts">
-                        <div mat-line>{{account}}</div>
-                        <button mat-icon-button (click)="removeAccount(account)">
-                            <mat-icon>clear</mat-icon>
-                        </button>
+                      <div mat-line>{{account}}</div>
+                      <button mat-icon-button (click)="removeAccount(account)">
+                        <mat-icon>clear</mat-icon>
+                      </button>
                     </mat-list-item>
-                </mat-list>
+                  </mat-list>
                 </div>
                 <div class="col-md-4">
-                    <mat-form-field class="detailFormField">
-                        <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
-                        <input matInput [max]="maxDate" [matDatepicker]="picker">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                      </mat-form-field>
+                  <mat-form-field class="detailFormField">
+                    <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
+                    <input matInput [max]="maxDate" [matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
                 </div>
               </div>
             </div>
             <mat-card-actions>
-                <button mat-button style="color: #f15252;">Aplicar filtros</button>
+              <button mat-button style="color: #f15252;">Aplicar filtros</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -76,10 +77,7 @@
             <mat-card-header>
               <mat-card-title style="color: #f15252;">TITULO</mat-card-title>
             </mat-card-header>
-            <app-bar-historic></app-bar-historic>
-            <mat-card-actions>
-                <button mat-button style="color: #f15252;">Actualizar datos</button>
-            </mat-card-actions>
+            <app-bubble></app-bubble>
           </mat-card>
         </div>
         <div class="col-md-1"></div>

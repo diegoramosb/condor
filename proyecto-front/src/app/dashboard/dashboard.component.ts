@@ -9,18 +9,20 @@ import { ApiService } from '../api.service';
 })
 export class DashboardComponent implements OnInit {
 
-  public showingHistoric = true;
-  public showingBubble = true;
-  public showingGraph = true;
-  public showingFreq = true;
-
+  public historicWord: string;
+  public bubbleWord: string;
+  public showingGraph = false;
+  public freqWord: string;
   public accounts = [];
 
   constructor(private snackBar: MatSnackBar, private apiService: ApiService) { }
 
 
   ngOnInit(): void {
-
+    this.getAccounts();
+    this.bubbleWord = localStorage.getItem('bubbleWord');
+    this.freqWord = localStorage.getItem('freqWord');
+    this.historicWord = localStorage.getItem('historicWord');
   }
 
   extractTweets() {
@@ -33,6 +35,12 @@ export class DashboardComponent implements OnInit {
     if(!this.accounts.includes(account)){
       this.accounts.push(account);
     }
+  }
+
+  getAccounts() {
+    this.apiService.getAccounts().subscribe((response: [])=> {
+      this.accounts = response
+    });
   }
 
 }

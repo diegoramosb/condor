@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 
@@ -7,7 +7,7 @@ import { Label, Color } from 'ng2-charts';
   templateUrl: './word-freq.component.html',
   styleUrls: ['../app.component.css']
 })
-export class WordFreqComponent implements OnInit {
+export class WordFreqComponent implements OnInit, OnDestroy {
 
   public freqChartOptions: ChartOptions = {
     responsive: true,
@@ -46,34 +46,28 @@ export class WordFreqComponent implements OnInit {
       hoverBackgroundColor: "rgba(29, 161, 243, 1)"
     }
   ];
-  public height: string;
-
-
-  mySubscription: any;
-
   @Input() freqChartData: ChartDataSets[];
 
   @Input() freqChartLabels: [];
 
-  // public freqChartData: ChartDataSets[] = [
-
-  //   { data: [], label: 'Frecuencia' },
-  // ];
-
   constructor() {
+    
   }
 
   ngOnInit() {
-    this.getHeigth()
+    var data = JSON.parse(localStorage.getItem('freqData'));
+    if(data['freqChartData'] != null) {
+      this.freqChartData = data['freqChartData'];
+      this.freqChartLabels = data['freqChartLabels'];
+    }
+    
   }
 
-  getHeigth() {
-    if(this.freqChartLabels.length == 0) {
-      this.height = "400"
-    }
-    else {
-      this.height = (this.freqChartLabels.length * 5).toString()
-    }
+  ngOnDestroy() {
+    var json = {'freqChartData': this.freqChartData, 'freqChartLabels': this.freqChartLabels};
+    console.log(json);
+    localStorage.setItem('freqData', JSON.stringify(json));
   }
 
+  
 }

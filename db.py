@@ -15,7 +15,8 @@ def return_tweets():
     pprint(tweetsCollection)
     return list(tweetsCollection.find().sort([('date', -1)]))
 
-def search_tweets_userId(id):
+def return_tweets_complete():
+
     us = usersCollection.find({'_id': id})
     for inf in us:
         return list(tweetsCollection.find({'userId': inf['_id']}))
@@ -30,6 +31,7 @@ def search_by_string(ph):
 
 def search_by_user(name):
     us = usersCollection.find({"$text": {"$search": name}})
+    pprint(us)
     for inf in us:
         return list(tweetsCollection.find({'userId': inf['_id']}))
 

@@ -9,7 +9,8 @@ from db import *
 import json
 from itertools import combinations
 from math import sin, cos, pi
-from dateutil import parser
+import nltk
+
 from  jsonmerge import merge
 
 from extract_tweets import searchTweetById, extractTweetsApi
@@ -39,39 +40,6 @@ def show_word_frequency(word):
     plt.show()
 
 
-@graph.route('/tweets', methods=['GET'])
-def get_all_tweets():
-    tweets = return_tweets()
-    for t in tweets:
-        tweetss = search_tweets_userId(t['userId'])
-
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
-
-@graph.route('/tweetsbydate', methods=['GET'])
-def get_tweets_date():
-    date = request.args.get('date')
-    dt = parser.parse(date)
-    tweets = search_tweets_after(dt)
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
-
-@graph.route('/tweetsbyword', methods=['GET'])
-def show_tweets_by_word():
-    word = request.args.get('word')
-    tweets= search_by_keywords(word)
-
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
-
-
-@graph.route('/tweetsbyuser', methods=['GET'])
-def show_tweets_by_user():
-    user = request.args.get('user')
-    tweets= search_by_user(user)
-
-    tweets_response = utils.list_to_json(tweets)
-    return utils.JSONResponse(tweets_response)
 
 
 @graph.route('/bubble', methods=['GET'])
@@ -114,13 +82,12 @@ def show_favs_rts():
     o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
 
-    pprint(json.dumps(m))
-    json.dumps(m)
+    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
 
-    tweets_response = utils.list_to_json(tweets)
-    bubble_response = json.dumps(m)
-    result = merge(bubble_response, tweets_response)
-    return utils.JSONResponse(result)
+    tweets_response = utils.list_to_json(p)
+    return utils.JSONResponse(tweets_response)
+
+
 
 
 # se pasa una palabra y un dia
@@ -141,8 +108,6 @@ def show_chart():
     fav = tweet['favorite_count']
     _id = tweet['_id']
     text = tweet['text']
-    userNames = []
-
 
     for req in requests:
         if req.day == datetime(2020, 4, 1).day:
@@ -150,18 +115,14 @@ def show_chart():
             rts.append(rt[requests.index(req)])
             favs.append(fav[requests.index(req)])
     # pprint(rts)
-
-
     ans = {"text": tweet["text"]}
     ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
     print(ans)
 
     # pprint(json.dumps(m))
-
-    tweets_response = utils.list_to_json(tweets)
     chart_response = json.dumps(ans)
-    result = merge(chart_response, tweets_response)
-    return utils.JSONResponse(result)
+
+    return utils.JSONResponse(chart_response)
 
 
 
@@ -185,13 +146,8 @@ def show_nube_palabra():
         if item['count'] >= 3 and word not in item['_id']:
             ans2.append(item)
 
-    tweets_response = utils.list_to_json(tweets)
     nube_response = utils.list_to_json(ans2)
-    result = merge(nube_response, tweets_response)
-
-
-
-    return utils.JSONResponse(result)
+    return utils.JSONResponse(nube_response)
 
 
 
@@ -200,7 +156,7 @@ def show_nube_palabra():
 def show_grafo_cuentas_palabras():
     words = request.args.getlist('words')
     #pprint(words)
-
+    tweets = []
 
     m =[]
     accounts = []
@@ -210,6 +166,7 @@ def show_grafo_cuentas_palabras():
         word = []
 
         tweets_by_word = search_by_keywords(w)
+        tweets += tweets_by_word
 
         for t in tweets_by_word:
 
@@ -247,13 +204,13 @@ def show_grafo_cuentas_palabras():
                 link['destino'] = {'x': x, 'y': y}
     # pprint(m)  
     # pprint(json.dumps(m))
-    grafo_response = json.dumps({"nodes": nodes, "links": m})
-    tweets = []
+    q = json.dumps({"nodes": nodes, "links": m})
 
-    tweets_response = utils.list_to_json(tweets_by_word)
+    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
 
-    result = merge(grafo_response, tweets_response)
-    return utils.JSONResponse(grafo_response)
+    tweets_response = utils.list_to_json(p)
+    return utils.JSONResponse(tweets_response)
+
 
     
 

@@ -5,12 +5,11 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 
 import utils
-from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId
+from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
 from extract_tweets import searchTweetById, extractTweetsApi
 from graphs import graph
 from flask_cors import CORS
 from dateutil import parser
-from jsonmerge import merge
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +20,6 @@ accountsx = ['@ELTIEMPO', '@elespectador', '@RevistaSemana']
 word = "coronavirus"
 string = '"Real Madrid"'
 username= "@elespectador"
-accountsList = []
 
 @app.route('/')
 def home():
@@ -56,16 +54,13 @@ def extractTweetsByAccount():
     accounts = request.args.getlist('account')
     tweets = extractTweetsApi(accounts, number)
     newCount = saveTweetsMongo(tweets)
-    for a in accounts:
-        accountsList.append(a)
-
-
+    
     return {'newTweets': newCount}, 200
 
 @app.route('/getAccounts', methods=['GET'])
 def getAccounts():
-    print(accountsList)
-    accounts_response = utils.list_to_json(accountsList)
+    accounts = return_accounts()
+    accounts_response = utils.list_to_json(accounts)
     return utils.JSONResponse(accounts_response)
 
 @app.route('/tweets', methods=['GET'])

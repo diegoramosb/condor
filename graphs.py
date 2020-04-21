@@ -11,8 +11,6 @@ from itertools import combinations
 from math import sin, cos, pi
 import nltk
 
-from  jsonmerge import merge
-
 from extract_tweets import searchTweetById, extractTweetsApi
 
 graph = Blueprint('graphs', __name__)
@@ -143,7 +141,7 @@ def show_nube_palabra():
             ans.append(obj)
     ans2 = []
     for item in ans:
-        if item['count'] >= 1 and word not in item['_id']:
+        if item['count'] >= 3 and word not in item['_id']:
             ans2.append(item)
 
     nube_response = utils.list_to_json(ans2)

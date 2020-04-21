@@ -1,0 +1,88 @@
+<mat-drawer-container height=100%>
+    <mat-drawer class="drawer" mode="side" opened>
+      <div class="container">
+        <div class="col-md">
+          <div class="row">
+          </div>
+        </div>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1">
+            <button mat-icon-button routerLink="" style="color: #f15252;">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+          </div>
+          <div class="col-md-10">
+            <mat-card class="filtersCard" style="margin-top: 10px;">
+              <mat-card-header>
+                <mat-card-title style="color: #f15252;">Filtros</mat-card-title>
+              </mat-card-header>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-4">
+                    <mat-form-field class="detailFormField">
+                      <mat-label class="detailFormLabel">Buscar palabras</mat-label>
+                      <input matInput #wordInput (keyup.enter)="addWord(wordInput.value)">
+                    </mat-form-field>
+                    <mat-list>
+                      <mat-list-item *ngFor="let word of selectedWords">
+                        <div mat-line>{{word}}</div>
+                        <button mat-icon-button (click)="removeWord(word)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
+                  <div class="col-md-4">
+                    <mat-form-field class="detailFormField">
+                      <mat-label class="detailFormLabel">Elegir cuentas</mat-label>
+                      <mat-select>
+                        <mat-option value="option" *ngFor="let account of accounts" (click)="addAccount(account)">
+                          {{account}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-list>
+                      <mat-list-item *ngFor="let account of selectedAccounts">
+                        <div mat-line>{{account}}</div>
+                        <button mat-icon-button (click)="removeAccount(account)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
+                  <div class="col-md-4">
+                    <mat-form-field class="detailFormField">
+                      <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
+                      <input matInput [max]="maxDate" [matDatepicker]="picker">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <mat-card-actions>
+                <button mat-button style="color: #f15252;">Aplicar filtros</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <mat-card class="detailGraphCard">
+              <mat-card-header>
+                <mat-card-title style="color: #f15252;">TITULO</mat-card-title>
+              </mat-card-header>
+              <app-word-freq></app-word-freq>
+            </mat-card>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  

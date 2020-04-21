@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import {ApiService} from "../api.service";
+import { ChartDataSets } from 'chart.js';
+import { Label } from 'ng2-charts';
+
 
 @Component({
   selector: 'app-word-freq-settings',
@@ -12,10 +16,22 @@ export class WordFreqSettingsComponent implements OnInit {
 
   public selectedAccounts = [];
 
-  public selectedWords = [];
+  public word = "";
 
   public maxDate = moment();
-  
+
+  public words = [];
+
+  public count = []; 
+
+  public freqChartData: ChartDataSets[] = [
+    { data: [], label: 'Frecuencia' },
+  ];
+
+  public freqChartLabels: Label[] = [];
+
+  constructor(private apiService: ApiService) {}
+
   ngOnInit(): void {
   }
 
@@ -33,18 +49,21 @@ export class WordFreqSettingsComponent implements OnInit {
     }
   }
 
-  addWord(word: string) {
-    if(!this.selectedWords.includes(word)) {
-      this.selectedWords.push(word);
-    }
+  searchWord(word: string) {
+    this.word = word;
+    console.log(this.word)
   }
 
-  removeWord(word: string) {
-    for(var i = 0; i < this.selectedWords.length; i++) {
-      if(this.selectedWords[i] == word) {
-        this.selectedWords.splice(i, 1);
-      }
-    }
-  }
+  applyFilters() {
+    console.log("sending:" + this.word)
+     this.apiService.getFrecuencyChartData(this.word).subscribe((data: []) => {
+       data.forEach(element => {
+         this.words.push(element['_id'])
+         this.count.push(element['count'])
+       });
+       this.freqChartLabels = this.words;
+       this.freqChartData = [{data: this.count, label:'Frecuencia'}];
+     });
+   }
 
 }

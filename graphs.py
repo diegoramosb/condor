@@ -154,7 +154,7 @@ def show_nube_palabra():
             ans.append(obj)
     ans2 = []
     for item in ans:
-        if item['count'] >= 3 and word not in item['_id']:
+        if item['count'] >= 1 and word not in item['_id']:
             ans2.append(item)
     nube_response= utils.list_to_json(ans2)
 

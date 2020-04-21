@@ -24,24 +24,33 @@ def home():
 def index():
     return "App running"
 
+
 @app.route('/updateTweets', methods=['GET'])
 def updateTweetsToday():
+    """
+    Actualiza likes y retweets de los tweets del día
+    """
     tweets = search_tweets_after(datetime.today())
+    print("tweets: ", tweets)
     updatedTweets = []
     for t in tweets:
         updatedTweets.append(searchTweetById(t["_id"]))
-    updateTweets(updatedTweets)
+    response = updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return 'Ok', 200
+    return response, 200
 
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():
+    """
+    Extrae un número de tweets de la API
+    """
+    number = int(request.args.get('number'))
     accounts = request.args.getlist('account')
-    tweets = extractTweetsApi(accounts, 5)
-    saveTweetsMongo(tweets)
+    tweets = extractTweetsApi(accounts, number)
+    newCount = saveTweetsMongo(tweets)
 
-    return 'Ok', 200
+    return {'newTweets': newCount}, 200
 
 
 

@@ -26,6 +26,9 @@ import { TweetsComponent } from './tweets/tweets.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GraphCardComponent } from './graph-card/graph-card.component';
 import { BarHistoricSettingsComponent } from './bar-historic-settings/bar-historic-settings.component';
+import { BubbleSettingsComponent } from './bubble-settings/bubble-settings.component';
+import { WordFreqSettingsComponent } from './word-freq-settings/word-freq-settings.component';
+import { GraphSettingsComponent } from './graph-settings/graph-settings.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { BarHistoricSettingsComponent } from './bar-historic-settings/bar-histor
     DashboardComponent,
     GraphCardComponent,
     BarHistoricSettingsComponent,
+    BubbleSettingsComponent,
+    WordFreqSettingsComponent,
+    GraphSettingsComponent,
     ],
   imports: [
     BrowserModule,

@@ -16,11 +16,11 @@ export class WordFreqSettingsComponent implements OnInit {
 
   public selectedAccounts = [];
 
-  public word = "";
-
-  public maxDate = moment();
+  public word: string;
 
   public words = [];
+
+  public maxDate = moment();
 
   public count = []; 
 
@@ -33,6 +33,7 @@ export class WordFreqSettingsComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
+    this.word = localStorage.getItem('freqWord');
   }
 
   addAccount(account: string) {
@@ -49,20 +50,20 @@ export class WordFreqSettingsComponent implements OnInit {
     }
   }
 
-  searchWord(word: string) {
-    this.word = word;
-    console.log(this.word)
-  }
+  asdf(){}
 
-  applyFilters() {
-    console.log("sending:" + this.word)
+  applyFilters(word: string) {
+    this.words = [];
+    this.count = [];
+    this.word = word;
      this.apiService.getFrecuencyChartData(this.word).subscribe((data: []) => {
        data.forEach(element => {
-         this.words.push(element['_id'])
-         this.count.push(element['count'])
+           this.words.push(element['_id'])
+           this.count.push(element['count'])
        });
        this.freqChartLabels = this.words;
        this.freqChartData = [{data: this.count, label:'Frecuencia'}];
+       localStorage.setItem('freqWord', this.word);
      });
    }
 

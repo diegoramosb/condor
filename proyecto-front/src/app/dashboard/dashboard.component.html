@@ -7,14 +7,14 @@
         </div>
         <form>
           <div class="row">
-            <mat-form-field>
-              <mat-label>Seguir cuenta</mat-label>
+            <mat-form-field style="width: 14vw;">
+              <mat-label>Buscar cuenta</mat-label>
               <input matInput>
             </mat-form-field>
           </div>
         </form>
         <div class="row">
-          <button mat-flat-button routerLink="/tweets">
+          <button mat-flat-button routerLink="/tweets" style="background-color: #f15252; color: white;">
             Ver tweets
           </button>
         </div>
@@ -22,42 +22,86 @@
     </div>
   </mat-drawer>
   <mat-drawer-content>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="row">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-6">
+          <div class="row justify-content-center">
             <mat-card class="graphCard">
-              <div class="row" id="graphCardHeader">
-                <div class="col-md-10">
-                  <h3 class="cardTitle" *ngIf="showingHistoric==true">Evolución de retweets y likes de la cuenta</h3>
-                </div>
-                <div class="col-md-2">
-                  <button mat-icon-button routerLink="/historic-settings" style="background-color: transparent; color: #f15252;">
-                    <mat-icon>settings</mat-icon>
-                </button>
-                </div>
-              </div>
-              <div class="row" class="cardBody" *ngIf="showingHistoric==true">
-                <span class="col-md-1"></span>
-                <app-bar-historic></app-bar-historic>
-                <span class="col-md-1"></span>
-              </div>
-              <div class="row" id="cardBody" *ngIf="showingHistoric==false" style="text-align: center;">
+              <mat-card-header>
+                <mat-card-title *ngIf="showingHistoric==true" class="cardTitle">
+                  Evolución de retweets y likes
+                </mat-card-title>
+              </mat-card-header>
+              <app-bar-historic *ngIf="showingHistoric==true"></app-bar-historic>
+              <div class="row" *ngIf="showingHistoric==false" style="text-align: center;">
                 <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
               </div>
+              <mat-card-actions>
+                <button mat-icon-button routerLink="/config-historico"
+                  style="color: #f15252;">
+                  <mat-icon>settings</mat-icon>
+                </button>
+              </mat-card-actions>
             </mat-card>
-
           </div>
-          <div class="row">
-            <app-graph></app-graph>
+          <div class="row justify-content-center">
+            <mat-card class="graphCard"> 
+              <mat-card-header>
+                <mat-card-title *ngIf="showingGraph==true" class="cardTitle">
+                  Evolución de retweets y likes
+                </mat-card-title>
+              </mat-card-header>
+              <app-graph *ngIf="showingGraph==true"></app-graph>
+              <div class="row" *ngIf="showingGraph==false" style="text-align: center;">
+                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+              </div>
+              <mat-card-actions>
+                <button mat-icon-button routerLink="/config-historico"
+                  style="color: #f15252;">
+                  <mat-icon>settings</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="row">
-            <app-bubble></app-bubble>
+        <div class="col-sm-12 col-md-6">
+          <div class="row justify-content-center">
+            <mat-card class="graphCard">
+              <mat-card-header>
+                <mat-card-title *ngIf="showingBubble==true" class="cardTitle">
+                  Likes, retweets y número de tweets
+                </mat-card-title>
+              </mat-card-header>
+              <app-bubble *ngIf="showingBubble==true"></app-bubble>
+              <div class="row" *ngIf="showingBubble==false" style="text-align: center;">
+                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+              </div>
+              <mat-card-actions>
+                <button mat-icon-button routerLink="/config-burbuja"
+                  style="color: #f15252;">
+                  <mat-icon>settings</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
           </div>
-          <div class="row">
-            <app-word-freq></app-word-freq>
+          <div class="row justify-content-center">
+            <mat-card class="graphCard">
+              <mat-card-header>
+                <mat-card-title *ngIf="showingFreq==true" class="cardTitle">
+                  asdf
+                </mat-card-title>
+              </mat-card-header>
+              <app-word-freq *ngIf="showingFreq==true"></app-word-freq>
+              <div class="row" *ngIf="showingFreq==false" style="text-align: center;">
+                <h2 style="color: grey;">Haz click en el ícono de configuración para configurar el gráfico</h2>
+              </div>
+              <mat-card-actions>
+                <button mat-icon-button routerLink="/config-frecuencia"
+                  style="color: #f15252;">
+                  <mat-icon>settings</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
           </div>
         </div>
       </div>

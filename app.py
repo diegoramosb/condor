@@ -34,7 +34,7 @@ def updateTweetsToday():
     for t in updatedTweets:
         print(t["id"])
     return 'Ok', 200
-
+## poner OK en json
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():
     accounts = request.args.getlist('account')

@@ -4,12 +4,21 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 
 """MongoDB connection"""
-#client = MongoClient('172.24.99.115', 27017)
-client = MongoClient('localhost', 27017)
-db = client['proyecto2020']
+client = MongoClient('172.24.99.115', 27017)
+#client = MongoClient('localhost', 27017)
+db = client['proyecto20202']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
 
+def return_tweets():
+
+    pprint(tweetsCollection)
+    return list(tweetsCollection.find().sort([('date', -1)]))
+
+def search_tweets_userId(id):
+    us = usersCollection.find({'_id': id})
+    for inf in us:
+        return list(tweetsCollection.find({'userId': inf['_id']}))
 
 def search_by_keywords(word):
     return list(tweetsCollection.find({"$text": {"$search": word}}))

@@ -1,3 +1,5 @@
+import parser
+
 import matplotlib.pyplot as plt
 from flask import Blueprint, request
 import numpy as np
@@ -7,6 +9,8 @@ from db import *
 import json
 from itertools import combinations
 from math import sin, cos, pi
+from dateutil import parser
+from  jsonmerge import merge
 
 from extract_tweets import searchTweetById, extractTweetsApi
 
@@ -35,6 +39,22 @@ def show_word_frequency(word):
     plt.show()
 
 
+@graph.route('/tweets', methods=['GET'])
+def get_all_tweets():
+    tweets = return_tweets()
+    for t in tweets:
+        tweetss = search_tweets_userId(t['userId'])
+
+    tweets_response = utils.list_to_json(tweets)
+    return utils.JSONResponse(tweets_response)
+
+@graph.route('/tweetsbydate', methods=['GET'])
+def get_tweets_date():
+    date = request.args.get('date')
+    dt = parser.parse(date)
+    tweets = search_tweets_after(dt)
+    tweets_response = utils.list_to_json(tweets)
+    return utils.JSONResponse(tweets_response)
 
 @graph.route('/tweetsbyword', methods=['GET'])
 def show_tweets_by_word():
@@ -58,7 +78,7 @@ def show_tweets_by_user():
 def show_favs_rts():
     word = request.args.get('word')
 #x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
-
+    tweets = search_by_keywords(word)
     userIds = []
     usage = []
     sumFavs = []
@@ -95,8 +115,12 @@ def show_favs_rts():
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
 
     pprint(json.dumps(m))
+    json.dumps(m)
+
+    tweets_response = utils.list_to_json(tweets)
     bubble_response = json.dumps(m)
-    return utils.JSONResponse(bubble_response)
+    result = merge(bubble_response, tweets_response)
+    return utils.JSONResponse(result)
 
 
 # se pasa una palabra y un dia
@@ -133,8 +157,11 @@ def show_chart():
     print(ans)
 
     # pprint(json.dumps(m))
+
+    tweets_response = utils.list_to_json(tweets)
     chart_response = json.dumps(ans)
-    return utils.JSONResponse(chart_response)
+    result = merge(chart_response, tweets_response)
+    return utils.JSONResponse(result)
 
 
 
@@ -144,6 +171,7 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
+    tweets = search_by_keywords(word)
     ids = []
     for obj in words:
         ids.append(obj['_id'].lower())
@@ -156,9 +184,14 @@ def show_nube_palabra():
     for item in ans:
         if item['count'] >= 3 and word not in item['_id']:
             ans2.append(item)
-    nube_response= utils.list_to_json(ans2)
 
-    return utils.JSONResponse(nube_response)
+    tweets_response = utils.list_to_json(tweets)
+    nube_response = utils.list_to_json(ans2)
+    result = merge(nube_response, tweets_response)
+
+
+
+    return utils.JSONResponse(result)
 
 
 
@@ -215,6 +248,11 @@ def show_grafo_cuentas_palabras():
     # pprint(m)  
     # pprint(json.dumps(m))
     grafo_response = json.dumps({"nodes": nodes, "links": m})
+    tweets = []
+
+    tweets_response = utils.list_to_json(tweets_by_word)
+
+    result = merge(grafo_response, tweets_response)
     return utils.JSONResponse(grafo_response)
 
     

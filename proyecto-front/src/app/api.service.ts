@@ -42,6 +42,18 @@ export class ApiService {
 
   }
 
+  public getAccounts() {
+    return this.httpClient.get(`${this.apiUrl}/getAccounts`);
+  }
+
+  public getTweets() {
+    return this.httpClient.get(`${this.apiUrl}/tweets`);
+  }
+
+  public getTweetsWord(word: string) {
+    return this.httpClient.get(`${this.apiUrl}/tweetsbyword?word=`+word);
+  }
+
   public updateTweets() {
     return this.httpClient.get(`${this.apiUrl}/updateTweets`);
   }

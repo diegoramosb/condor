@@ -108,7 +108,8 @@ def saveTweetsMongo(tweets):
                     'userId': t['user']['id'],
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
-                    'request_times': [datetime.now()]
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
             }
 
             else:
@@ -123,7 +124,8 @@ def saveTweetsMongo(tweets):
                     'userId': t['user']['id'],
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
-                    'request_times': [datetime.now()]
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
             }
         else:
             newTweet = {
@@ -134,7 +136,8 @@ def saveTweetsMongo(tweets):
                 'userId': t['user']['id'],
                 'retweet_count': [t['retweet_count']],
                 'favorite_count': [t['favorite_count']],
-                'request_times': [datetime.now()]
+                'request_times': [datetime.now()],
+                'polarity': "none"
             }
         try:
             tweetsCollection.insert_one(newTweet)
@@ -157,3 +160,5 @@ def updateTweets(tweets):
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"request_times": datetime.now()}})
     return({'updatedTweets': len(tweets)})
 
+def updatePolarity(tweetId, polarity):
+    tweetsCollection.update({"_id": tweetId}, {"$set": {"polarity": polarity}})

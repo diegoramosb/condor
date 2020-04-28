@@ -30,7 +30,17 @@
     padding-right: 0; */
 } 
 
-.tweetCard {
+.tweetCardPositive {
+    margin: 10px;
+    border-top: 4px solid lightgreen;
+}
+
+.tweetCardNegative {
+    margin: 10px;
+    border-top: 4px solid #f15252;
+}
+
+.tweetCardNone {
     margin: 10px;
 }
 

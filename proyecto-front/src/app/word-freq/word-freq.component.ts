@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
-import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-word-freq',
   templateUrl: './word-freq.component.html',
   styleUrls: ['../app.component.css']
 })
-export class WordFreqComponent implements OnInit {
+export class WordFreqComponent implements OnInit, OnDestroy {
 
   public freqChartOptions: ChartOptions = {
     responsive: true,
@@ -27,7 +26,7 @@ export class WordFreqComponent implements OnInit {
         }
 
       }],
-       yAxes: [
+      yAxes: [
         {
           ticks: {
             min: 0
@@ -37,7 +36,7 @@ export class WordFreqComponent implements OnInit {
     }
   };
   public showing = false;
-  public freqChartLabels: Label[] = [];
+  // public freqChartLabels: Label[] = [];
   public freqChartType: ChartType = 'horizontalBar';
   public freqChartLegend = true;
   public freqChartPlugins = [];
@@ -47,36 +46,27 @@ export class WordFreqComponent implements OnInit {
       hoverBackgroundColor: "rgba(29, 161, 243, 1)"
     }
   ];
+  @Input() freqChartData: ChartDataSets[];
 
+  @Input() freqChartLabels: [];
 
-  mySubscription: any;
-
-  public freqChartData: ChartDataSets[] = [
-
-    { data: [], label: 'Frecuencia' },
-  ];
-
-   constructor(private apiService: ApiService) { }
-
-  ngOnInit() {
-
+  constructor() {
+    
   }
 
-  onEnter(word: string) {
-     var palabras = [];
-     var count = [];
-
-      this.apiService.getFrecuencyChartData(word).subscribe((data: []) => {
-        data.forEach(element => {
-          palabras.push(element['_id'])
-          count.push(element['count'])
-
-        });
-      });
-      this.freqChartLabels = palabras;
-      console.log(palabras)
-      console.log(count)
-      this.freqChartData = [{data: count, label:'Frecuencia'}];
+  ngOnInit() {
+    var data = JSON.parse(localStorage.getItem('freqData'));
+    if(data['freqChartData'] != null) {
+      this.freqChartData = data['freqChartData'];
+      this.freqChartLabels = data['freqChartLabels'];
     }
     
+  }
+
+  ngOnDestroy() {
+    var json = {'freqChartData': this.freqChartData, 'freqChartLabels': this.freqChartLabels};
+    localStorage.setItem('freqData', JSON.stringify(json));
+  }
+
+  
 }

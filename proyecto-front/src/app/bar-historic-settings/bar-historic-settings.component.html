@@ -11,21 +11,21 @@
     <div class="container">
       <div class="row">
         <div class="col-md-1">
-            <button mat-icon-button routerLink="" style="color: #f15252;">
+            <button mat-icon-button routerLink="" style="color: #465775;">
                 <mat-icon>arrow_back</mat-icon>
             </button>
         </div>
         <div class="col-md-10">
           <mat-card class="filtersCard" style="margin-top: 10px;">
             <mat-card-header>
-              <mat-card-title style="color: #f15252;">Filtros</mat-card-title>
+              <mat-card-title style="color: #465775;">Filtros</mat-card-title>
             </mat-card-header>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-4">
                   <mat-form-field class="detailFormField">
                     <mat-label class="detailFormLabel">Buscar palabras</mat-label>
-                    <input matInput #wordInput (keyup.enter)="addWord(wordInput.value)">
+                    <input matInput #wordInput (keyup.enter)="asdf()">
                   </mat-form-field>
                   <mat-list>
                       <mat-list-item *ngFor="let word of selectedWords">
@@ -63,7 +63,7 @@
               </div>
             </div>
             <mat-card-actions>
-                <button mat-button style="color: #f15252;">Aplicar filtros</button>
+                <button mat-button (click)="applyFilters(wordInput.value)" style="color: #465775;">Aplicar filtros</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -74,11 +74,11 @@
         <div class="col-md-10">
           <mat-card class="detailGraphCard">
             <mat-card-header>
-              <mat-card-title style="color: #f15252;">TITULO</mat-card-title>
+              <mat-card-title style="color: #465775;">"{{word}}"</mat-card-title>
             </mat-card-header>
-            <app-bar-historic></app-bar-historic>
+            <app-bar-historic [barChartData]="barChartData" [barChartLabels]="barChartLabels"></app-bar-historic>
             <mat-card-actions>
-                <button mat-button style="color: #f15252;">Actualizar datos</button>
+                <button mat-button (click)="updateData()" style="color: #465775;">Actualizar datos</button>
             </mat-card-actions>
           </mat-card>
         </div>

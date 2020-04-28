@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiService } from '../api.service';
+import { SettingsComponent } from '../settings/settings.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,14 +11,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  public showingHistoric = true;
-  public showingBubble = true;
-  public showingGraph = true;
-  public showingFreq = true;
+  public historicWord: string;
+  public bubbleWord: string;
+  public showingGraph = false;
+  public freqWord: string;
 
-  constructor() { }
+  constructor(private snackBar: MatSnackBar, private apiService: ApiService, private dialog: MatDialog) { }
+
 
   ngOnInit(): void {
+    // this.getAccounts();
+    this.bubbleWord = localStorage.getItem('bubbleWord');
+    this.freqWord = localStorage.getItem('freqWord');
+    // this.historicWord = localStorage.getItem('historicWord');
   }
 
+  extractTweets() {
+    this.getAccounts().subscribe((response: string[]) => {
+      let accounts: string[] = [];
+      response.forEach(account => {
+        accounts.push(account['screen_name'])
+        console.log("added" + account)
+      });
+      this.apiService.extractTweets(accounts, Math.floor(200 / accounts.length)).subscribe(response => {
+        this.snackBar.open(`Actualizados ${response['newTweets']} tweets`, "Aceptar");
+      })
+    });
+  }
+
+  getAccounts() {
+    return this.apiService.getAccounts();
+  }
+
+  openSettings() {
+    this.getAccounts().subscribe((response: []) => {
+      let accounts: string[] = response
+      const dialogRef = this.dialog.open(SettingsComponent, {
+        width: '40vw',
+        data: { name: accounts }
+      });
+
+      // dialogRef.afterClosed().subscribe(result => {
+      //   console.log('The dialog was closed');
+      //   this.accounts = result;
+      // });
+    })
+  }
 }

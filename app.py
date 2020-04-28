@@ -5,13 +5,16 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 
 import utils
+
 from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, \
     searchUserId, deleteById
+
+from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
+
 from extract_tweets import searchTweetById, extractTweetsApi
 from graphs import graph
 from flask_cors import CORS
 from dateutil import parser
-from jsonmerge import merge
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +25,6 @@ accountsx = ['@ELTIEMPO', '@elespectador', '@RevistaSemana']
 word = "coronavirus"
 string = '"Real Madrid"'
 username= "@elespectador"
-accountsList = []
 
 @app.route('/')
 def home():
@@ -34,30 +36,35 @@ def index():
 
 @app.route('/updateTweets', methods=['GET'])
 def updateTweetsToday():
+    """
+    Actualiza likes y retweets de los tweets del día
+    """
     tweets = search_tweets_after(datetime.today())
+    print("tweets: ", tweets)
     updatedTweets = []
     for t in tweets:
         updatedTweets.append(searchTweetById(t["_id"]))
-    updateTweets(updatedTweets)
+    response = updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return 'Ok', 200
-## poner OK en json
+    return response, 200
+
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():
+    """
+    Extrae un número de tweets de la API
+    """
+    number = int(request.args.get('number'))
     accounts = request.args.getlist('account')
-    for a in accounts:
-        accountsList.append(a)
-
-    tweets = extractTweetsApi(accounts, 5)
-    saveTweetsMongo(tweets)
-
-    return 'Ok', 200
+    tweets = extractTweetsApi(accounts, number)
+    newCount = saveTweetsMongo(tweets)
+    
+    return {'newTweets': newCount}, 200
 
 @app.route('/getAccounts', methods=['GET'])
 def getAccounts():
-    print(accountsList)
-    accounts_response = utils.list_to_json(accountsList)
+    accounts = return_accounts()
+    accounts_response = utils.list_to_json(accounts)
     return utils.JSONResponse(accounts_response)
 
 @app.route('/tweets', methods=['GET'])
@@ -117,7 +124,10 @@ def show_tweets_by_user():
     #tweets_response = utils.list_to_json(tweets)
    # return utils.JSONResponse(tweets_response)
 
-
+@app.route('/setPolarity', methods=['PUT'])
+def set_polarity():
+    updatePolarity(request.args.get('tweetId'), request.args.get('polarity'))
+    return {}, 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)

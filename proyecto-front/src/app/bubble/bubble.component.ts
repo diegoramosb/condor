@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color } from 'ng2-charts';
-import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-bubble',
   templateUrl: './bubble.component.html',
   styleUrls: ['../app.component.css']
 })
-export class BubbleComponent implements OnInit {
+export class BubbleComponent implements OnInit, OnDestroy {
 
   public bubbleChartOptions: ChartOptions = {
     responsive: true,
@@ -52,41 +51,19 @@ export class BubbleComponent implements OnInit {
     },
   ];
 
-  public bubbleChartData: ChartDataSets[] = [
-
-     { data: [], label: ''},
-  ];
-
   public showing = false;
 
-  constructor(private apiService: ApiService) { }
+  @Input() bubbleChartData: ChartDataSets[];
 
   ngOnInit() {
-    // this.apiService.getBubbleData()
+    var data = JSON.parse(localStorage.getItem('bubbleData'));
+    if(data != null) {
+      this.bubbleChartData = data['bubbleData'];
+    }
   }
 
-  onEnter(word: string) {
-
-    this.apiService.getBubbleChartData(word).subscribe((data: []) => {
-        var x:number;
-        var info = [];
-        var y:number;
-        var r:number;
-      data.forEach((element) => {
-
-        x=(element['data']['x'])
-        y=element['data']['y']
-        r=element['data']['z']
-
-        info.push({data:[{x:x, y:y, r:r}], label:element['label']})
-
-      });
-
-      this.bubbleChartData = info
-      console.log(info)
-    });
-
-
+  ngOnDestroy() {
+    var json = {'bubbleData': this.bubbleChartData};
+    localStorage.setItem('bubbleData', JSON.stringify(json));
   }
-
 }

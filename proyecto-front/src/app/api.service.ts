@@ -41,4 +41,33 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/grafo` + params);
 
   }
+
+  public getAccounts() {
+    return this.httpClient.get(`${this.apiUrl}/getAccounts`);
+  }
+
+  public getTweets() {
+    return this.httpClient.get(`${this.apiUrl}/tweets`);
+  }
+
+  public getTweetsWord(word: string) {
+    return this.httpClient.get(`${this.apiUrl}/tweetsbyword?word=`+word);
+  }
+
+  public updateTweets() {
+    return this.httpClient.get(`${this.apiUrl}/updateTweets`);
+  }
+
+  public extractTweets(accounts: string[], number: number) {
+    var params = `?number=${number}&`;
+    for(var i = 0; i < accounts.length; i++) {
+      if(i < accounts.length - 1) {
+        params += "account=" + accounts[i] + "&";
+      }
+      else {
+        params += "account=" + accounts[i];
+      }
+    }
+    return this.httpClient.get(`${this.apiUrl}/extractTweets` + params);
+  }
 }

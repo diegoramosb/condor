@@ -17,6 +17,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { MatDialogModule } from '@angular/material/dialog'; 
+import { MatDividerModule } from '@angular/material/divider'; 
 import { LayoutModule } from '@angular/cdk/layout';
 import { BarHistoricComponent } from './bar-historic/bar-historic.component';
 import { BubbleComponent } from './bubble/bubble.component';
@@ -29,6 +32,7 @@ import { BarHistoricSettingsComponent } from './bar-historic-settings/bar-histor
 import { BubbleSettingsComponent } from './bubble-settings/bubble-settings.component';
 import { WordFreqSettingsComponent } from './word-freq-settings/word-freq-settings.component';
 import { GraphSettingsComponent } from './graph-settings/graph-settings.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +48,7 @@ import { GraphSettingsComponent } from './graph-settings/graph-settings.componen
     BubbleSettingsComponent,
     WordFreqSettingsComponent,
     GraphSettingsComponent,
+    SettingsComponent,
     ],
   imports: [
     BrowserModule,
@@ -63,6 +68,9 @@ import { GraphSettingsComponent } from './graph-settings/graph-settings.componen
     MatSelectModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatDividerModule,
     LayoutModule
   ],
   providers: [],

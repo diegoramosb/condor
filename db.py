@@ -5,15 +5,23 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 
 """MongoDB connection"""
+<<<<<<< HEAD
 #client = MongoClient('172.24.99.115', 27017)
 client = MongoClient('localhost', 27017)
 db = client['proyecto20202']
+=======
+client = MongoClient('172.24.99.115', 27017)
+# client = MongoClient('localhost', 27017)
+db = client['proyecto20203']
+>>>>>>> e66aa90a664864aee1ddd68b39ff8d39092f9ea3
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
 
+def return_accounts():
+    return usersCollection.find()
+
 def return_tweets():
 
-    pprint(tweetsCollection)
     return list(tweetsCollection.find().sort([('date', -1)]))
 
 def return_tweets_complete():
@@ -110,7 +118,8 @@ def saveTweetsMongo(tweets):
                     'userId': t['user']['id'],
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
-                    'request_times': [datetime.now()]
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
             }
 
             else:
@@ -125,7 +134,8 @@ def saveTweetsMongo(tweets):
                     'userId': t['user']['id'],
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
-                    'request_times': [datetime.now()]
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
             }
         else:
             newTweet = {
@@ -136,7 +146,8 @@ def saveTweetsMongo(tweets):
                 'userId': t['user']['id'],
                 'retweet_count': [t['retweet_count']],
                 'favorite_count': [t['favorite_count']],
-                'request_times': [datetime.now()]
+                'request_times': [datetime.now()],
+                'polarity': "none"
             }
         try:
             tweetsCollection.insert_one(newTweet)
@@ -149,7 +160,7 @@ def saveTweetsMongo(tweets):
         if (usersCollection.find_one({"_id": t['user']['id']})) is None:
             newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
             usersCollection.insert_one(newuser)
-    print("--- Added {} new tweets ---".format(cnt))
+    return(cnt)
 
 
 def updateTweets(tweets):
@@ -157,5 +168,7 @@ def updateTweets(tweets):
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"retweet_count": t["retweet_count"]}})
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"favorite_count": t["favorite_count"]}})
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"request_times": datetime.now()}})
-    print("--- Updated {} tweets ---".format(len(tweets)))
+    return({'updatedTweets': len(tweets)})
 
+def updatePolarity(tweetId, polarity):
+    tweetsCollection.update({"_id": tweetId}, {"$set": {"polarity": polarity}})

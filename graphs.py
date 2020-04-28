@@ -11,8 +11,6 @@ from itertools import combinations
 from math import sin, cos, pi
 import nltk
 
-from  jsonmerge import merge
-
 from extract_tweets import searchTweetById, extractTweetsApi
 
 graph = Blueprint('graphs', __name__)

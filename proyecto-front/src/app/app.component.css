@@ -30,6 +30,24 @@
     padding-right: 0; */
 } 
 
+.tweetCardPositive {
+    margin: 10px;
+    border-top: 4px solid lightgreen;
+}
+
+.tweetCardNegative {
+    margin: 10px;
+    border-top: 4px solid #f15252;
+}
+
+.tweetCardNone {
+    margin: 10px;
+}
+
+/* .settingsCard {
+    margin-l
+} */
+
 .detailFormField {
     width: inherit;
 }
@@ -38,12 +56,9 @@
     font-size: 1em;
 }
 
-.tweetCard {
-    margin: 10px;
-}
 
 .cardTitle {
-    color: #22344e;
+    color: #465775;
 }
 
 .detailGraphTitle {
@@ -79,5 +94,5 @@ mat-drawer {
 h1 {
     font-size: 2.5vw;
     font-weight: bold;
-    color: #f15252;
+    color: #465775;
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
-import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-bar-historic',
@@ -28,7 +27,6 @@ export class BarHistoricComponent implements OnInit {
       ]
     }
   };
-  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
@@ -42,33 +40,25 @@ export class BarHistoricComponent implements OnInit {
       hoverBackgroundColor: "rgba(232, 28, 79, 1)"
     },
   ];
-
-  public barChartData: ChartDataSets[] = [
-    { data: [], label: 'Retweets' },
-    { data: [], label: 'Likes' }
-  ];   
+  
+  @Input() barChartLabels: Label[];
+  @Input() barChartData: ChartDataSets[];
 
   public text = "";
   public showing = false;
 
-  constructor(private apiService: ApiService) { }
+  constructor() { }
 
   ngOnInit() {
+    var data = JSON.parse(localStorage.getItem('historicData'));
+    if(data != null) {
+      this.barChartData = data['historicData'];
+      this.barChartLabels = data['historicLabels']
+    }
   }
 
-  onEnter(word: string) {
-    var labels = [];
-    var likes = [];
-    var retweets = [];
-    this.apiService.getHistoricData(word).subscribe((data: []) => {
-      this.text = data['text'];
-      data['hist'].forEach(element => {
-        labels.push(element['hour'])
-        likes.push(element['numFavs'])
-        retweets.push(element['numRts'])
-      });
-    });
-    this.barChartLabels = labels;
-    this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
+  ngOnDestroy() {
+    var json = {'historicData': this.barChartData, 'historicLabels': this.barChartLabels};
+    localStorage.setItem('historicData', JSON.stringify(json));
   }
 }

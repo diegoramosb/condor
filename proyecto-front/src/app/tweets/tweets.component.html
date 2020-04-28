@@ -1,64 +1,64 @@
 <mat-drawer-container height=100%>
-    <mat-drawer class="drawer" mode="side" opened>
-        <div class="container">
-            <div class="col-md">
-                <div class="row">
-                    <h1>Tweets</h1>
-                </div>
-                <div class="row">
-                    <mat-form-field class="detailFormField">
-                        <mat-label class="detailFormLabel">Filtrar por palabra</mat-label>
-                        <input matInput #wordInput (keyup.enter)="getTweetsByWord(wordInput.value)">
-                      </mat-form-field>
-                </div>
-            </div>
+  <mat-drawer class="drawer" mode="side" opened>
+    <div class="container">
+      <div class="col-md">
+        <div class="row">
+          <h1>Tweets</h1>
         </div>
-    </mat-drawer>
-    <mat-drawer-content>
-        <div class="container">
+        <div class="row">
+          <mat-form-field class="detailFormField">
+            <mat-label class="detailFormLabel">Filtrar por palabra</mat-label>
+            <input matInput #wordInput (keyup.enter)="getTweetsByWord(wordInput.value)">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <button mat-icon-button routerLink="" style="color: #465775;">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+        <div class="col-md-8">
+          <mat-card class="tweetCard" *ngFor="let tweet of tweets">
+            <mat-card-header>
+              <div mat-card-avatar>
+                <img matListAvatar src="{{tweet['account'][0]['profile_image']}}">
+              </div>
+              <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
+              <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>
+                {{tweet['tweet']['text']}}
+              </p>
+            </mat-card-content>
             <div class="row">
-                <div class="col-md-2">
-                    <button mat-icon-button routerLink="" style="color: #465775;">
-                        <mat-icon>arrow_back</mat-icon>
-                    </button>
+              <div class="col-md-1">
+                <div class="row">
+                  <mat-icon>favorite</mat-icon>
+                  <p>{{tweet['tweet']['favorite_count'][0]}}</p>
                 </div>
-                <div class="col-md-8">
-                    <mat-card class="tweetCard" *ngFor="let tweet of tweets">
-                        <mat-card-header>
-                            <div mat-card-avatar>
-                                <img matListAvatar src="{{tweet['account'][0]['profile_image']}}">
-                            </div>
-                            <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
-                            <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <p>
-                                {{tweet['tweet']['text']}}
-                            </p>
-                        </mat-card-content>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <div class="row">
-                                    <mat-icon>favorite</mat-icon>
-                                    <p>{{tweet['tweet']['favorite_count'][0]}}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="row">
-                                    <mat-icon>refresh</mat-icon>
-                                    <p>{{tweet['tweet']['retweet_count'][0]}}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <button mat-flat-button>{{tweet['tweet']['date']}}</button>
-                            </div>
-                        </div>
-                    </mat-card>
+              </div>
+              <div class="col-md-1">
+                <div class="row">
+                  <mat-icon>refresh</mat-icon>
+                  <p>{{tweet['tweet']['retweet_count'][0]}}</p>
                 </div>
-                <div class="col-md-2">
-    
-                </div>
+              </div>
+              <div class="col-md-1">
+                <button mat-flat-button>{{tweet['tweet']['date']}}</button>
+              </div>
             </div>
+          </mat-card>
         </div>
-    </mat-drawer-content>
+        <div class="col-md-2">
+
+        </div>
+      </div>
+    </div>
+  </mat-drawer-content>
 </mat-drawer-container>

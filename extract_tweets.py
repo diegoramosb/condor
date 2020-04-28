@@ -24,11 +24,14 @@ def extractTweetsApi(accounts, nTweets):
     :param nTweets: maximum number of tweets to extract from each account
     :return: dict array with the tweets
     """
+
     jsons = []
     for id in accounts:
         for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(nTweets):
+            ##pprint(id)
             jsonStr = json.dumps(status._json)
             parsed = json.loads(jsonStr)
+            pprint(parsed)
             jsons.append(parsed)
 
     return jsons

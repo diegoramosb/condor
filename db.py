@@ -1,11 +1,12 @@
+from bson import ObjectId
 from pymongo import MongoClient
 from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 
 """MongoDB connection"""
-client = MongoClient('172.24.99.115', 27017)
-#client = MongoClient('localhost', 27017)
+#client = MongoClient('172.24.99.115', 27017)
+client = MongoClient('localhost', 27017)
 db = client['proyecto20202']
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
@@ -46,6 +47,9 @@ def search_tweets_after(startDate):
 
 def searchUserId(id):
     return list(usersCollection.find({'_id': id}))
+
+def deleteById(id):
+    return list(usersCollection.delete_one({'_id': id}))
 
 def search_most_common_words(word):
 

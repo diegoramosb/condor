@@ -5,7 +5,8 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 
 import utils
-from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId
+from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, \
+    searchUserId, deleteById
 from extract_tweets import searchTweetById, extractTweetsApi
 from graphs import graph
 from flask_cors import CORS
@@ -71,7 +72,11 @@ def get_all_tweets():
 
     return utils.JSONResponse(tweets_response)
 
-
+@app.route('/delete', methods=['DELETE'])
+def delete_tweets_byAccount():
+    id = request.args.get('id')
+    deleteById(id)
+    return 'Ok', 200
 
 @app.route('/tweetsbydate', methods=['GET'])
 def get_tweets_date():

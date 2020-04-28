@@ -23,7 +23,9 @@
           </button>
         </div>
         <div class="col-md-8">
-          <mat-card class="tweetCard" *ngFor="let tweet of tweets">
+          <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'positive',
+          'tweetCardNegative': tweet['tweet']['polarity'] == 'negative', 
+          'tweetCardNone': tweet['tweet']['polarity'] == 'none'}" *ngFor="let tweet of tweets">
             <mat-card-header>
               <div mat-card-avatar>
                 <img matListAvatar src="{{tweet['account'][0]['profile_image']}}">
@@ -49,8 +51,12 @@
                   <p>{{tweet['tweet']['retweet_count'][0]}}</p>
                 </div>
               </div>
-              <div class="col-md-1">
-                <button mat-flat-button>{{tweet['tweet']['date']}}</button>
+              <div class="col-md-3">
+                <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
+              </div>
+              <div class="col-md-4"></div>
+              <div class="col-md-3">
+                <button mat-flat-button style="color: #465775">Cambiar polaridad</button>
               </div>
             </div>
           </mat-card>

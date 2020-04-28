@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     // this.getAccounts();
     this.bubbleWord = localStorage.getItem('bubbleWord');
     this.freqWord = localStorage.getItem('freqWord');
-    this.historicWord = localStorage.getItem('historicWord');
+    // this.historicWord = localStorage.getItem('historicWord');
   }
 
   extractTweets() {

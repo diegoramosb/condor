@@ -65,7 +65,6 @@ export class WordFreqComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     var json = {'freqChartData': this.freqChartData, 'freqChartLabels': this.freqChartLabels};
-    console.log(json);
     localStorage.setItem('freqData', JSON.stringify(json));
   }
 

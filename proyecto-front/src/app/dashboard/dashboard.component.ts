@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../api.service';
+import { SettingsComponent } from '../settings/settings.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,34 +15,43 @@ export class DashboardComponent implements OnInit {
   public bubbleWord: string;
   public showingGraph = false;
   public freqWord: string;
-  public accounts = [];
 
-  constructor(private snackBar: MatSnackBar, private apiService: ApiService) { }
+  constructor(private snackBar: MatSnackBar, private apiService: ApiService, private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
-    this.getAccounts();
+    this.getAccounts().subscribe(response => console.log(response));
     this.bubbleWord = localStorage.getItem('bubbleWord');
     this.freqWord = localStorage.getItem('freqWord');
     this.historicWord = localStorage.getItem('historicWord');
   }
 
   extractTweets() {
-    this.apiService.extractTweets(this.accounts, Math.floor(200/this.accounts.length)).subscribe(response => {
-      this.snackBar.open(`Actualizados ${response['newTweets']} tweets`, "Aceptar");
-    })
-  }
+    this.getAccounts().subscribe((response: string[]) => {
+      let accounts: string[] = response
+      this.apiService.extractTweets(accounts, Math.floor(200 / accounts.length)).subscribe(response => {
+        this.snackBar.open(`Actualizados ${response['newTweets']} tweets`, "Aceptar");
+      })
+    });
 
-  addAccount(account: string) {
-    if(!this.accounts.includes(account)){
-      this.accounts.push(account);
-    }
   }
 
   getAccounts() {
-    this.apiService.getAccounts().subscribe((response: [])=> {
-      this.accounts = response
-    });
+    return this.apiService.getAccounts();
   }
 
+  openSettings() {
+    this.getAccounts().subscribe((response: []) => {
+      let accounts: string[] = response
+      const dialogRef = this.dialog.open(SettingsComponent, {
+        width: '40vw',
+        data: { name: accounts }
+      });
+  
+      // dialogRef.afterClosed().subscribe(result => {
+      //   console.log('The dialog was closed');
+      //   this.accounts = result;
+      // });
+    })
+  }
 }

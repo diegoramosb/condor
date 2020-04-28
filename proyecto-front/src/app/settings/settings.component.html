@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <h2 mat-dialog-title style="color: #465775;">Ajustes</h2>
+  <div mat-dialog-content>
+    <mat-divider></mat-divider>
+    <h3 style="color: #465775;">Cuentas</h3>
+    <mat-form-field style="width: 14vw">
+      <mat-label>Seguir cuenta</mat-label>
+      <input matInput #accountInput (keyup.enter)="addAccount(accountInput.value)">
+    </mat-form-field>
+    <mat-list>
+      <mat-list-item *ngFor="let account of accounts">
+        <img matListAvatar src="{{account['profile_image']}}">
+        <h3 matLine style="text-align: left;">{{account['name']}}</h3>
+        <p matLine style="text-align: left;">@{{account['screen_name']}}</p>
+        <button mat-button (click)="removeAccount(account)" style="color: #465775; padding-right: 4vw;">Dejar de seguir</button>
+      </mat-list-item>
+    </mat-list>
+    <mat-divider></mat-divider>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]>Cancelar</button>
+    <button mat-flat-button [mat-dialog-close] (click)="onClickSave()" style="background-color: #465775; color: white;">Guardar</button>
+  </div>
+</div>

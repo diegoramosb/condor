@@ -30,6 +30,14 @@
     padding-right: 0; */
 } 
 
+.tweetCard {
+    margin: 10px;
+}
+
+/* .settingsCard {
+    margin-l
+} */
+
 .detailFormField {
     width: inherit;
 }
@@ -38,9 +46,6 @@
     font-size: 1em;
 }
 
-.tweetCard {
-    margin: 10px;
-}
 
 .cardTitle {
     color: #465775;

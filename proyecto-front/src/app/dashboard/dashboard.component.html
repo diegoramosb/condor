@@ -5,19 +5,6 @@
         <div class="row">
           <h1>Dashboard</h1>
         </div>
-        <div class="row">
-          <mat-form-field style="width: 14vw;">
-            <mat-label>Seguir cuenta</mat-label>
-            <input matInput #accountInput (keyup.enter)="addAccount(accountInput.value)">
-          </mat-form-field>
-          <mat-list>
-            <mat-list-item *ngFor="let account of accounts">
-              <img matListAvatar src="{{account['profile_image']}}">
-              <h3 matLine style="text-align: left;">{{account['name']}}</h3>
-              <p matLine style="text-align: left;">@{{account['screen_name']}}</p>
-            </mat-list-item>
-          </mat-list>
-        </div>
         <div class="row justify-content-center">
           <button mat-flat-button routerLink="/tweets" style="background-color: #465775; color: white; margin-bottom: 2vh; margin-top: 
           4vh;">
@@ -25,6 +12,9 @@
           </button>
           <button mat-flat-button (click)="extractTweets()" style="background-color: #465775; color: white;">
             Descargar nuevos tweets
+          </button>
+          <button mat-button (click)="openSettings()" style="color: #465775; margin-top: 1vh">
+            Ajustes
           </button>
         </div>
       </div>

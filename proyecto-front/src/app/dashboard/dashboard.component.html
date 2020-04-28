@@ -19,11 +19,11 @@
           </mat-list>
         </div>
         <div class="row justify-content-center">
-          <button mat-flat-button routerLink="/tweets" style="background-color: #f15252; color: white; margin-bottom: 2vh; margin-top: 
+          <button mat-flat-button routerLink="/tweets" style="background-color: #465775; color: white; margin-bottom: 2vh; margin-top: 
           4vh;">
             Ver tweets
           </button>
-          <button mat-flat-button (click)="extractTweets()" style="background-color: #f15252; color: white;">
+          <button mat-flat-button (click)="extractTweets()" style="background-color: #465775; color: white;">
             Descargar nuevos tweets
           </button>
         </div>
@@ -44,7 +44,7 @@
               <app-bar-historic *ngIf="historicWord!=null"></app-bar-historic>
               <h2 style="color: grey; text-align: center;"  *ngIf="historicWord==null">No has configurado el gráfico</h2>
               <mat-card-actions>
-                <button mat-button style="color: #f15252;">Configurar</button>
+                <button mat-button style="color: #465775;">Configurar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -58,7 +58,7 @@
               <app-graph *ngIf="showingGraph==true"></app-graph>
                 <h2 style="color: grey; text-align: center;"  *ngIf="showingGraph==false">No has configurado el gráfico</h2>
               <mat-card-actions>
-                <button mat-button style="color: #f15252;">Configurar</button>
+                <button mat-button style="color: #465775;">Configurar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -76,7 +76,7 @@
                 <h2 style="color: grey; text-align: center;"  *ngIf="bubbleWord==null">No has configurado el gráfico</h2>
               </div>
               <mat-card-actions>
-                <button mat-button routerLink="config-burbuja" style="color: #f15252;">Configurar</button>
+                <button mat-button routerLink="config-burbuja" style="color: #465775;">Configurar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -92,7 +92,7 @@
                 <h2 style="color: grey; text-align: center;"  *ngIf="freqWord==null">No has configurado el gráfico</h2>
               </div>
               <mat-card-actions>
-                <button mat-button routerLink="config-frecuencia" style="color: #f15252;">Configurar</button>
+                <button mat-button routerLink="config-frecuencia" style="color: #465775;">Configurar</button>
               </mat-card-actions>
             </mat-card>
           </div>

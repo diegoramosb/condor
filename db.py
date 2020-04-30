@@ -54,9 +54,6 @@ def search_tweets_after(startDate):
 def searchUserId(id):
     return list(usersCollection.find({'_id': id}))
 
-def deleteById(id):
-    return list(usersCollection.delete_one({'_id': id}))
-
 def search_most_common_words(word):
 
     agr =[
@@ -170,3 +167,7 @@ def updateTweets(tweets):
 
 def updatePolarity(tweetId, polarity):
     tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}})
+
+def deleteUserAndTweets(userId):
+    tweetsCollection.delete_many({"userId": int(userId)})
+    usersCollection.delete_one({"_id": int(userId)})

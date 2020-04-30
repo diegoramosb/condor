@@ -124,15 +124,6 @@ def show_tweets_by_user():
     #tweets_response = utils.list_to_json(tweets)
    # return utils.JSONResponse(tweets_response)
 
-@app.route('/tweetsbyall', methods=['GET'])
-def show_tweets_by_user():
-    info = request.args.get('info')
-    tweets = search_by_user(info)
-    print(tweets)
-    return 'Ok', 200
-    # tweets_response = utils.list_to_json(tweets)
-
-
 # return utils.JSONResponse(tweets_response)
 
 

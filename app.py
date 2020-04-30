@@ -120,15 +120,44 @@ def show_tweets_by_user():
     user = request.args.get('user')
     tweets = search_by_user(user)
     print(tweets)
-    return 'Ok', 200
+    #return 'Ok', 200
     #tweets_response = utils.list_to_json(tweets)
-   # return utils.JSONResponse(tweets_response)
+    #return utils.JSONResponse(tweets_response)
 
 @app.route('/tweetsbyall', methods=['GET'])
-def show_tweets_by_user():
-    info = request.args.get('info')
-    tweets = search_by_user(info)
-    print(tweets)
+def filters():
+    #fecha, usuario,palabra
+    info = request.args.getlist('info')
+    o = []
+    for i in info:
+        if utils.is_date(i):
+
+            users = []
+            dt = parser.parse(i)
+            tweets = search_tweets_after(dt)
+
+            for t in tweets:
+                users.append(searchUserId(t['userId']))
+
+            o += [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
+
+        elif utils.isAccount(i):
+            users = []
+            tweets = search_by_user(i)
+
+            o += [{"account": i, "tweet": y} for y in zip(tweets)]
+
+        elif utils.hasString(i):
+            users = []
+            tweets = search_by_keywords(i)
+
+            for t in tweets:
+                users.append(searchUserId(t['userId']))
+
+            o += [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
+
+    tweets_response = utils.list_to_json(o)
+    return utils.JSONResponse(tweets_response)
     return 'Ok', 200
     # tweets_response = utils.list_to_json(tweets)
 

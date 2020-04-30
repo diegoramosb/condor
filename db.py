@@ -169,4 +169,4 @@ def updateTweets(tweets):
     return({'updatedTweets': len(tweets)})
 
 def updatePolarity(tweetId, polarity):
-    tweetsCollection.update({"_id": tweetId}, {"$set": {"polarity": polarity}})
+    tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}})

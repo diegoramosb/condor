@@ -124,6 +124,7 @@ def show_tweets_by_user():
     #tweets_response = utils.list_to_json(tweets)
     #return utils.JSONResponse(tweets_response)
 
+
 @app.route('/tweetsbyall', methods=['GET'])
 def filters():
     #fecha, usuario,palabra

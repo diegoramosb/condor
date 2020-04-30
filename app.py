@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 import utils
 
 from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, \
-    searchUserId, deleteById
+    searchUserId, deleteUserAndTweets
 
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
 
@@ -20,11 +20,6 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(graph)
 
-
-accountsx = ['@ELTIEMPO', '@elespectador', '@RevistaSemana']
-word = "coronavirus"
-string = '"Real Madrid"'
-username= "@elespectador"
 
 @app.route('/')
 def home():
@@ -79,11 +74,11 @@ def get_all_tweets():
 
     return utils.JSONResponse(tweets_response)
 
-@app.route('/delete', methods=['DELETE'])
+@app.route('/unsubscribe', methods=['DELETE'])
 def delete_tweets_byAccount():
     id = request.args.get('id')
-    deleteById(id)
-    return 'Ok', 200
+    deleteUserAndTweets(id)
+    return {}, 200
 
 @app.route('/tweetsbydate', methods=['GET'])
 def get_tweets_date():

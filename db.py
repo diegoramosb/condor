@@ -4,6 +4,8 @@ from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 
+from utils import isAccount
+
 """MongoDB connection"""
 
 #client = MongoClient('172.24.99.115', 27017)
@@ -89,7 +91,18 @@ def search_most_common_words(word):
     pprint(list(tweetsCollection.aggregate(agr)))
     return list(tweetsCollection.aggregate(agr))
 
+def get_filtros(info):
+    print(info)
+    lis =[]
+    for i in info:
 
+        if isAccount(i):
+            us = usersCollection.find({"$text": {"$search": i}})
+            for inf in us:
+                lis= list (tweetsCollection.find({ '$or': [{"date": {"$gte": i} }, {"$text": {"$search": i} }, {'userId': inf['_id']}] } ))
+        else:
+            lis= list(tweetsCollection.find({'$or': [{"date": {"$gte": i}}, {"$text": {"$search": i}}]}))
+    return lis
 
 def saveTweetsMongo(tweets):
     """

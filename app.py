@@ -34,15 +34,15 @@ def updateTweetsToday():
     """
     Actualiza likes y retweets de los tweets del día
     """
-    tweets = search_tweets_after(datetime.today())
-    print("tweets: ", tweets)
+    date = datetime.combine(datetime.today(), datetime.min.time())
+    tweets = search_tweets_after(date)
     updatedTweets = []
     for t in tweets:
         updatedTweets.append(searchTweetById(t["_id"]))
     response = updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return response, 200
+    return {'nUpdated': len(response)}, 200
 
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():

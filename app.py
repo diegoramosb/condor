@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 import utils
 
 from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, \
-    searchUserId, deleteById
+    searchUserId, deleteById, get_filtros
 
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
 
@@ -164,6 +164,17 @@ def filters():
 
 
 # return utils.JSONResponse(tweets_response)
+
+@app.route('/getfiltros', methods=['GET'])
+def filters_db():
+    #fecha, usuario,palabra
+    info = request.args.getlist('info')
+
+    o = get_filtros(info)
+
+    tweets_response = utils.list_to_json(o)
+    return utils.JSONResponse(tweets_response)
+
 
 
 @app.route('/setPolarity', methods=['PUT'])

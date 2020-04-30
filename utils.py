@@ -2,6 +2,7 @@ from datetime import date, datetime
 from flask import Response
 from nltk.corpus import stopwords
 import json
+from dateutil.parser import parse
 import nltk
 
 
@@ -31,5 +32,30 @@ class DateTimeEncoder(json.JSONEncoder):
             return o.isoformat()
 
         return json.JSONEncoder.default(self, o)
+
+
+def hasNumbers(string):
+    return any(char.isdigit() for char in string)
+
+def isAccount(string):
+    if '@' in string:
+        return True
+    else:
+        return False
+
+def hasString(string):
+    if string.isalpha():
+        return True
+    else:
+        return False
+
+def is_date(string, fuzzy=False):
+    try:
+        parse(string, fuzzy=fuzzy)
+        return True
+
+    except ValueError:
+        return False
+
 
 

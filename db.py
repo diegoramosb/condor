@@ -5,15 +5,13 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 
 """MongoDB connection"""
-<<<<<<< HEAD
+
 #client = MongoClient('172.24.99.115', 27017)
-client = MongoClient('localhost', 27017)
-db = client['proyecto20202']
-=======
+
 client = MongoClient('172.24.99.115', 27017)
 # client = MongoClient('localhost', 27017)
 db = client['proyecto20203']
->>>>>>> e66aa90a664864aee1ddd68b39ff8d39092f9ea3
+
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
 

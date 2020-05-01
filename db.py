@@ -1,3 +1,5 @@
+import parser
+
 from bson import ObjectId
 from pymongo import MongoClient
 from pprint import pprint
@@ -92,6 +94,7 @@ def get_filtros(words,date,accounts, polaridad):
 
     arr = []
     us = []
+
     if len(accounts) >0:
         for a in accounts:
             idm = usersCollection.find_one({"screen_name":  a})
@@ -111,7 +114,8 @@ def get_filtros(words,date,accounts, polaridad):
         arr.append(o)
 
     if date is not None:
-        arr.append({"date": {"$gte": date}})
+        dt = parser.parse(date)
+        arr.append({"date": {"$gte": dt}})
 
     if polaridad is not None:
         arr.append({'polarity': polaridad})

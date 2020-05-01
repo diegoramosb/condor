@@ -124,14 +124,12 @@ def show_tweets_by_user():
 @app.route('/getfiltros', methods=['GET'])
 def filters_db():
 
-    dt = None
     words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
     polaridad = request.args.get('polaridad')
-    if date is not None:
-        dt = parser.parse(date)
-    o = get_filtros(words,dt,accounts,polaridad)
+
+    o = get_filtros(words,date,accounts,polaridad)
 
     tweets_response = utils.list_to_json(o)
     return utils.JSONResponse(tweets_response)

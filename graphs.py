@@ -42,9 +42,15 @@ def show_word_frequency(word):
 
 @graph.route('/bubble', methods=['GET'])
 def show_favs_rts():
-    word = request.args.get('word')
+    words = request.args.getlist('word')
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.get('polaridad')
+
+
+
 #x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
-    tweets = search_by_keywords(word)
+    tweets = get_filtros(words, date, accounts, polaridad)
     userIds = []
     usage = []
     sumFavs = []
@@ -52,7 +58,7 @@ def show_favs_rts():
     sumRts= []
     mediaRts = []
     userNames = []
-    for tweet in search_by_keywords(word):
+    for tweet in tweets:
 
         if tweet['userId'] not in userIds:
             userIds.append(tweet['userId'])
@@ -79,11 +85,9 @@ def show_favs_rts():
 
     o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
+    d = [{"info": q} for q in zip(m)]
 
-    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
-
-    tweets_response = utils.list_to_json(p)
-    return utils.JSONResponse(tweets_response)
+    return {"tweets": tweets , "data": d}
 
 
 
@@ -91,9 +95,13 @@ def show_favs_rts():
 # se pasa una palabra y un dia
 @graph.route('/historic', methods=['GET'])
 def show_chart():
-    word = request.args.get('word')
-    #dayy = request.args.get('day')
-    tweets = search_by_keywords(word)
+    words = request.args.getlist('word')
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.get('polaridad')
+
+    tweets = get_filtros(words, date, accounts, polaridad)
+
     tweet = tweets[1]
 
     pprint(tweets[1])

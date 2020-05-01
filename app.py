@@ -119,56 +119,23 @@ def show_tweets_by_user():
     #return utils.JSONResponse(tweets_response)
 
 
-@app.route('/tweetsbyall', methods=['GET'])
-def filters():
-    #fecha, usuario,palabra
-    info = request.args.getlist('info')
-    o = []
-    for i in info:
-        if utils.is_date(i):
-
-            users = []
-            dt = parser.parse(i)
-            tweets = search_tweets_after(dt)
-
-            for t in tweets:
-                users.append(searchUserId(t['userId']))
-
-            o += [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-
-        elif utils.isAccount(i):
-            users = []
-            tweets = search_by_user(i)
-
-            o += [{"account": i, "tweet": y} for y in zip(tweets)]
-
-        elif utils.hasString(i):
-            users = []
-            tweets = search_by_keywords(i)
-
-            for t in tweets:
-                users.append(searchUserId(t['userId']))
-
-            o += [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-
-    tweets_response = utils.list_to_json(o)
-    return utils.JSONResponse(tweets_response)
-    return 'Ok', 200
-    # tweets_response = utils.list_to_json(tweets)
-
-
 # return utils.JSONResponse(tweets_response)
 
 @app.route('/getfiltros', methods=['GET'])
 def filters_db():
-    #fecha, usuario,palabra
-    info = request.args.getlist('info')
 
-    o = get_filtros(info)
+    dt = None
+    words = request.args.getlist('word')
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.get('polaridad')
+    if date is not None:
+        dt = parser.parse(date)
+    o = get_filtros(words,dt,accounts,polaridad)
 
     tweets_response = utils.list_to_json(o)
     return utils.JSONResponse(tweets_response)
-
+    #return {}, 200
 
 
 @app.route('/setPolarity', methods=['PUT'])

@@ -1,3 +1,5 @@
+import parser
+
 from bson import ObjectId
 from pymongo import MongoClient
 from pprint import pprint
@@ -88,18 +90,38 @@ def search_most_common_words(word):
     pprint(list(tweetsCollection.aggregate(agr)))
     return list(tweetsCollection.aggregate(agr))
 
-def get_filtros(info):
-    print(info)
-    lis =[]
-    for i in info:
+def get_filtros(words,date,accounts, polaridad):
 
-        if isAccount(i):
-            us = usersCollection.find({"$text": {"$search": i}})
-            for inf in us:
-                lis= list (tweetsCollection.find({ '$or': [{"date": {"$gte": i} }, {"$text": {"$search": i} }, {'userId': inf['_id']}] } ))
-        else:
-            lis= list(tweetsCollection.find({'$or': [{"date": {"$gte": i}}, {"$text": {"$search": i}}]}))
-    return lis
+    arr = []
+    us = []
+
+    if len(accounts) >0:
+        for a in accounts:
+            idm = usersCollection.find_one({"screen_name":  a})
+            if idm is not None:
+                us.append(idm['_id'])
+
+        p = {'$or': []}
+        for u in us:
+            p['$or'].append({'userId': u})
+
+        arr.append(p)
+
+    o = {'$or': []}
+    if len(words) > 0:
+        for w in words:
+            o['$or'].append({"$text": {"$search": w}})
+        arr.append(o)
+
+    if date is not None:
+        dt = parser.parse(date)
+        arr.append({"date": {"$gte": dt}})
+
+    if polaridad is not None:
+        arr.append({'polarity': polaridad})
+
+    return list(tweetsCollection.find({'$and': arr}))
+
 
 def saveTweetsMongo(tweets):
     """

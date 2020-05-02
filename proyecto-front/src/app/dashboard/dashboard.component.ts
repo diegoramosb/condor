@@ -20,7 +20,6 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.getAccounts();
     this.bubbleWord = localStorage.getItem('bubbleWord');
     this.freqWord = localStorage.getItem('freqWord');
     // this.historicWord = localStorage.getItem('historicWord');
@@ -31,7 +30,6 @@ export class DashboardComponent implements OnInit {
       let accounts: string[] = [];
       response.forEach(account => {
         accounts.push(account['screen_name'])
-        console.log("added" + account)
       });
       this.apiService.extractTweets(accounts, Math.floor(200 / accounts.length)).subscribe(response => {
         this.snackBar.open(`Actualizados ${response['newTweets']} tweets`, "Aceptar");
@@ -48,13 +46,16 @@ export class DashboardComponent implements OnInit {
       let accounts: string[] = response
       const dialogRef = this.dialog.open(SettingsComponent, {
         width: '40vw',
-        data: { name: accounts }
+        data: {accounts: accounts, newAccounts: [], removedAccounts: []}
       });
 
-      // dialogRef.afterClosed().subscribe(result => {
-      //   console.log('The dialog was closed');
-      //   this.accounts = result;
-      // });
+      dialogRef.afterClosed().subscribe((result) => {
+        if(result != undefined) {
+          result.removedAccounts.forEach((removedId: number) => {
+            this.apiService.unsubscribeFromAccount(removedId);
+          });
+        }
+      });
     })
   }
 }

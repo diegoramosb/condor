@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../api.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DialogData{
   accounts: [];
+  removedAccounts: number[];
+  newAccounts: string[];
 }
 
 @Component({
@@ -13,40 +15,42 @@ export interface DialogData{
 })
 export class SettingsComponent implements OnInit {
 
-  public accounts = [];
-
   constructor(private apiService: ApiService, 
     public dialogRef: MatDialogRef<SettingsComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit(): void {
-    this.getAccounts();
+    // this.data.accounts.forEach(account => {
+    //   this.accountsStr.push(account['screen_name']);
+    // });
   }
 
   addAccount(account: string) {
-    if (!this.accounts.includes(account)) {
-      this.accounts.push(account);
+    var contains = false;
+    this.data.accounts.forEach(acc => {
+      if(acc['screen_name'] == account) {
+        contains = true;
+      }
+    });
+    if(!contains) {
+      //getAccountAPI
+      this.data.newAccounts.push(account);
     }
   }
 
   removeAccount(account: string) {
-    for(var i = 0; i < this.accounts.length; i++) {
-      if(this.accounts[i] == account) {
-        this.accounts.splice(i, 1);
+    for(var i = 0; i < this.data.accounts.length; i++) {
+      if(this.data.accounts[i]['screen_name'] == account) {
+        this.data.removedAccounts.push(this.data.accounts[i]['_id']);
+        this.data.accounts.splice(i, 1);
+        console.log(account)
       }
     }
   }
 
-  getAccounts() {
-    this.apiService.getAccounts().subscribe((response: []) => {
-      this.accounts = response
-    });
-  }
-
-  onClickSave() {
-    //service to remove from backend
-    console.log("asdf")
-  }
+  // onClickSave() {
+  //   this.removedAccounts;
+  // }
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { BubbleData } from './models/bubble-data'
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +43,10 @@ export class ApiService {
 
   public getAccounts() {
     return this.httpClient.get(`${this.apiUrl}/getAccounts`);
+  }
+
+  public unsubscribeFromAccount(accountId) {
+    return this.httpClient.delete(`${this.apiUrl}/unsubscribe?id=`+accountId)
   }
 
   public getTweets() {

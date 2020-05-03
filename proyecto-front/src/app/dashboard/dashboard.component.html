@@ -32,7 +32,7 @@
                 </mat-card-title>
               </mat-card-header>
               <app-bar-historic *ngIf="historicWord!=null"></app-bar-historic>
-              <h2 style="color: grey; text-align: center;"  *ngIf="historicWord==null">No has configurado el gráfico</h2>
+              <h2 style="color: grey; text-align: center;" *ngIf="historicWord==null">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="/config-historico" style="color: #465775;">Configurar</button>
               </mat-card-actions>
@@ -46,7 +46,8 @@
                 </mat-card-title>
               </mat-card-header>
               <app-graph *ngIf="showingGraph==true"></app-graph>
-                <h2 style="color: grey; text-align: center;"  *ngIf="showingGraph==false">No has configurado el gráfico</h2>
+              <h2 style="color: grey; text-align: center;" *ngIf="showingGraph==false">No has configurado el gráfico
+              </h2>
               <mat-card-actions>
                 <button mat-button style="color: #465775;">Configurar</button>
               </mat-card-actions>
@@ -57,14 +58,12 @@
           <div class="row justify-content-center">
             <mat-card class="graphCard">
               <mat-card-header>
-                <mat-card-title *ngIf="bubbleWord!=null" class="cardTitle">
-                  Likes, retweets y número de tweets con la palabra "{{bubbleWord}}"
+                <mat-card-title *ngIf="showingBubble" class="cardTitle">
+                  <!-- Likes, retweets y número de tweets con la palabra "{{bubbleWord}}" -->
                 </mat-card-title>
               </mat-card-header>
-              <app-bubble *ngIf="bubbleWord!=null"></app-bubble>
-              <div class="row" *ngIf="bubbleWord==null" style="text-align: center;">
-                <h2 style="color: grey; text-align: center;"  *ngIf="bubbleWord==null">No has configurado el gráfico</h2>
-              </div>
+              <app-bubble *ngIf="showingBubble"></app-bubble>
+              <h2 style="color: grey; text-align: center;" *ngIf="!showingBubble">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="config-burbuja" style="color: #465775;">Configurar</button>
               </mat-card-actions>
@@ -78,9 +77,7 @@
                 </mat-card-title>
               </mat-card-header>
               <app-word-freq *ngIf="freqWord!=null"></app-word-freq>
-              <div class="row" *ngIf="freqWord==null" style="text-align: center;">
-                <h2 style="color: grey; text-align: center;"  *ngIf="freqWord==null">No has configurado el gráfico</h2>
-              </div>
+              <h2 style="color: grey; text-align: center;" *ngIf="freqWord==null">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="config-frecuencia" style="color: #465775;">Configurar</button>
               </mat-card-actions>

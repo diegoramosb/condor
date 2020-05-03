@@ -1,10 +1,9 @@
-import parser
-
 from bson import ObjectId
 from pymongo import MongoClient
 from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
+from dateutil import parser
 
 from utils import isAccount
 

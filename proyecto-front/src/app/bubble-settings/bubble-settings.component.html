@@ -57,7 +57,7 @@
                 <div class="col-md-4">
                   <mat-form-field class="detailFormField">
                     <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
-                    <input matInput [max]="maxDate" [matDatepicker]="picker" (dateChange)="setDate($event)">
+                    <input matInput [max]="maxDate" [matDatepicker]="picker" (dateChange)="setDate($event)" [value]="selectedDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
@@ -76,7 +76,7 @@
         <div class="col-md-10">
           <mat-card class="detailGraphCard">
             <mat-card-header>
-              <mat-card-title style="color: #465775;" *ngIf="title!=null">{{title}}</mat-card-title>
+              <mat-card-title style="color: #465775;">Likes, retweets y número de tweets</mat-card-title>
             </mat-card-header>
             <app-bubble [bubbleChartData]="bubbleChartData"></app-bubble>
           </mat-card>

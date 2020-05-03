@@ -47,7 +47,6 @@ def show_favs_rts():
     accounts = request.args.getlist('account')
     polaridad = request.args.get('polaridad')
 
-#x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
     tweets = get_filtros(words, date, accounts, polaridad)
     userIds = []
     usage = []
@@ -83,9 +82,7 @@ def show_favs_rts():
 
     o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
-    d = [{"info": q} for q in zip(m)]
-
-    return {"tweets": tweets , "data": d}
+    return {"tweets": tweets, "bubbles": m}
 
 
 

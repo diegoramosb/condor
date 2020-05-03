@@ -107,10 +107,11 @@ def get_filtros(words,date,accounts, polaridad):
 
         arr.append(p)
 
-    o = {'$or': []}
+    o = {'$text': {'$search': ""}}
     if len(words) > 0:
         for w in words:
-            o['$or'].append({"$text": {"$search": w}})
+            o['$text']['$search'] = o['$text']['$search'] + '"' + w + '"' + ' '
+        o['$text']['$search'] = o['$text']['$search'].strip()
         arr.append(o)
 
     if date is not None:
@@ -119,7 +120,7 @@ def get_filtros(words,date,accounts, polaridad):
 
     if polaridad is not None:
         arr.append({'polarity': polaridad})
-
+    pprint(arr)
     return list(tweetsCollection.find({'$and': arr}))
 
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http'
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,18 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getBubbleChartData(word: string) {
-    var params = new HttpParams().set("word", word);
-    return this.httpClient.get(`${this.apiUrl}/bubble`+ "?word=" + word);
+  public getBubbleChartData(words: string[], accounts: string[], date: moment.Moment) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('DD-MM-YYYY'))
+    }
+    return this.httpClient.get(`${this.apiUrl}/bubble`, {params: params});
   }
 
   public getHistoricData(word: string) {

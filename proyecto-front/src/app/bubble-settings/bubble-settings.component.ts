@@ -36,10 +36,10 @@ export class BubbleSettingsComponent implements OnInit {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('bubbleFilters'));
-    if(filterData != null) {
+    if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
-      // this.selectedDate = moment
+      this.selectedDate = moment(filterData.date, "YYYY-MM-DD");
       this.setTitle();
     }
   }
@@ -73,7 +73,6 @@ export class BubbleSettingsComponent implements OnInit {
   }
 
   setDate(event: MatDatepickerInputEvent<moment.Moment>) {
-    console.log(this.selectedDate);
     this.selectedDate = event.value;
   }
 
@@ -96,15 +95,23 @@ export class BubbleSettingsComponent implements OnInit {
       localStorage.setItem('showingBubble', "true");
       localStorage.setItem('bubbleFilters', JSON.stringify({
         'words': this.selectedWords,
-        'accounts': this.selectedAccounts
-        // 'date': this.selectedDate != null ? { 'day': this.selectedDate.day(), 'month': this.selectedDate.month(), 'year': this.selectedDate.year() } : 'null'
+        'accounts': this.selectedAccounts,
+        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
       }));
       this.setTitle();
     });
   }
 
   setTitle() {
-    this.title = `Likes, retweets y número de tweets con la(s) palabra(s) ${this.selectedWords}`
+    var title = "Likes, retweets y número de tweets de "
+    for(var i = 0; i < this.selectedAccounts.length - 1; i++) {
+      title += "@" + this.selectedAccounts[i] + ", "
+    }
+    title += "@" + this.selectedAccounts[this.selectedAccounts.length-1] + " con las palabras ";
+    for(var i = 0; i < this.selectedWords.length - 1; i++) {
+      title += '"' + this.selectedWords[i] + '", '
+    }
+    title += '"' + this.selectedWords[this.selectedWords.length - 1] + '" '
   }
 
 }

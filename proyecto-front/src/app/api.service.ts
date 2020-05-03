@@ -20,7 +20,7 @@ export class ApiService {
       params = params.append("account", account);
     });
     if(date != null) {
-      params = params.append("date", date.format('DD-MM-YYYY'))
+      params = params.append("date", date.format('YYYY-MM-DD'))
     }
     return this.httpClient.get(`${this.apiUrl}/bubble`, {params: params});
   }

@@ -8,17 +8,17 @@
       <input matInput #accountInput (keyup.enter)="addAccount(accountInput.value)">
     </mat-form-field>
     <mat-list>
-      <mat-list-item *ngFor="let account of accounts">
+      <mat-list-item *ngFor="let account of data['accounts']">
         <img matListAvatar src="{{account['profile_image']}}">
         <h3 matLine style="text-align: left;">{{account['name']}}</h3>
         <p matLine style="text-align: left;">@{{account['screen_name']}}</p>
-        <button mat-button (click)="removeAccount(account)" style="color: #465775; padding-right: 4vw;">Dejar de seguir</button>
+        <button mat-button (click)="removeAccount(account['screen_name'])" style="color: #465775; padding-right: 4vw;">Dejar de seguir</button>
       </mat-list-item>
     </mat-list>
     <mat-divider></mat-divider>
   </div>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]>Cancelar</button>
-    <button mat-flat-button [mat-dialog-close] (click)="onClickSave()" style="background-color: #465775; color: white;">Guardar</button>
+    <button mat-flat-button [mat-dialog-close]="data" style="background-color: #465775; color: white;">Guardar</button>
   </div>
 </div>

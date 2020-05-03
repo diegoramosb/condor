@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class DashboardComponent implements OnInit {
 
   public historicWord: string;
-  public bubbleWord: string;
+  public showingBubble: boolean;
   public showingGraph = false;
   public freqWord: string;
 
@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.bubbleWord = localStorage.getItem('bubbleWord');
+    this.showingBubble = localStorage.getItem('showingBubble') == 'true'? true: false;
     this.freqWord = localStorage.getItem('freqWord');
     // this.historicWord = localStorage.getItem('historicWord');
   }

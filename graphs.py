@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from flask import Blueprint, request
 import numpy as np
 import utils
+import nltk
+
 from statistics import mean
 from db import *
 import json
@@ -14,7 +16,7 @@ import nltk
 from extract_tweets import searchTweetById, extractTweetsApi
 
 graph = Blueprint('graphs', __name__)
-
+nltk.download('stopwords')
 
 def show_word_frequency(word):
     userIds = []
@@ -104,7 +106,7 @@ def show_chart():
     rts = []
     favs = []
     horas =[]
-
+#todos los tweets y retweets y likes de las horas - suma de todos los tweets,
     requests = tweet['request_times']
     rt = tweet['retweet_count']
     fav = tweet['favorite_count']
@@ -138,7 +140,7 @@ def show_nube_palabra():
     accounts = request.args.getlist('account')
     polaridad = request.args.get('polaridad')
 
-    tweets = get_filtros(words, date, accounts, polaridad)
+    tweets = get_filtros(word, date, accounts, polaridad)
 
     ids = []
     for obj in words:
@@ -154,8 +156,6 @@ def show_nube_palabra():
             ans2.append(item)
 
     return {"tweets": tweets, "data": ans2}
-
-
 
 
 

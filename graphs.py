@@ -47,8 +47,6 @@ def show_favs_rts():
     accounts = request.args.getlist('account')
     polaridad = request.args.get('polaridad')
 
-
-
 #x = media de RTS, y =MEDIA DE FAVS, r =NUMERO DE TWEETS
     tweets = get_filtros(words, date, accounts, polaridad)
     userIds = []
@@ -99,6 +97,7 @@ def show_chart():
     date = request.args.get('date')
     accounts = request.args.getlist('account')
     polaridad = request.args.get('polaridad')
+    id = request.args.get('idTweet')
 
     tweets = get_filtros(words, date, accounts, polaridad)
 
@@ -138,7 +137,12 @@ def show_nube_palabra():
 
     word = request.args.get('word')
     words = search_most_common_words(word)
-    tweets = search_by_keywords(word)
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.get('polaridad')
+
+    tweets = get_filtros(words, date, accounts, polaridad)
+
     ids = []
     for obj in words:
         ids.append(obj['_id'].lower())
@@ -152,15 +156,22 @@ def show_nube_palabra():
         if item['count'] >= 3 and word not in item['_id']:
             ans2.append(item)
 
-    nube_response = utils.list_to_json(ans2)
-    return utils.JSONResponse(nube_response)
+    return {"tweets": tweets, "data": ans2}
+
+
 
 
 
 #Se pasan las palabras
 @graph.route('/grafo', methods=['GET'])
 def show_grafo_cuentas_palabras():
+
     words = request.args.getlist('words')
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.get('polaridad')
+
+
     #pprint(words)
     tweets = []
 
@@ -211,11 +222,11 @@ def show_grafo_cuentas_palabras():
     # pprint(m)  
     # pprint(json.dumps(m))
     q = json.dumps({"nodes": nodes, "links": m})
+    tuits = get_filtros(words, date, accounts, polaridad)
 
-    p = [{"info": q, "tweet": n} for q, n in zip(m, tweets)]
+    p = [{"info": q} for q in zip(m)]
 
-    tweets_response = utils.list_to_json(p)
-    return utils.JSONResponse(tweets_response)
+    return {"tweets": tuits, "data": p}
 
 
     

@@ -39,7 +39,16 @@ def show_word_frequency(word):
     plt.title('Número de menciones de "{}"'.format(word))
     plt.show()
 
+def get_tweets_with_its_user(tweets):
 
+    ans = []
+    tuit = []
+    for t in tweets:
+        user = searchUserId(t['userId'])
+        ans += user
+
+    print(ans)
+    return ans
 
 
 @graph.route('/bubble', methods=['GET'])
@@ -84,7 +93,9 @@ def show_favs_rts():
 
     o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
-    return {"tweets": tweets, "bubbles": m}
+    users = get_tweets_with_its_user(tweets)
+    n = [{"tweet": t, "user": u} for t, u in zip(tweets, users)]
+    return {"tweets": n, "bubbles": m}
 
 
 
@@ -100,33 +111,40 @@ def show_chart():
 
     tweets = get_filtros(words, date, accounts, polaridad)
 
-    tweet = tweets[1]
-
-    pprint(tweets[1])
     rts = []
     favs = []
     horas =[]
-#todos los tweets y retweets y likes de las horas - suma de todos los tweets,
-    requests = tweet['request_times']
-    rt = tweet['retweet_count']
-    fav = tweet['favorite_count']
-    _id = tweet['_id']
-    text = tweet['text']
 
-    for req in requests:
-        if req.day == datetime(2020, 4, 1).day:
-            horas.append(req.strftime("%H:%M"))
-            rts.append(rt[requests.index(req)])
-            favs.append(fav[requests.index(req)])
+    sumRts = []
+    sumFavs = 0
+    sumHoras = []
+#todos los tweets y retweets y likes de las horas - suma de todos los tweets,
+
+    for t in tweets:
+        requests = t['request_times']
+        rt = t['retweet_count']
+        fav = t['favorite_count']
+        print(fav)
+        sumHoras += requests
+        #sumFavs += fav
+        sumRts += rt
+
+    #print(sumFavs)
+
+    for req in sumHoras:
+        if req.day == datetime(2020, 5, 1).day:
+            horas.append(sumHoras.strftime("%H:%M"))
+            rts.append(sumRts[requests.index(req)])
+            favs.append(sumFavs[requests.index(req)])
     # pprint(rts)
-    ans = {"text": tweet["text"]}
-    ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
-    print(ans)
+    #ans = {"text": tweet["text"]}
+    #ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
+    #print(ans)
 
     # pprint(json.dumps(m))
-    chart_response = json.dumps(ans)
+    m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
 
-    return utils.JSONResponse(chart_response)
+    return {"tweets": tweets, "data": m}
 
 
 
@@ -154,8 +172,10 @@ def show_nube_palabra():
     for item in ans:
         if item['count'] >= 3 and word not in item['_id']:
             ans2.append(item)
+    users = get_tweets_with_its_user(tweets)
+    n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
 
-    return {"tweets": tweets, "data": ans2}
+    return {"tweets": n, "data": ans2}
 
 
 
@@ -222,8 +242,10 @@ def show_grafo_cuentas_palabras():
     tuits = get_filtros(words, date, accounts, polaridad)
 
     p = [{"info": q} for q in zip(m)]
+    users = get_tweets_with_its_user(tweets)
+    n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
 
-    return {"tweets": tuits, "data": p}
+    return {"tweets": n, "data": p}
 
 
     

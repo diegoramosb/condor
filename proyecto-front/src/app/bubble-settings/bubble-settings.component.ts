@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ApiService } from '../api.service';
 import { ChartDataSets } from 'chart.js';
-import { FormControl } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { thresholdFreedmanDiaconis } from 'd3';
 
 @Component({
   selector: 'app-bubble-settings',
@@ -16,6 +14,7 @@ export class BubbleSettingsComponent implements OnInit {
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
+  public tweets = [];
 
   public accounts: any;
 
@@ -39,8 +38,9 @@ export class BubbleSettingsComponent implements OnInit {
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
-      this.selectedDate = moment(filterData.date, "YYYY-MM-DD");
+      this.selectedDate = filterData.date != "null"? moment(filterData.date, "YYYY-MM-DD"): null;
       this.setTitle();
+      this.applyFilters();
     }
   }
 
@@ -78,7 +78,9 @@ export class BubbleSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
-      console.log(data);
+
+      this.tweets = data['tweets'];
+
       var x: number;
       var info = [];
       var y: number;

@@ -11,18 +11,19 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class DashboardComponent implements OnInit {
 
-  public historicWord: string;
+  public showingHistoric: boolean;
   public showingBubble: boolean;
-  public showingGraph = false;
-  public freqWord: string;
+  public showingGraph: boolean;
+  public showingFreq: boolean;
 
   constructor(private snackBar: MatSnackBar, private apiService: ApiService, private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
+    this.showingHistoric = localStorage.getItem('showingHistoric') == 'true'? true: false;
     this.showingBubble = localStorage.getItem('showingBubble') == 'true'? true: false;
-    this.freqWord = localStorage.getItem('freqWord');
-    // this.historicWord = localStorage.getItem('historicWord');
+    this.showingGraph = localStorage.getItem('showingGraph') == 'true'? true: false;
+    this.showingFreq = localStorage.getItem('showingFreq') == 'true'? true: false;
   }
 
   extractTweets() {

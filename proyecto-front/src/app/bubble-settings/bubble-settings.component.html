@@ -1,9 +1,38 @@
 <mat-drawer-container height=100%>
   <mat-drawer class="drawer" mode="side" opened>
     <div class="container">
-      <div class="col-md">
-        <div class="row">
-        </div>
+      <div class="row">
+        <mat-card *ngFor="let tweet of tweets" class="tweetCardNone">
+          <!-- <mat-card-header>
+            <div mat-card-avatar>
+              <img matListAvatar src="{{tweet['account'][0]['profile_image']}}">
+            </div>
+            <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
+            <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
+          </mat-card-header> -->
+          <mat-card-content>
+            <p>
+              {{tweet['text']}}
+            </p>
+          </mat-card-content>
+          <div class="row">
+            <div class="col-md-1">
+              <div class="row">
+                <mat-icon>favorite</mat-icon>
+                <p>{{tweet['favorite_count'][0]}}</p>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <div class="row">
+                <mat-icon>refresh</mat-icon>
+                <p>{{tweet['retweet_count'][0]}}</p>
+              </div>
+            </div>
+            <div class="col-md-10">
+              <p>{{tweet['date'] | date:'d/M/yy h:mm a'}}</p>
+            </div>
+          </div>
+        </mat-card>
       </div>
     </div>
   </mat-drawer>
@@ -57,7 +86,8 @@
                 <div class="col-md-4">
                   <mat-form-field class="detailFormField">
                     <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
-                    <input matInput [max]="maxDate" [matDatepicker]="picker" (dateChange)="setDate($event)" [value]="selectedDate">
+                    <input matInput [max]="maxDate" [matDatepicker]="picker" (dateChange)="setDate($event)"
+                      [value]="selectedDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>

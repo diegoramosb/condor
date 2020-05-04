@@ -3,33 +3,33 @@
     <div class="container">
       <div class="row">
         <mat-card *ngFor="let tweet of tweets" class="tweetCardNone">
-          <!-- <mat-card-header>
+          <mat-card-header>
             <div mat-card-avatar>
-              <img matListAvatar src="{{tweet['account'][0]['profile_image']}}">
+              <img matListAvatar src="{{tweet['user']['profile_image']}}">
             </div>
-            <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
-            <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
-          </mat-card-header> -->
+            <mat-card-title style="color: #465775">{{tweet['user']['name']}}</mat-card-title>
+            <mat-card-subtitle>@{{tweet['user']['screen_name']}}</mat-card-subtitle>
+          </mat-card-header>
           <mat-card-content>
-            <p>
-              {{tweet['text']}}
+            <p style="text-align: left;">
+              {{tweet['tweet']['text']}}
             </p>
           </mat-card-content>
           <div class="row">
             <div class="col-md-1">
               <div class="row">
                 <mat-icon>favorite</mat-icon>
-                <p>{{tweet['favorite_count'][0]}}</p>
+                <p>{{tweet['tweet']['favorite_count'][0]}}</p>
               </div>
             </div>
             <div class="col-md-1">
               <div class="row">
                 <mat-icon>refresh</mat-icon>
-                <p>{{tweet['retweet_count'][0]}}</p>
+                <p>{{tweet['tweet']['retweet_count'][0]}}</p>
               </div>
             </div>
             <div class="col-md-10">
-              <p>{{tweet['date'] | date:'d/M/yy h:mm a'}}</p>
+              <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
             </div>
           </div>
         </mat-card>

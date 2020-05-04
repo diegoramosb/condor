@@ -27,12 +27,12 @@
           <div class="row justify-content-center">
             <mat-card class="graphCard">
               <mat-card-header>
-                <mat-card-title *ngIf="historicWord!=null" class="cardTitle">
-                  Evolución de retweets y likes de tweets con la palabra "{{historicWord}}"
+                <mat-card-title *ngIf="showingHistoric" class="cardTitle">
+                  Evolución de retweets y likes de las cuentas elegidas
                 </mat-card-title>
               </mat-card-header>
-              <app-bar-historic *ngIf="historicWord!=null"></app-bar-historic>
-              <h2 style="color: grey; text-align: center;" *ngIf="historicWord==null">No has configurado el gráfico</h2>
+              <app-bar-historic *ngIf="showingHistoric"></app-bar-historic>
+              <h2 style="color: grey; text-align: center;" *ngIf="!showingHistoric">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="/config-historico" style="color: #465775;">Configurar</button>
               </mat-card-actions>
@@ -41,12 +41,12 @@
           <div class="row justify-content-center">
             <mat-card class="graphCard">
               <mat-card-header>
-                <mat-card-title *ngIf="showingGraph==true" class="cardTitle">
+                <mat-card-title *ngIf="showingGraph" class="cardTitle">
                   <!-- Evolución de retweets y likes -->
                 </mat-card-title>
               </mat-card-header>
-              <app-graph *ngIf="showingGraph==true"></app-graph>
-              <h2 style="color: grey; text-align: center;" *ngIf="showingGraph==false">No has configurado el gráfico
+              <app-graph *ngIf="showingGraph"></app-graph>
+              <h2 style="color: grey; text-align: center;" *ngIf="!showingGraph">No has configurado el gráfico
               </h2>
               <mat-card-actions>
                 <button mat-button style="color: #465775;">Configurar</button>
@@ -72,12 +72,12 @@
           <div class="row justify-content-center">
             <mat-card class="graphCard">
               <mat-card-header>
-                <mat-card-title *ngIf="freqWord!=null" class="cardTitle">
-                  Frecuencia de las palabras relacionadas con "{{freqWord}}"
+                <mat-card-title *ngIf="showingFreq" class="cardTitle">
+                  Frecuencia de las palabras relacionadas con la búsqueda
                 </mat-card-title>
               </mat-card-header>
-              <app-word-freq *ngIf="freqWord!=null"></app-word-freq>
-              <h2 style="color: grey; text-align: center;" *ngIf="freqWord==null">No has configurado el gráfico</h2>
+              <app-word-freq *ngIf="showingFreq"></app-word-freq>
+              <h2 style="color: grey; text-align: center;" *ngIf="!showingFreq">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="config-frecuencia" style="color: #465775;">Configurar</button>
               </mat-card-actions>

@@ -21,11 +21,8 @@ export class BubbleSettingsComponent implements OnInit {
   public maxDate = moment();
 
   public bubbleChartData: ChartDataSets[] = [
-
     { data: [], label: '' },
   ];
-
-  public title: string;
 
   ngOnInit(): void {
   }
@@ -39,7 +36,6 @@ export class BubbleSettingsComponent implements OnInit {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
       this.selectedDate = filterData.date != "null"? moment(filterData.date, "YYYY-MM-DD"): null;
-      this.setTitle();
       this.applyFilters();
     }
   }
@@ -100,20 +96,6 @@ export class BubbleSettingsComponent implements OnInit {
         'accounts': this.selectedAccounts,
         'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
       }));
-      this.setTitle();
     });
   }
-
-  setTitle() {
-    var title = "Likes, retweets y número de tweets de "
-    for(var i = 0; i < this.selectedAccounts.length - 1; i++) {
-      title += "@" + this.selectedAccounts[i] + ", "
-    }
-    title += "@" + this.selectedAccounts[this.selectedAccounts.length-1] + " con las palabras ";
-    for(var i = 0; i < this.selectedWords.length - 1; i++) {
-      title += '"' + this.selectedWords[i] + '", '
-    }
-    title += '"' + this.selectedWords[this.selectedWords.length - 1] + '" '
-  }
-
 }

@@ -31,8 +31,17 @@ export class ApiService {
   }
 
 
-  public getFrecuencyChartData(word: string) {
-    var params = new HttpParams().set("word", word);
+  public getFrecuencyChartData(words: string[], accounts: string[], date: moment.Moment) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('YYYY-MM-DD'))
+    }
     return this.httpClient.get(`${this.apiUrl}/nube`, {params: params});
   }
 

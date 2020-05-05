@@ -7,10 +7,66 @@
         </div>
         <div class="row">
           <mat-form-field class="detailFormField">
-            <mat-label class="detailFormLabel">Filtrar por palabra</mat-label>
-            <input matInput #wordInput (keyup.enter)="getTweetsByWord(wordInput.value)">
+            <mat-label class="detailFormLabel">Buscar palabras</mat-label>
+            <input matInput #wordInput (keyup.enter)="addWord(wordInput.value)">
+          </mat-form-field>
+          <mat-list>
+            <mat-list-item *ngFor="let word of selectedWords">
+              <div mat-line style="align-self:flex-start;">{{word}}</div>
+              <button mat-icon-button (click)="removeWord(word)">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="row">
+          <mat-form-field class="detailFormField">
+            <mat-label class="detailFormLabel">Elegir cuentas</mat-label>
+            <mat-select>
+              <mat-option value="option" *ngFor="let account of accounts" (click)="addAccount(account)">
+                <p style="text-align: left;">@{{account['screen_name']}}</p>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-list>
+            <mat-list-item *ngFor="let account of selectedAccounts">
+              <div mat-line style="align-self:flex-start;">@{{account}}</div>
+              <button mat-icon-button (click)="removeAccount(account)">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="row">
+          <mat-form-field class="detailFormField">
+            <mat-label class="detailFormLabel">Fecha de inicio</mat-label>
+            <input matInput [max]="maxDate" [matDatepicker]="picker" (dateChange)="setDate($event)"
+              [value]="selectedDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
+        <div class="row">
+          <mat-checkbox [(ngModel)]="positive">positiva</mat-checkbox>
+        </div>
+        <div class="row">
+          <mat-checkbox [(ngModel)]="negative">negativa</mat-checkbox>
+        </div>
+        <div class="row">
+          <mat-checkbox [(ngModel)]="neutral">neutral</mat-checkbox>
+        </div>
+        <div class="row">
+          <mat-checkbox [(ngModel)]="none">ninguna</mat-checkbox>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <button mat-flat-button (click)="applyFilters()"
+          style="background-color: #465775; color: white; margin-bottom: 4vh;">
+          Aplicar filtros
+        </button>
+        <button mat-flat-button (click)="removeFilters()" style="background-color: #465775; color: white;">
+          Eiminar filtros
+        </button>
       </div>
     </div>
   </mat-drawer>
@@ -25,6 +81,7 @@
         <div class="col-md-8">
           <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'positive',
           'tweetCardNegative': tweet['tweet']['polarity'] == 'negative', 
+          'tweetCardNeutral': tweet['tweet']['polarity'] == 'neutral', 
           'tweetCardNone': tweet['tweet']['polarity'] == 'none'}" *ngFor="let tweet of tweets">
             <mat-card-header>
               <div mat-card-avatar>
@@ -56,7 +113,7 @@
               </div>
               <div class="col-md-4"></div>
               <div class="col-md-3">
-                <button mat-flat-button style="color: #465775">Cambiar polaridad</button>
+                <button mat-flat-button (click)="setPolarity(tweet['tweet']['_id'])" style="color: #465775">Cambiar polaridad</button>
               </div>
             </div>
           </mat-card>

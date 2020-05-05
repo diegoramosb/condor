@@ -72,8 +72,24 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/tweets`);
   }
 
-  public getTweetsWord(word: string) {
-    return this.httpClient.get(`${this.apiUrl}/tweetsbyword?word=`+word);
+  public getTweetsFilters(words: string[], accounts: string[], date: moment.Moment, polarities: string[]) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('YYYY-MM-DD'))
+    }
+    return this.httpClient.get(`${this.apiUrl}/getfiltros`, {params: params});
+  }
+
+  public setPolarity(tweetId: number, polarity: string) {
+    var params = new HttpParams().set("tweetId", tweetId.toString());
+    params.set("polarity", polarity);
+    return this.httpClient.get(`${this.apiUrl}/setPolarity`, {params: params})
   }
 
   public updateTweets() {

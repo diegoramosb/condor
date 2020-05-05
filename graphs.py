@@ -56,7 +56,7 @@ def show_favs_rts():
     words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
-    polaridad = request.args.get('polaridad')
+    polaridad = request.args.getlist('polaridad')
 
     tweets = get_filtros(words, date, accounts, polaridad)
     userIds = []
@@ -106,45 +106,32 @@ def show_chart():
     words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
-    polaridad = request.args.get('polaridad')
+    polaridad = request.args.getlist('polaridad')
     id = request.args.get('idTweet')
 
     tweets = get_filtros(words, date, accounts, polaridad)
 
-    rts = []
-    favs = []
-    horas =[]
-
-    sumRts = []
-    sumFavs = 0
-    sumHoras = []
-#todos los tweets y retweets y likes de las horas - suma de todos los tweets,
+    data = {}
+    #todos los tweets y retweets y likes de las horas - suma de todos los tweets,
 
     for t in tweets:
         requests = t['request_times']
         rt = t['retweet_count']
         fav = t['favorite_count']
-        print(fav)
-        sumHoras += requests
-        #sumFavs += fav
-        sumRts += rt
+        for i in range(len(requests)):
+            timeStr = requests[i].strftime("%H:%M")
+            if timeStr not in data:
+                data[timeStr] = {"sum_rt": rt[i], "sum_like": fav[i]}
+            else:
+                dataTime = data[timeStr]
+                sumRt = dataTime["sum_rt"] + rt[i]
+                sumLike = dataTime["sum_like"] + fav[i]
+                data[timeStr] = {"sum_rt": sumRt, "sum_like": sumLike}
+        
 
-    #print(sumFavs)
 
-    for req in sumHoras:
-        if req.day == datetime(2020, 5, 1).day:
-            horas.append(sumHoras.strftime("%H:%M"))
-            rts.append(sumRts[requests.index(req)])
-            favs.append(sumFavs[requests.index(req)])
-    # pprint(rts)
-    #ans = {"text": tweet["text"]}
-    #ans["hist"] = [{"hour": h, "numRts": r, "numFavs": f} for h, r, f in zip(horas, rts, favs)]
-    #print(ans)
-
-    # pprint(json.dumps(m))
-    m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
-
-    return {"tweets": tweets, "data": m}
+    # return {"tweets": tweets, "data": m}
+    return {"tweets": tweets, "data": data}
 
 
 
@@ -156,7 +143,7 @@ def show_nube_palabra():
     words = search_most_common_words(word)
     date = request.args.get('date')
     accounts = request.args.getlist('account')
-    polaridad = request.args.get('polaridad')
+    polaridad = request.args.getlist('polaridad')
 
     tweets = get_filtros(word, date, accounts, polaridad)
 
@@ -186,7 +173,7 @@ def show_grafo_cuentas_palabras():
     words = request.args.getlist('words')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
-    polaridad = request.args.get('polaridad')
+    polaridad = request.args.getlist('polaridad')
 
 
     #pprint(words)

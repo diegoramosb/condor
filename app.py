@@ -126,11 +126,16 @@ def filters_db():
     words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
-    polaridad = request.args.get('polaridad')
+    polarities = request.args.getlist('polarity')
 
-    o = get_filtros(words,date,accounts,polaridad)
-
+    tweets = get_filtros(words,date,accounts,polarities)
+    users = []
+    tweets = sorted(tweets, key=lambda tweet: tweet['date'], reverse=True)
+    for t in tweets:
+        users.append(searchUserId(t['userId']))
+    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
     tweets_response = utils.list_to_json(o)
+
     return utils.JSONResponse(tweets_response)
     #return {}, 200
 

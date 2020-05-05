@@ -80,6 +80,9 @@ export class ApiService {
     accounts.forEach(account => {
       params = params.append("account", account);
     });
+    polarities.forEach(pol => {
+      params = params.append("polarity", pol);
+    });
     if(date != null) {
       params = params.append("date", date.format('YYYY-MM-DD'))
     }

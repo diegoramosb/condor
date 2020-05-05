@@ -89,7 +89,7 @@ def search_most_common_words(word):
     pprint(list(tweetsCollection.aggregate(agr)))
     return list(tweetsCollection.aggregate(agr))
 
-def get_filtros(words,date,accounts, polaridad):
+def get_filtros(words, date, accounts, polarities):
 
     arr = []
     us = []
@@ -117,8 +117,12 @@ def get_filtros(words,date,accounts, polaridad):
         dt = parser.parse(date)
         arr.append({"date": {"$gte": dt}})
 
-    if polaridad is not None:
-        arr.append({'polarity': polaridad})
+    if len(polarities)>0:
+        p = {'$or': []}
+        for pol in polarities:
+            p['$or'].append({'polarity': pol})    
+        arr.append(p)
+
     pprint(arr)
     return list(tweetsCollection.find({'$and': arr}))
 

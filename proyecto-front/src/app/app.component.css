@@ -40,6 +40,11 @@
     border-top: 4px solid #f15252;
 }
 
+.tweetCardNeutral {
+    margin: 10px;
+    border-top: 4px solid #f9f871;
+}
+
 .tweetCardNone {
     margin: 10px;
 }
@@ -90,6 +95,15 @@ mat-drawer {
     padding-bottom: 10px;
     width: 20vw;
 }
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #465775!important;
+  }
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #465775;
+  }
 
 h1 {
     font-size: 2.5vw;

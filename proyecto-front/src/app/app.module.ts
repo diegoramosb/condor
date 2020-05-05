@@ -20,6 +20,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 import { MatDialogModule } from '@angular/material/dialog'; 
 import { MatDividerModule } from '@angular/material/divider'; 
+import { FormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
 import { BarHistoricComponent } from './bar-historic/bar-historic.component';
 import { BubbleComponent } from './bubble/bubble.component';
@@ -71,6 +72,7 @@ import { SettingsComponent } from './settings/settings.component';
     MatSnackBarModule,
     MatDialogModule,
     MatDividerModule,
+    FormsModule,
     LayoutModule
   ],
   providers: [],

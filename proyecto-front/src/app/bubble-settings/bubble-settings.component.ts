@@ -73,7 +73,7 @@ export class BubbleSettingsComponent implements OnInit {
   }
 
   applyFilters() {
-    this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
+    this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
 
       this.tweets = data['tweets'];
 

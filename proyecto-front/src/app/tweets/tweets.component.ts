@@ -76,6 +76,9 @@ export class TweetsComponent implements OnInit {
     this.selectedDate = event.value;
   }
 
+  setPolarity(tweetId: number) {
+    console.log(tweetId);
+  }
 
   getTweets() {
     this.apiService.getTweets().subscribe((response: []) => {

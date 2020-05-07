@@ -1,7 +1,15 @@
 from pprint import pprint
+from tweepy import StreamListener
+from tweepy import Stream
 
 import tweepy
 import json
+
+from flask import Blueprint, request
+
+from db import return_accounts, saveTweetsMongo
+
+extract = Blueprint('extract', __name__)
 
 """Twitter API keys"""
 twitterKeys = {
@@ -39,7 +47,8 @@ def extractTweetsApi(accounts, nTweets):
 
 def extractTweetsSinceId(account, nTweets, id):
     jsons = []
-    for status in tweepy.Cursor(api.user_timeline, screen_name=account, tweet_mode="extended", since_id=id-1).items(nTweets):
+    for status in tweepy.Cursor(api.user_timeline, screen_name=account, tweet_mode="extended", since_id=id - 1).items(
+            nTweets):
         jsonStr = json.dumps(status._json)
         parsed = json.loads(jsonStr)
         jsons.append(parsed)
@@ -48,3 +57,33 @@ def extractTweetsSinceId(account, nTweets, id):
 
 def searchTweetById(id):
     return api.get_status(id)._json
+
+
+class MyStreamListener(StreamListener):
+
+    def on_status(self, status):
+        print(status.text)
+
+
+listener = MyStreamListener()
+myStream = Stream(auth, listener)
+
+
+@extract.route('/updateTweetsByAccount', methods=['GET'])
+def updateTweetsByAccount():
+    follow = []
+    for a in return_accounts():
+        follow.append(a['_id'])
+    pprint(follow)
+
+    try:
+        #myStream.userstream('eltiempo')
+        for a in follow:
+            myStream.filter(follow=a)
+        #tuit = myStream.filter(follow=['14834302'])
+        #saveTweetsMongo(tuit)
+        return 'ok', 200
+    except:
+        print
+        "error!"
+        myStream.disconnect()

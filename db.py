@@ -126,6 +126,8 @@ def get_filtros(words, date, accounts, polarities):
     pprint(arr)
     return list(tweetsCollection.find({'$and': arr}))
 
+def getIdsAccounts():
+    return list(usersCollection)
 
 def saveTweetsMongo(tweets):
     """

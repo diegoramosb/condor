@@ -5,11 +5,12 @@ from flask import Flask, jsonify, request
 
 import utils
 
+
 from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, deleteUserAndTweets, get_filtros,searchUserId, deleteUserAndTweets
 
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
 
-from extract_tweets import searchTweetById, extractTweetsApi
+from extract_tweets import searchTweetById, extractTweetsApi, extract
 from graphs import graph
 from flask_cors import CORS
 from dateutil import parser
@@ -17,6 +18,7 @@ from dateutil import parser
 app = Flask(__name__)
 CORS(app)
 app.register_blueprint(graph)
+app.register_blueprint(extract)
 
 
 @app.route('/')
@@ -144,6 +146,8 @@ def filters_db():
 def set_polarity():
     updatePolarity(request.args.get('tweetId'), request.args.get('polarity'))
     return {}, 200
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)

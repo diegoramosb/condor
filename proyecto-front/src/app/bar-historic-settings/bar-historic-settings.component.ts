@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ChartDataSets } from 'chart.js';
 import { ApiService } from '../api.service';
 import { Label } from 'ng2-charts';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-bar-historic-settings',
@@ -11,13 +12,13 @@ import { Label } from 'ng2-charts';
 })
 export class BarHistoricSettingsComponent implements OnInit {
 
-  constructor(private apiService: ApiService) { }
-
-  public accounts = ["a", "b", "c"]
 
   public selectedAccounts = [];
-
   public selectedWords = [];
+  public selectedDate = null;
+  public tweets = [];
+
+  public accounts: any;
 
   public maxDate = moment();
 
@@ -28,15 +29,25 @@ export class BarHistoricSettingsComponent implements OnInit {
 
   public barChartLabels: Label[] = [];
 
-  public word: string;
+  constructor(private apiService: ApiService) {
+    this.apiService.getAccounts().subscribe(response => {
+      this.accounts = response;
+    });
+    var filterData = JSON.parse(localStorage.getItem('historicFilters'));
+    if (filterData != null) {
+      this.selectedWords = filterData.words;
+      this.selectedAccounts = filterData.accounts;
+      this.selectedDate = filterData.date != "null"? moment(filterData.date, "YYYY-MM-DD"): null;
+      this.applyFilters();
+    }
+  }
 
   ngOnInit(): void {
-    this.word = localStorage.getItem('historicWord');
   }
 
   addAccount(account: string) {
-    if (!this.selectedAccounts.includes(account)) {
-      this.selectedAccounts.push(account);
+    if (!this.selectedAccounts.includes(account['screen_name'])) {
+      this.selectedAccounts.push(account['screen_name']);
     }
   }
 
@@ -62,29 +73,36 @@ export class BarHistoricSettingsComponent implements OnInit {
     }
   }
 
-  applyFilters(word: string) {
-    this.word = word;
+  setDate(event: MatDatepickerInputEvent<moment.Moment>) {
+    this.selectedDate = event.value;
+  }
+
+  applyFilters() {
     var labels = [];
     var likes = [];
     var retweets = [];
-    this.apiService.getHistoricData(word).subscribe((data: []) => {
-      // this.text = data['text'];
-      data['hist'].forEach(element => {
-        labels.push(element['hour'])
-        likes.push(element['numFavs'])
-        retweets.push(element['numRts'])
+    this.apiService.getHistoricData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      this.tweets = data['tweets'];
+      data['data'].forEach(element => {
+        labels.push(element['time'])
+        likes.push(element['sum_like'])
+        retweets.push(element['sum_rt'])
       });
+      this.barChartLabels = labels;
+      this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
+
+      localStorage.setItem('showingHistoric', "true");
+      localStorage.setItem('historicFilters', JSON.stringify({
+        'words': this.selectedWords,
+        'accounts': this.selectedAccounts,
+        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+      }));
     });
-    this.barChartLabels = labels;
-    this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
-    localStorage.setItem('historicWord', word);
   }
 
   updateData() {
     this.apiService.updateTweets().subscribe(response => {
-      this.applyFilters(this.word);
+      this.applyFilters();
     });
   }
-
-  asdf(){}
 }

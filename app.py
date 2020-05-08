@@ -67,6 +67,7 @@ def get_all_tweets():
     tweets = return_tweets()
     users = []
     for t in tweets:
+        t["_id"] = str(t["_id"])
         users.append(searchUserId(t['userId']))
     #merged_list = tuple(zip(users, tweets))
     o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
@@ -80,48 +81,6 @@ def delete_tweets_byAccount():
     deleteUserAndTweets(id)
     return {}, 200
 
-@app.route('/tweetsbydate', methods=['GET'])
-def get_tweets_date():
-    date = request.args.get('date')
-    users = []
-    dt = parser.parse(date)
-    tweets = search_tweets_after(dt)
-
-    for t in tweets:
-        users.append(searchUserId(t['userId']))
-
-    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-
-
-    tweets_response = utils.list_to_json(o)
-    return utils.JSONResponse(tweets_response)
-
-@app.route('/tweetsbyword', methods=['GET'])
-def show_tweets_by_word():
-    word = request.args.get('word')
-    users = []
-    tweets = search_by_keywords(word)
-
-    for t in tweets:
-        users.append(searchUserId(t['userId']))
-
-    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-
-    tweets_response = utils.list_to_json(o)
-    return utils.JSONResponse(tweets_response)
-
-@app.route('/tweetsbyuser', methods=['GET'])
-def show_tweets_by_user():
-    user = request.args.get('user')
-    tweets = search_by_user(user)
-    print(tweets)
-    #return 'Ok', 200
-    #tweets_response = utils.list_to_json(tweets)
-    #return utils.JSONResponse(tweets_response)
-
-
-# return utils.JSONResponse(tweets_response)
-
 @app.route('/getfiltros', methods=['GET'])
 def filters_db():
 
@@ -134,6 +93,7 @@ def filters_db():
     users = []
     tweets = sorted(tweets, key=lambda tweet: tweet['date'], reverse=True)
     for t in tweets:
+        t["_id"] = str(t["_id"])
         users.append(searchUserId(t['userId']))
     o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
     tweets_response = utils.list_to_json(o)
@@ -144,7 +104,7 @@ def filters_db():
 
 @app.route('/setPolarity', methods=['PUT'])
 def set_polarity():
-    updatePolarity(request.args.get('tweetId'), request.args.get('polarity'))
+    updatePolarity(request.get_json()['tweetId'], request.get_json()['polarity'])
     return {}, 200
 
 

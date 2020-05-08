@@ -21,7 +21,6 @@ def return_accounts():
     return usersCollection.find()
 
 def return_tweets():
-
     return list(tweetsCollection.find().sort([('date', -1)]))
 
 def return_tweets_complete():

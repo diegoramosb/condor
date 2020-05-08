@@ -89,10 +89,10 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/getfiltros`, {params: params});
   }
 
-  public setPolarity(tweetId: number, polarity: string) {
-    var params = new HttpParams().set("tweetId", tweetId.toString());
-    params.set("polarity", polarity);
-    return this.httpClient.get(`${this.apiUrl}/setPolarity`, {params: params})
+  public setPolarity(tweetId: string, polarity: string) {
+    var params = new HttpParams().append("tweetId", tweetId);
+    params = params.append("polarity", polarity);
+    return this.httpClient.put(`${this.apiUrl}/setPolarity`, {"tweetId": tweetId, "polarity": polarity})
   }
 
   public updateTweets() {

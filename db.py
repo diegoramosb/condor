@@ -40,7 +40,6 @@ def search_by_string(ph):
 
 def search_by_user(name):
     us = usersCollection.find({"$text": {"$search": name}})
-    pprint(us)
     for inf in us:
         return list(tweetsCollection.find({'userId': inf['_id']}))
 
@@ -85,7 +84,6 @@ def search_most_common_words(word):
         }
 
     ]
-    pprint(list(tweetsCollection.aggregate(agr)))
     return list(tweetsCollection.aggregate(agr))
 
 def get_filtros(words, date, accounts, polarities):
@@ -122,7 +120,6 @@ def get_filtros(words, date, accounts, polarities):
             p['$or'].append({'polarity': pol})    
         arr.append(p)
 
-    pprint(arr)
     return list(tweetsCollection.find({'$and': arr}))
 
 def getIdsAccounts():
@@ -206,7 +203,7 @@ def updateTweets(tweets):
     return({'updatedTweets': len(tweets)})
 
 def updatePolarity(tweetId, polarity):
-    tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}})
+    print(tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}}))
 
 def deleteUserAndTweets(userId):
     tweetsCollection.delete_many({"userId": int(userId)})

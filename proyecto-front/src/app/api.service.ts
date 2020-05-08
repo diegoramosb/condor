@@ -25,8 +25,18 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/bubble`, {params: params});
   }
 
-  public getHistoricData(word: string) {
-    var params = new HttpParams().set("word", word);
+  public getHistoricData(words: string[], accounts: string[], date: moment.Moment) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('YYYY-MM-DD'))
+    }
+    console.log(params)
     return this.httpClient.get(`${this.apiUrl}/historic`, {params: params});
   }
 

@@ -202,7 +202,7 @@ def updateTweets(tweets):
     return({'updatedTweets': len(tweets)})
 
 def updatePolarity(tweetId, polarity):
-    print(tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}}))
+    tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}})
 
 def deleteUserAndTweets(userId):
     tweetsCollection.delete_many({"userId": int(userId)})

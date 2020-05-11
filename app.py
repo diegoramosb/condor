@@ -1,16 +1,12 @@
 import json
 from datetime import datetime
-
 from flask import Flask, jsonify, request
-
 import utils
-
+from pprint import pprint
 
 from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, deleteUserAndTweets, get_filtros,searchUserId, deleteUserAndTweets
-
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
-
-from extract_tweets import searchTweetById, extractTweetsApi, extract
+from extract_tweets import searchTweetById, extractTweetsApi, extract, lookup_user
 from graphs import graph
 from flask_cors import CORS
 from dateutil import parser
@@ -20,14 +16,6 @@ CORS(app)
 app.register_blueprint(graph)
 app.register_blueprint(extract)
 
-
-@app.route('/')
-def home():
-    return jsonify({"text":"hello world"})
-
-@app.route("/home", methods=["GET"])
-def index():
-    return "App running"
 
 @app.route('/updateTweets', methods=['GET'])
 def updateTweetsToday():
@@ -44,6 +32,7 @@ def updateTweetsToday():
         print(t["id"])
     return {'nUpdated': len(response)}, 200
 
+
 @app.route('/extractTweets', methods=['GET'])
 def extractTweetsByAccount():
     """
@@ -56,11 +45,13 @@ def extractTweetsByAccount():
     
     return {'newTweets': newCount}, 200
 
+
 @app.route('/getAccounts', methods=['GET'])
 def getAccounts():
     accounts = return_accounts()
     accounts_response = utils.list_to_json(accounts)
     return utils.JSONResponse(accounts_response)
+
 
 @app.route('/tweets', methods=['GET'])
 def get_all_tweets():
@@ -75,11 +66,13 @@ def get_all_tweets():
 
     return utils.JSONResponse(tweets_response)
 
+
 @app.route('/unsubscribe', methods=['DELETE'])
 def delete_tweets_byAccount():
     id = request.args.get('id')
     deleteUserAndTweets(id)
     return {}, 200
+
 
 @app.route('/getfiltros', methods=['GET'])
 def filters_db():
@@ -107,7 +100,9 @@ def set_polarity():
     updatePolarity(request.get_json()['tweetId'], request.get_json()['polarity'])
     return {}, 200
 
-
+@app.route('/searchUser', methods=['GET'])
+def search_user():
+    return jsonify(lookup_user(request.args.get('screenName'))), 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)

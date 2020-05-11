@@ -58,6 +58,17 @@ def extractTweetsSinceId(account, nTweets, id):
 def searchTweetById(id):
     return api.get_status(id)._json
 
+def lookup_user(screenName):
+    users = []
+    for user in api.search_users(screenName, 5):
+        json = user._json
+        img = json['profile_image_url']
+        name = json['name']
+        screenName = json['screen_name']
+        id = json['id']
+        users.append({"id": id, "name": name, "screen_name": screenName, "img": img})
+    return users
+
 
 class MyStreamListener(StreamListener):
 

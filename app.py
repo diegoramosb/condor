@@ -69,7 +69,7 @@ def get_all_tweets():
 
 @app.route('/unsubscribe', methods=['DELETE'])
 def delete_tweets_byAccount():
-    id = request.args.get('id')
+    id = request.args.get('accountId')
     deleteUserAndTweets(id)
     return {}, 200
 

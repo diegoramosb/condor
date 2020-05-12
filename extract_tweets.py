@@ -36,10 +36,8 @@ def extractTweetsApi(accounts, nTweets):
     jsons = []
     for id in accounts:
         for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(nTweets):
-            ##pprint(id)
             jsonStr = json.dumps(status._json)
             parsed = json.loads(jsonStr)
-            pprint(parsed)
             jsons.append(parsed)
 
     return jsons
@@ -66,7 +64,7 @@ def lookup_user(screenName):
         name = json['name']
         screenName = json['screen_name']
         id = json['id']
-        users.append({"id": id, "name": name, "screen_name": screenName, "img": img})
+        users.append({"_id": id, "name": name, "screen_name": screenName, "profile_image": img})
     return users
 
 
@@ -85,7 +83,6 @@ def updateTweetsByAccount():
     follow = []
     for a in return_accounts():
         follow.append(a['_id'])
-    pprint(follow)
 
     try:
         #myStream.userstream('eltiempo')

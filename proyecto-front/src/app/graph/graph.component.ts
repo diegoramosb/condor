@@ -1,169 +1,142 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color } from 'ng2-charts';
-import { ApiService } from '../api.service';
+import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core'; import * as d3 from 'd3';
+import { path } from 'd3';
+
 
 @Component({
   selector: 'app-graph',
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './graph.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['./graph.component.scss']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnChanges, AfterViewInit {
 
-  public showing = false;
+  @Input() graphData;
 
-  public barChartColors: Color[] = [
-    {
-      backgroundColor: "rgba(29, 161, 243, 1)"
-    },
-    {
-      backgroundColor: "rgba(25, 207, 134, 1)"
-    },
-    {
-      backgroundColor: "rgba(232, 28, 79, 1)"
-    },
-    {
-      backgroundColor: "rgba(250, 28, 79, 1)"
+  @ViewChild('chart')
+  private chartContainer: ElementRef;
+
+  margin = { top: 50, right: 20, bottom: 30, left: 100 };
+
+  constructor() { }
+
+  ngOnChanges(): void {
+    if (!this.graphData) {
+      return;
     }
-  ];
-
-  public scatterChartOptions: ChartOptions = {
-    responsive: true,
-    legend: {
-      display: false
-    },
-    tooltips: {
-      intersect: false,
-      mode: "nearest"
-    },
-    scales: {
-      xAxes: [{
-        gridLines: {
-          display: false
-        },
-        ticks: {
-          min: 0,
-          max: 20,
-          display: false
-        }
-      }],
-      yAxes: [{
-        gridLines: {
-          display: false
-        },
-        ticks: {
-          min: 0,
-          max: 20,
-          display: false
-        }
-      }]
+    if (this.chartContainer != undefined) {
+      this.createChart();
     }
-  };
-
-  public scatterChartData: ChartDataSets[] = [
-    { data: [] }
-    // {
-    //   data: [
-    //     { x: 10, y: 5, r: 10 },
-    //   ],
-    //   label: 'Cuenta1',
-    //   backgroundColor: "rgba(29, 161, 243, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [
-    //     { x: 20, y: 3, r: 10 },
-    //   ],
-    //   label: 'Cuenta2',
-    //   backgroundColor: "rgba(25, 207, 134, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [
-    //     { x: 30, y: 7, r: 10 },
-    //   ],
-    //   label: 'Cuenta3',
-    //   backgroundColor: "rgba(232, 28, 79, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [{ x: 10, y: 5 }, { x: 20, y: 3 }],
-    //   label: 'Palabra1',
-    //   type: 'line',
-    //   fill: false,
-    //   borderColor: "grey",
-    //   pointBackgroundColor: "rgba(0, 0, 0, 0)",
-    //   pointRadius: 0
-    // },
-    // {
-    //   data: [{ x: 20, y: 3 }, { x: 30, y: 7 }],
-    //   label: 'Palabra2',
-    //   type: 'line',
-    //   fill: false,
-    //   borderColor: "grey",
-    //   pointBackgroundColor: "rgba(0, 0, 0, 0)",
-    //   pointRadius: 0
-    // },
-  ];
-  public scatterChartType: ChartType = 'bubble';
-
-  public words: string[] = [];
-
-  constructor(private apiService: ApiService) { }
-
-  ngOnInit() {
   }
 
-  onEnter(word: string) {
-    this.words.push(word)
-    this.getWords(this.words);
+  ngAfterViewInit(): void {
+    this.createChart();
   }
 
-  wordGroup() {
-    var group = [];
-    for (var i = 0, j = 0; i < this.words.length; i++) {
-      if (i >= 2 && i % 2 == 0) {
-        j++
-      }
-      group[j] = group[j] || [];
-      group[j].push(this.words[i])
+  onResize() {
+    this.createChart();
+  }
+
+  private createChart(): void {
+    d3.select('svg').remove();
+
+    const element = this.chartContainer.nativeElement;
+
+    var arcs = [
+      { startAngle: 0, endAngle: 0.2 },
+      { startAngle: 0.2, endAngle: 0.6 },
+      { startAngle: 0.6, endAngle: 1.4 },
+      { startAngle: 1.4, endAngle: 3 },
+      { startAngle: 3, endAngle: 2 * Math.PI }
+    ]
+
+    var points = [
+      [0, 80],
+      [100, 100],
+      [200, 30],
+      [300, 50],
+      [400, 40],
+      [500, 80]
+    ];
+
+    var pathData = (points) => {
+      return d3.line()
+        .curve(d3.curveCardinal)(points);
     }
-    return group;
-  }
 
-  getWords(words: string[]) {
+    var arcGenerator = d3.arc()
+      .innerRadius(80)
+      .outerRadius(100)
+      .padAngle(.02)
+      .padRadius(100);
 
-    this.apiService.getGraphData(words).subscribe((result: []) => {
-      var graph = []
-      var i = 0;
-      result['nodes'].forEach(node => {
-        graph.push({
-          data: [
-            { x: node['x'], y: node['y'], r: 10 }
-          ],
-          label: node['cuenta'],
-          type: 'bubble',
-          backgroundColor: this.barChartColors[i]
-        })
-        i++;
-      });
-      result['links'].forEach(link => {
-        graph.push({
-          data: [
-            { x: link['origen']['x'], y: link['origen']['y'] },
-            { x: link['destino']['x'], y: link['destino']['y'] },
-          ],
-          label: link['palabra'],
-          pointRadius: 0,
-          type: "line",
-          fill: false,
-          borderColor: "grey"
-        })
+
+    const svg = d3.select(element).append('svg')
+      .attr('width', element.offsetWidth)
+      .attr('height', element.offsetHeight);
+
+    const g = svg.append('g')
+      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
+    g.selectAll('path')
+      .data(arcs)
+      .enter()
+      .append('path')
+      .attr('d', arcGenerator);
+
+    // g.select('path')
+    //   .attr('d', pathData(points));
+
+    g.append('path')
+      .attr('d', pathData(points));
+
+
+    d3.select('svg')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', function (d) {
+        return d[0];
       })
+      .attr('cy', function (d) {
+        return d[1];
+      })
+      .attr('r', 3);
 
-      this.scatterChartData = graph;
-      console.log(graph);
-    });
+    // const x = d3
+    //   .scaleBand()
+    //   .rangeRound([0, contentWidth])
+    //   .padding(0.1)
+    //   .domain(data.map(d => d.letter));
+
+    // const y = d3
+    //   .scaleLinear()
+    //   .rangeRound([contentHeight, 0])
+    //   .domain([0, d3.max(data, d => d.frequency)]);
+
+
+    // g.append('g')
+    //   .attr('class', 'axis axis--x')
+    //   .attr('transform', 'translate(0,' + contentHeight + ')')
+    //   .call(d3.axisBottom(x));
+
+    // g.append('g')
+    //   .attr('class', 'axis axis--y')
+    //   .call(d3.axisLeft(y).ticks(10, '%'))
+    //   .append('text')
+    //   .attr('transform', 'rotate(-90)')
+    //   .attr('y', 6)
+    //   .attr('dy', '0.71em')
+    //   .attr('text-anchor', 'end')
+    //   .text('Frequency');
+
+    // g.selectAll('.bar')
+    //   .data(data)
+    //   .enter().append('rect')
+    //   .attr('class', 'bar')
+    //   .attr('x', d => x(d.letter))
+    //   .attr('y', d => y(d.frequency))
+    //   .attr('width', x.bandwidth())
+    //   .attr('height', d => contentHeight - y(d.frequency));
   }
-
 }

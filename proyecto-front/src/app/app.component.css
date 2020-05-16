@@ -110,3 +110,8 @@ h1 {
     font-weight: bold;
     color: #465775;
 }
+
+app-graph {
+    width: 20px;
+    height: 50vh;
+}

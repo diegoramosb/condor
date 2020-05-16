@@ -15,7 +15,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   @ViewChild('chart')
   private chartContainer: ElementRef;
 
-  margin = { top: 50, right: 20, bottom: 30, left: 100 };
+  margin = { top: 100, right: 20, bottom: 30, left: 100 };
 
   constructor() { }
 
@@ -58,10 +58,9 @@ export class GraphComponent implements OnChanges, AfterViewInit {
       [500, 80]
     ];
 
-    var pathData = (points) => {
-      return d3.line()
-        .curve(d3.curveCardinal)(points);
-    }
+    var pathData = d3.line()
+      .curve(d3.curveCardinal);
+
 
     var arcGenerator = d3.arc()
       .innerRadius(80)
@@ -87,7 +86,9 @@ export class GraphComponent implements OnChanges, AfterViewInit {
     //   .attr('d', pathData(points));
 
     g.append('path')
-      .attr('d', pathData(points));
+      .data(points)
+      .enter()
+      .attr('d', pathData);
 
 
     d3.select('svg')

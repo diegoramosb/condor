@@ -30,7 +30,6 @@ import { GraphComponent } from './graph/graph.component';
 import { WordFreqComponent } from './word-freq/word-freq.component';
 import { TweetsComponent } from './tweets/tweets.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { GraphCardComponent } from './graph-card/graph-card.component';
 import { BarHistoricSettingsComponent } from './bar-historic-settings/bar-historic-settings.component';
 import { BubbleSettingsComponent } from './bubble-settings/bubble-settings.component';
 import { WordFreqSettingsComponent } from './word-freq-settings/word-freq-settings.component';
@@ -46,7 +45,6 @@ import { SettingsComponent } from './settings/settings.component';
     WordFreqComponent,
     TweetsComponent,
     DashboardComponent,
-    GraphCardComponent,
     BarHistoricSettingsComponent,
     BubbleSettingsComponent,
     WordFreqSettingsComponent,

@@ -53,7 +53,7 @@ export class BarHistoricComponent implements OnInit {
     var data = JSON.parse(localStorage.getItem('historicData'));
     if(data != null) {
       this.barChartData = data['historicData'];
-      this.barChartLabels = data['historicLabels']
+      this.barChartLabels = data['historicLabels'];
     }
   }
 

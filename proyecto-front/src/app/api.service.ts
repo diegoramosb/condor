@@ -25,8 +25,17 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/bubble`, {params: params});
   }
 
-  public getHistoricData(word: string) {
-    var params = new HttpParams().set("word", word);
+  public getHistoricData(words: string[], accounts: string[], date: moment.Moment) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('YYYY-MM-DD'))
+    }
     return this.httpClient.get(`${this.apiUrl}/historic`, {params: params});
   }
 
@@ -64,8 +73,9 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/getAccounts`);
   }
 
-  public unsubscribeFromAccount(accountId) {
-    return this.httpClient.delete(`${this.apiUrl}/unsubscribe?id=`+accountId)
+  public unsubscribeFromAccount(accountId: number) {
+    var params = new HttpParams().append("accountId", accountId.toString())
+    return this.httpClient.delete(`${this.apiUrl}/unsubscribe`, {params: params})
   }
 
   public getTweets() {
@@ -89,26 +99,38 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/getfiltros`, {params: params});
   }
 
-  public setPolarity(tweetId: number, polarity: string) {
-    var params = new HttpParams().set("tweetId", tweetId.toString());
-    params.set("polarity", polarity);
-    return this.httpClient.get(`${this.apiUrl}/setPolarity`, {params: params})
+  public setPolarity(tweetId: string, polarity: string) {
+    var params = new HttpParams().append("tweetId", tweetId);
+    params = params.append("polarity", polarity);
+    return this.httpClient.put(`${this.apiUrl}/setPolarity`, {"tweetId": tweetId, "polarity": polarity})
   }
 
   public updateTweets() {
     return this.httpClient.get(`${this.apiUrl}/updateTweets`);
   }
 
-  public extractTweets(accounts: string[], number: number) {
-    var params = `?number=${number}&`;
-    for(var i = 0; i < accounts.length; i++) {
-      if(i < accounts.length - 1) {
-        params += "account=" + accounts[i] + "&";
+  public extractTweets(accounts: string[]) {
+    var params = new HttpParams();
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    params = params.append("number", Math.floor(200 / accounts.length).toString());
+    return this.httpClient.get(`${this.apiUrl}/extractTweets`, {params: params});
+  }
+
+  public searchNewUser(screenName) {
+    if(!(screenName instanceof Object)) {
+      var trimmedName = screenName.startsWith("@") ? screenName.substring(1): screenName;
+      if(trimmedName.length > 3) {
+          var params = new HttpParams().append("screenName", trimmedName);
+          return this.httpClient.get(`${this.apiUrl}/searchUser`, {params: params});
       }
       else {
-        params += "account=" + accounts[i];
+        return []
       }
     }
-    return this.httpClient.get(`${this.apiUrl}/extractTweets` + params);
+    else {
+      return []
+    }
   }
 }

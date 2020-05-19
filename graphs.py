@@ -46,8 +46,6 @@ def get_tweets_with_its_user(tweets):
     for t in tweets:
         user = searchUserId(t['userId'])
         ans += user
-
-    print(ans)
     return ans
 
 
@@ -112,26 +110,29 @@ def show_chart():
     tweets = get_filtros(words, date, accounts, polaridad)
 
     data = {}
+    rtTotal = 0
+    likeTotal = 0
     #todos los tweets y retweets y likes de las horas - suma de todos los tweets,
 
     for t in tweets:
-        requests = t['request_times']
-        rt = t['retweet_count']
-        fav = t['favorite_count']
-        for i in range(len(requests)):
-            timeStr = requests[i].strftime("%H:%M")
-            if timeStr not in data:
-                data[timeStr] = {"sum_rt": rt[i], "sum_like": fav[i]}
-            else:
-                dataTime = data[timeStr]
-                sumRt = dataTime["sum_rt"] + rt[i]
-                sumLike = dataTime["sum_like"] + fav[i]
-                data[timeStr] = {"sum_rt": sumRt, "sum_like": sumLike}
+        if date is None or t['date'].strftime("%Y-%m-%d") == date:
+            requests = t['request_times']
+            rt = t['retweet_count']
+            fav = t['favorite_count']
+            for i in range(len(requests)):
+                timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
+                rtTotal = rtTotal + rt[i]
+                likeTotal = likeTotal + fav[i]
+                data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
         
-
-
-    # return {"tweets": tweets, "data": m}
-    return {"tweets": tweets, "data": data}
+    dataList = []
+    for item in data.items():
+        dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
+    dataList = sorted(dataList,
+    key=lambda x: datetime.strptime(x['time'], '%d/%m/%Y %H:%M'), reverse=False)
+    users = get_tweets_with_its_user(tweets)
+    n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
+    return {"tweets": n, "data": dataList}
 
 
 

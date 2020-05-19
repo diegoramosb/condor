@@ -37,10 +37,8 @@ def extractTweetsApi(accounts, nTweets):
     jsons = []
     for id in accounts:
         for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(nTweets):
-            ##pprint(id)
             jsonStr = json.dumps(status._json)
             parsed = json.loads(jsonStr)
-            pprint(parsed)
             jsons.append(parsed)
 
     return jsons
@@ -58,6 +56,17 @@ def extractTweetsSinceId(account, nTweets, id):
 
 def searchTweetById(id):
     return api.get_status(id)._json
+
+def lookup_user(screenName):
+    users = []
+    for user in api.search_users(screenName, 5):
+        json = user._json
+        img = json['profile_image_url']
+        name = json['name']
+        screenName = json['screen_name']
+        id = json['id']
+        users.append({"_id": id, "name": name, "screen_name": screenName, "profile_image": img})
+    return users
 
 
 class MyStreamListener(StreamListener):
@@ -96,8 +105,12 @@ def updateTweetsByAccount():
 
     follow = []
     for a in return_accounts():
+<<<<<<< HEAD
         follow.append(str(a['_id']))
     pprint(follow)
+=======
+        follow.append(a['_id'])
+>>>>>>> b216044de81ab889ee6056754bbc1d5bf580541f
 
     try:
         myStream.filter(follow=follow)

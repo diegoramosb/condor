@@ -3,16 +3,31 @@
   <div mat-dialog-content>
     <mat-divider></mat-divider>
     <h3 style="color: #465775;">Cuentas</h3>
-    <mat-form-field style="width: 14vw">
-      <mat-label>Seguir cuenta</mat-label>
-      <input matInput #accountInput (keyup.enter)="addAccount(accountInput.value)">
-    </mat-form-field>
+    <form [formGroup]='usersForm'>
+      <mat-form-field style="width: 20vw">
+        <mat-label>Seguir cuenta</mat-label>
+        <input matInput [matAutocomplete]="auto" formControlName='userInput'>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let user of filteredUsers" [value]="user" (click)="addAccount(user)">
+            <div class="row">
+              <div class="col-md-4">
+                <img style="border-radius: 50%;" src="{{user['profile_image']}}">
+              </div>
+              <div class="col-md-8">
+                <p style="text-align: left;">@{{user['screen_name']}}</p> 
+              </div>
+            </div>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
     <mat-list>
       <mat-list-item *ngFor="let account of data['accounts']">
         <img matListAvatar src="{{account['profile_image']}}">
         <h3 matLine style="text-align: left;">{{account['name']}}</h3>
         <p matLine style="text-align: left;">@{{account['screen_name']}}</p>
-        <button mat-button (click)="removeAccount(account['screen_name'])" style="color: #465775; padding-right: 4vw;">Dejar de seguir</button>
+        <button mat-button (click)="removeAccount(account['screen_name'])"
+          style="color: #465775; padding-right: 4vw;">Dejar de seguir</button>
       </mat-list-item>
     </mat-list>
     <mat-divider></mat-divider>

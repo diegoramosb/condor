@@ -20,22 +20,10 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.showingHistoric = localStorage.getItem('showingHistoric') == 'true'? true: false;
-    this.showingBubble = localStorage.getItem('showingBubble') == 'true'? true: false;
-    this.showingGraph = localStorage.getItem('showingGraph') == 'true'? true: false;
-    this.showingFreq = localStorage.getItem('showingFreq') == 'true'? true: false;
-  }
-
-  extractTweets() {
-    this.getAccounts().subscribe((response: string[]) => {
-      let accounts: string[] = [];
-      response.forEach(account => {
-        accounts.push(account['screen_name'])
-      });
-      this.apiService.extractTweets(accounts, Math.floor(200 / accounts.length)).subscribe(response => {
-        this.snackBar.open(`Actualizados ${response['newTweets']} tweets`, "Aceptar");
-      })
-    });
+    this.showingHistoric = localStorage.getItem('showingHistoric') == 'true' ? true : false;
+    this.showingBubble = localStorage.getItem('showingBubble') == 'true' ? true : false;
+    this.showingGraph = localStorage.getItem('showingGraph') == 'true' ? true : false;
+    this.showingFreq = localStorage.getItem('showingFreq') == 'true' ? true : false;
   }
 
   getAccounts() {
@@ -47,14 +35,22 @@ export class DashboardComponent implements OnInit {
       let accounts: string[] = response
       const dialogRef = this.dialog.open(SettingsComponent, {
         width: '40vw',
-        data: {accounts: accounts, newAccounts: [], removedAccounts: []}
+        data: { accounts: accounts, newAccounts: [], removedAccounts: [] }
       });
 
       dialogRef.afterClosed().subscribe((result) => {
-        if(result != undefined) {
+        if (result != undefined) {
           result.removedAccounts.forEach((removedId: number) => {
-            this.apiService.unsubscribeFromAccount(removedId);
+            this.apiService.unsubscribeFromAccount(removedId).subscribe(response => {
+              this.snackBar.open("Eliminados tweets de las cuentas seleccionadas", "Aceptar")
+            }
+            );
           });
+          if (result.newAccounts.length > 0) {
+            this.apiService.extractTweets(result.newAccounts).subscribe(response => {
+              this.snackBar.open(`Descargados ${response['newTweets']} tweets de las nuevas cuentas`, "Aceptar");
+            });
+          }
         }
       });
     })

@@ -54,7 +54,7 @@
           <mat-checkbox [(ngModel)]="negative">negativa</mat-checkbox>
         </div>
         <div class="row">
-          <mat-checkbox [(ngModel)]="neutral">neutral</mat-checkbox>
+          <mat-checkbox [(ngModel)]="neutral">neutra</mat-checkbox>
         </div>
         <div class="row">
           <mat-checkbox [(ngModel)]="none">ninguna</mat-checkbox>
@@ -114,7 +114,12 @@
               </div>
               <div class="col-md-4"></div>
               <div class="col-md-3">
-                <button mat-flat-button (click)="setPolarity(tweet['tweet']['_id'])" style="color: #465775">Cambiar polaridad</button>
+                <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #465775">Cambiar polaridad</button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'positive')">Positiva</button>
+                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'negative')">Negativa</button>
+                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'neutral')">Neutra</button>
+                </mat-menu>
               </div>
             </div>
           </mat-card>

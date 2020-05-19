@@ -105,12 +105,11 @@ def updateTweetsByAccount():
 
     follow = []
     for a in return_accounts():
-<<<<<<< HEAD
         follow.append(str(a['_id']))
     pprint(follow)
-=======
-        follow.append(a['_id'])
->>>>>>> b216044de81ab889ee6056754bbc1d5bf580541f
+
+       # follow.append(a['_id'])
+
 
     try:
         myStream.filter(follow=follow)

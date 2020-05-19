@@ -38,10 +38,12 @@ export class TweetsComponent implements OnInit {
       this.none = filterData.none;
       this.applyFilters();
     }
+    else {
+      this.getTweets();
+    }
   }
 
   ngOnInit(): void {
-    this.getTweets()
   }
 
   addAccount(account: string) {
@@ -76,13 +78,21 @@ export class TweetsComponent implements OnInit {
     this.selectedDate = event.value;
   }
 
-  setPolarity(tweetId: number) {
-    console.log(tweetId);
+  setPolarity(tweetId: string, polarity: string) {
+    this.apiService.setPolarity(tweetId, polarity).subscribe(response => {
+      if(localStorage.getItem('tweetFilters') != null) {
+        this.applyFilters();
+      }
+      else {
+        this.getTweets();
+      }
+    });
   }
 
   getTweets() {
     this.apiService.getTweets().subscribe((response: []) => {
       this.tweets = response;
+      console.log(response);
     })
   }
 
@@ -102,6 +112,7 @@ export class TweetsComponent implements OnInit {
     }
     this.apiService.getTweetsFilters(this.selectedWords, this.selectedAccounts, this.selectedDate, selectedPolarities).subscribe((response: []) => {
       this.tweets = response;
+      console.log(response);
     });
     localStorage.setItem('tweetFilters', JSON.stringify({
       'words': this.selectedWords,
@@ -122,6 +133,7 @@ export class TweetsComponent implements OnInit {
     this.negative = true;
     this.neutral = true;
     this.none = true;
+    localStorage.removeItem('tweetFilters');
     this.getTweets();
   }
 

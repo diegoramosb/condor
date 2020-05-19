@@ -38,7 +38,6 @@ search_by_user(username)
 
 # search_most_common_words(word)
 
-
-
+updateTweetsByAccount()
 
 print("done")

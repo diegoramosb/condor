@@ -16,6 +16,7 @@ db = client['proyecto20203']
 
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
+xCollection = db['textCollection']
 
 def return_accounts():
     return usersCollection.find()
@@ -185,16 +186,93 @@ def saveTweetsMongo(tweets):
                 'polarity': "none"
             }
         try:
+            print(newTweet)
             tweetsCollection.insert_one(newTweet)
             print("Added: {}".format(t['_id']))
             cnt += 1
 
-        except DuplicateKeyError:
-            print("{} already in DB".format(t['_id']))
+        except:
+            print('todo mal')
+            #print("{} already in DB".format(t['_id']))
 
         if (usersCollection.find_one({"_id": t['user']['id']})) is None:
             newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
             usersCollection.insert_one(newuser)
+    return(cnt)
+
+
+def saveTweetsMongoOne(t):
+    """
+    Saves the tweets in a MongoDB collection
+    :param collection: MongoDB collection object
+    :param tweets: tweets to save
+    """
+    #pprint(t)
+    cnt = 0
+    t['_id'] = t['id']
+    follow = []
+    for a in return_accounts():
+        follow.append(str(a['_id']))
+
+    date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y') - timedelta(hours=5)
+
+    newTweet ={}
+
+    if t['user']['id'] in follow:
+        if t['entities'] is None:
+            if t['entities']['media'] is None:
+
+                newTweet = {
+                    '_id': t['id'],
+                    'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                    'text': t['text'],
+                    'date': date,
+                    'userId': t['user']['id'],
+                    'retweet_count': [t['retweet_count']],
+                    'favorite_count': [t['favorite_count']],
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
+                }
+
+            else:
+
+                media = t['entities']['media'][0]['media_url']
+                newTweet = {
+                    '_id': t['id'],
+                    'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                    'text': t['text'],
+                    'media_link': media,
+                    'date': date,
+                    'userId': t['user']['id'],
+                    'retweet_count': [t['retweet_count']],
+                    'favorite_count': [t['favorite_count']],
+                    'request_times': [datetime.now()],
+                    'polarity': "none"
+                }
+        else:
+            newTweet = {
+                '_id': t['id'],
+                'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                'text': t['text'],
+                'date': date,
+                'userId': t['user']['id'],
+                'retweet_count': [t['retweet_count']],
+                'favorite_count': [t['favorite_count']],
+                'request_times': [datetime.now()],
+                'polarity': "none"
+            }
+    try:    
+        tweetsCollection.insert_one(newTweet)
+        print(newTweet)
+        print("Added: {}".format(t['_id']))
+        cnt += 1
+
+    except DuplicateKeyError:
+        print("{} already in DB".format(t['_id']))
+
+    if (usersCollection.find_one({"_id": t['user']['id']})) is None:
+        newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
+        usersCollection.insert_one(newuser)
     return(cnt)
 
 
@@ -211,3 +289,7 @@ def updatePolarity(tweetId, polarity):
 def deleteUserAndTweets(userId):
     tweetsCollection.delete_many({"userId": int(userId)})
     usersCollection.delete_one({"_id": int(userId)})
+
+def x(t):
+
+    xCollection.insert(t)

@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from pprint import pprint
 from tweepy import StreamListener
 from tweepy import Stream
@@ -7,7 +8,7 @@ import json
 
 from flask import Blueprint, request
 
-from db import return_accounts, saveTweetsMongo
+from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne, x
 
 extract = Blueprint('extract', __name__)
 
@@ -22,7 +23,7 @@ twitterKeys = {
 """Twitter API authentication"""
 auth = tweepy.OAuthHandler(twitterKeys['apiKey'], twitterKeys['apiSecret'])
 auth.set_access_token(twitterKeys['accessTokenKey'], twitterKeys['accesTokenSecret'])
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 def extractTweetsApi(accounts, nTweets):
@@ -60,9 +61,30 @@ def searchTweetById(id):
 
 
 class MyStreamListener(StreamListener):
-
     def on_status(self, status):
-        print(status.text)
+
+        is_ret = False
+        # jsons = []
+        # jsonStrs = json.dumps(status._json)
+        # parsed = json.loads(jsonStrs)
+        # jsons.append(parsed)
+        # ##pprint(jsons)
+        #decoded = json.loads(status)
+        #pprint(decoded)
+        if hasattr(status, 'retweeted_status'):
+            is_ret = True
+
+        try:
+            if is_ret == False:
+                saveTweetsMongoOne(status._json)
+                pprint('ok')
+            else:
+                print('nada')
+        except Exception as e:
+            print(e)
+            print('error')
+
+        return True
 
 
 listener = MyStreamListener()
@@ -71,19 +93,15 @@ myStream = Stream(auth, listener)
 
 @extract.route('/updateTweetsByAccount', methods=['GET'])
 def updateTweetsByAccount():
+
     follow = []
     for a in return_accounts():
-        follow.append(a['_id'])
+        follow.append(str(a['_id']))
     pprint(follow)
 
     try:
-        #myStream.userstream('eltiempo')
-        for a in follow:
-            myStream.filter(follow=a)
-        #tuit = myStream.filter(follow=['14834302'])
-        #saveTweetsMongo(tuit)
-        return 'ok', 200
+        myStream.filter(follow=follow)
+        return {}, 200
+
     except:
-        print
-        "error!"
-        myStream.disconnect()
+        return {}, 500

@@ -21,16 +21,16 @@ export class GraphSettingsComponent implements OnInit {
 
   public graphData = [
     {
-      name: "c1",
-      words: ["w1", "w2", "w3"]
+      name: "a",
+      words: ["a1", "a2", "a3"]
     },
     {
-      name: "c2",
-      words: ["w2", "w3"]
+      name: "b",
+      words: ["b2", "b3"]
     },
     {
-      name: "c3",
-      words: ["w3"]
+      name: "c",
+      words: ["c1", "c2", "c3", "c4", "c5"]
     }
   ]
 

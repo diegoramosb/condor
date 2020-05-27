@@ -1,6 +1,12 @@
-import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core'; import * as d3 from 'd3';
+import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import * as d3 from 'd3';
 import { path } from 'd3';
+import { group } from '@angular/animations';
 
+export interface GraphData {
+  name: string;
+  words: string[];
+}
 
 @Component({
   selector: 'app-graph',
@@ -8,14 +14,17 @@ import { path } from 'd3';
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.scss']
 })
+
 export class GraphComponent implements OnChanges, AfterViewInit {
 
-  @Input() graphData;
+  @Input() graphData: GraphData[];
 
   @ViewChild('chart')
   private chartContainer: ElementRef;
 
-  margin = { top: 100, right: 20, bottom: 30, left: 100 };
+  height = 500;
+
+  width = 500;
 
   constructor() { }
 
@@ -37,107 +46,188 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   }
 
   private createChart(): void {
-    d3.select('svg').remove();
+    var element = this.chartContainer.nativeElement;
 
-    const element = this.chartContainer.nativeElement;
+    var svg = d3.select(element)
+      .append('svg')
+      .attr("height", this.height)
+      .attr("width", this.width)
+      .style('background-color', 'yellow')
 
-    var arcs = [
-      { startAngle: 0, endAngle: 0.2 },
-      { startAngle: 0.2, endAngle: 0.6 },
-      { startAngle: 0.6, endAngle: 1.4 },
-      { startAngle: 1.4, endAngle: 3 },
-      { startAngle: 3, endAngle: 2 * Math.PI }
-    ]
+    var nodes = this.calculateNodes(this.calculateWordRadius(), this.calculateAccountRadius())
+    var words = nodes[0];
+    var accounts = nodes[1];
 
-    var points = [
-      [0, 80],
-      [100, 100],
-      [200, 30],
-      [300, 50],
-      [400, 40],
-      [500, 80]
-    ];
+    var group = svg.append('g')
+      .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
 
-    var pathData = d3.line()
-      .curve(d3.curveCardinal);
+    accounts.forEach(account => {
+      group.append('circle')
+        .attr('cx', account['x'])
+        .attr('cy', account['y'])
+        .attr('r', 2)
+        .attr('fill', 'black')
 
+      group.append('text')
+        .attr('x', account['label']['x'])
+        .attr('y', account['label']['y'])
+        .attr('text-anchor', 'start')
+        .attr('transform', `rotate(${account['label']['rot']} ${account['label']['x']} ${account['label']['y']})`)
+        .text(account['label']['text'])
+        .style('font-size', '1em')
+    });
 
-    var arcGenerator = d3.arc()
-      .innerRadius(80)
-      .outerRadius(100)
-      .padAngle(.02)
-      .padRadius(100);
+    words.forEach(word => {
+      group.append('circle')
+        .attr('cx', word['x'])
+        .attr('cy', word['y'])
+        .attr('r', 2)
+        .attr('fill', 'black')
 
-
-    const svg = d3.select(element).append('svg')
-      .attr('width', element.offsetWidth)
-      .attr('height', element.offsetHeight);
-
-    const g = svg.append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
-
-    g.selectAll('path')
-      .data(arcs)
-      .enter()
-      .append('path')
-      .attr('d', arcGenerator);
-
-    // g.select('path')
-    //   .attr('d', pathData(points));
-
-    g.append('path')
-      .data(points)
-      .enter()
-      .attr('d', pathData);
+      group.append('text')
+        .attr('x', word['label']['x'])
+        .attr('y', word['label']['y'])
+        .attr('text-anchor', 'start')
+        .attr('transform', `rotate(${word['label']['rot']}, ${word['label']['x']}, ${word['label']['y']})`)
+        .text(word['label']['text'])
+        .style('font-size', '1em')
+    })
 
 
-    d3.select('svg')
-      .selectAll('circle')
-      .data(points)
-      .enter()
-      .append('circle')
-      .attr('cx', function (d) {
-        return d[0];
-      })
-      .attr('cy', function (d) {
-        return d[1];
-      })
-      .attr('r', 3);
+    // var bezierCurve = (x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2) => {
+    //   var path = d3.path();
+    //   path.moveTo(x1, y1);
+    //   path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
+    //   return path.toString();
+    // }
 
-    // const x = d3
-    //   .scaleBand()
-    //   .rangeRound([0, contentWidth])
-    //   .padding(0.1)
-    //   .domain(data.map(d => d.letter));
+    // svg.append('path').attr('d', bezierCurve(100, 100, 100, 200, 200, 100, 200, 200)).attr('stroke', 'black').attr('fill', 'none');
 
-    // const y = d3
-    //   .scaleLinear()
-    //   .rangeRound([contentHeight, 0])
-    //   .domain([0, d3.max(data, d => d.frequency)]);
+    // var pathGenerator = (x1, y1, x2, y2, x3, y3) => {
+    //   var path = d3.path()
+    //   path.moveTo(x1, y1)
+    //   path.lineTo(x2, y2)
+    //   path.lineTo(x3, y3)
+    //   path.closePath()
+    //   return path.toString()
+    // }
+    // svg.append('path').attr('d', pathGenerator(25, 25, 75, 25, 200, 200))
 
+    // var lineGenerator = d3.line<any>()
+    // .x(function(d) {
+    //   return d[0]
+    // })
+    // .y(function (d) {
+    //   return d[1]
+    // })
 
-    // g.append('g')
-    //   .attr('class', 'axis axis--x')
-    //   .attr('transform', 'translate(0,' + contentHeight + ')')
-    //   .call(d3.axisBottom(x));
+    // group.append("line")
+    //   .attr("x1", 200)
+    //   .attr("y1", 200)
+    //   .attr("x2", 300)
+    //   .attr("y2", 200)
+    //   .style("stroke", "rgb(255,0,0)")
+    //   .style("stroke-width", 2);
+  }
 
-    // g.append('g')
-    //   .attr('class', 'axis axis--y')
-    //   .call(d3.axisLeft(y).ticks(10, '%'))
-    //   .append('text')
-    //   .attr('transform', 'rotate(-90)')
-    //   .attr('y', 6)
-    //   .attr('dy', '0.71em')
-    //   .attr('text-anchor', 'end')
-    //   .text('Frequency');
+  calculateWordRadius() {
+    return 150;
+  }
 
-    // g.selectAll('.bar')
-    //   .data(data)
-    //   .enter().append('rect')
-    //   .attr('class', 'bar')
-    //   .attr('x', d => x(d.letter))
-    //   .attr('y', d => y(d.frequency))
-    //   .attr('width', x.bandwidth())
-    //   .attr('height', d => contentHeight - y(d.frequency));
+  calculateAccountRadius() {
+    return this.calculateWordRadius() + 30;
+    //encontrar palabra más larga y sumar x*número de letras de la palabra
+  }
+
+  calculateRotation(x, y) {
+    var textRotation = 0;
+    if(x > 0) {
+      if(y >= 0) {
+        textRotation = Math.atan2(y, x);
+      }
+      else {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+    }
+    else {
+      if(y > 0) {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+      else {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+    }
+    return textRotation * (360/(2*Math.PI));
+  }
+
+  calculateNodes(wordRadius: number, accountRadius: number) {
+    var words = [];
+    var accounts = [];
+    var accountScale = d3.scaleLinear()
+      .domain([0, this.graphData.length])
+      .range([0, 2 * Math.PI]);
+
+    var rotation = (accountScale(1) - accountScale(0))/2;
+    for (var i = 0; i < this.graphData.length; i++) {
+      var theta = accountScale(i) + rotation;
+      var x = (accountRadius + 5) * Math.sin(theta);
+      var y = (accountRadius + 5) * Math.cos(theta);
+      
+      var account = this.graphData[i];
+      accounts.push(
+        {
+          'label': {
+            'text': account.name,
+            'x': x,
+            'y': y,
+            'rot': this.calculateRotation(x, y)
+          },
+          'x': accountRadius * Math.sin(theta),
+          'y': accountRadius * Math.cos(theta)
+        }
+      );   
+      
+      if(account.words.length > 1) {
+        var start = accountScale(i);
+        var end = accountScale((i+1) % this.graphData.length) != 0 ? accountScale((i+1) % this.graphData.length) : 2 * Math.PI;
+        var mid = (end - start)/2;
+        var trueStart = start + 1.5*(mid/account.words.length);
+        var trueEnd = end - 1.5*(mid/account.words.length);
+        var increment = (trueEnd - trueStart)/(account.words.length - 1);
+
+        for (var j = 0; j < account.words.length; j++) {
+          var alpha = trueStart + j * increment;
+          var x = (wordRadius + 5) * Math.sin(alpha);
+          var y = (wordRadius + 5) * Math.cos(alpha);
+          words.push(
+            {
+              'label': {
+                'text': account.words[j],
+                'x': x,
+                'y': y,
+                'rot': this.calculateRotation(x, y)
+              },
+              'x': wordRadius * Math.sin(alpha),
+              'y': wordRadius * Math.cos(alpha)
+            }
+          );
+        }
+      }
+      else if(account.words.length == 1) {
+        words.push(
+          {
+            'label': {
+              'text': account.words[0],
+              'x': (wordRadius + 5) * Math.sin(theta),
+              'y': (wordRadius + 5) * Math.cos(theta)
+            },
+            'x': wordRadius * Math.sin(theta),
+            'y': wordRadius * Math.cos(theta)
+          }
+        );
+      }
+    }
+
+    return [words, accounts];
   }
 }

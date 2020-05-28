@@ -1,18 +1,20 @@
-import json
+import pickle
 from datetime import datetime
+
+import joblib
 from flask import Flask, jsonify, request
+
+
 import utils
-from pprint import pprint
 
-from db import search_tweets_after, updateTweets, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, deleteUserAndTweets, get_filtros,searchUserId, deleteUserAndTweets
-from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, search_by_keywords, search_by_user, return_tweets, searchUserId, return_accounts
+from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
+from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
 
-
-from extract_tweets import searchTweetById, extractTweetsApi, extract, updateTweetsByAccount, lookup_user
-
+from joblib import load
+from extract_tweets import searchTweetById, extractTweetsApi, extract, lookup_user
+from util.Preprocessor import Preprocessor
 from graphs import graph
 from flask_cors import CORS
-from dateutil import parser
 
 app = Flask(__name__)
 CORS(app)
@@ -44,10 +46,22 @@ def extractTweetsByAccount():
     number = int(request.args.get('number'))
     accounts = request.args.getlist('account')
     tweets = extractTweetsApi(accounts, number)
+    result = model(tweets)
     #print(tweets)
-    newCount = saveTweetsMongo(tweets)
+    newCount = saveTweetsMongo(tweets, result)
     
     return {'newTweets': newCount}, 200
+
+def model(tweets):
+    pipeline = joblib.load(open('util/filename.joblib', 'rb'))
+    tuits = []
+    for t in tweets:
+        tuits.append(t['full_text'])
+    result = pipeline.predict(tuits)
+    print(result)
+    return result
+
+
 
 
 @app.route('/getAccounts', methods=['GET'])

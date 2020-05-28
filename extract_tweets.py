@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from pprint import pprint
+
+import joblib
 from tweepy import StreamListener
 from tweepy import Stream
 
@@ -7,6 +9,7 @@ import tweepy
 import json
 
 from flask import Blueprint, request
+
 
 from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne, x
 
@@ -73,19 +76,24 @@ class MyStreamListener(StreamListener):
     def on_status(self, status):
 
         is_ret = False
-        # jsons = []
-        # jsonStrs = json.dumps(status._json)
-        # parsed = json.loads(jsonStrs)
-        # jsons.append(parsed)
-        # ##pprint(jsons)
-        #decoded = json.loads(status)
-        #pprint(decoded)
+        is_account = False
+
         if hasattr(status, 'retweeted_status'):
             is_ret = True
 
+        follow = []
+        for a in return_accounts():
+            follow.append(str(a['_id']))
+        #pprint(follow)
+        #pprint(status.user.id)
+        if str(status.user.id) in follow:
+            is_account = True
+            #pprint(is_account)
+
         try:
-            if is_ret == False:
-                saveTweetsMongoOne(status._json)
+            if not is_ret and is_account is True:
+                result = model_stream([status.text])
+                saveTweetsMongoOne(status._json, result)
                 pprint('ok')
             else:
                 print('nada')
@@ -108,12 +116,17 @@ def updateTweetsByAccount():
         follow.append(str(a['_id']))
     pprint(follow)
 
-       # follow.append(a['_id'])
-
-
     try:
-        myStream.filter(follow=follow)
-        return {}, 200
+        tuits = myStream.filter(follow=follow)
+        pprint(tuits)
 
+        return {}, 200
     except:
         return {}, 500
+
+
+def model_stream(tweet_text):
+    pipeline = joblib.load(open('util/filename.joblib', 'rb'))
+    result = pipeline.predict(tweet_text)
+    print(result)
+    return result

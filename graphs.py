@@ -108,7 +108,6 @@ def show_chart():
     id = request.args.get('idTweet')
 
     tweets = get_filtros(words, date, accounts, polaridad)
-
     data = {}
     rtTotal = 0
     likeTotal = 0
@@ -138,15 +137,13 @@ def show_chart():
 
 #Palabras mas frecuentes en resultado de busqueda de tweets por palabra
 @graph.route('/nube', methods=['GET'])
-def show_nube_palabra():
+def show_frecuencia():
 
-    word = request.args.get('word')
-    words = search_most_common_words(word)
-    date = request.args.get('date')
-    accounts = request.args.getlist('account')
-    polaridad = request.args.getlist('polaridad')
+    word = request.args.getlist('word')
+    words = []
 
-    tweets = get_filtros(word, date, accounts, polaridad)
+    for w in word:
+        words += search_most_common_words(w)
 
     ids = []
     for obj in words:
@@ -157,9 +154,22 @@ def show_nube_palabra():
         if obj['_id'].lower() in filtered:
             ans.append(obj)
     ans2 = []
+
     for item in ans:
-        if item['count'] >= 3 and word not in item['_id']:
+
+        #pprint(word[ans.index(item)])
+            #pprint(item['_id'])
+        if item['count'] >= 3 and word[0] not in item['_id']:
             ans2.append(item)
+
+
+    #pprint(ans2)
+    date = request.args.get('date')
+    accounts = request.args.getlist('account')
+    polaridad = request.args.getlist('polaridad')
+
+    tweets = get_filtros(word, date, accounts, polaridad)
+
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
 

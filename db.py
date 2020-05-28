@@ -1,3 +1,4 @@
+import joblib
 from bson import ObjectId
 from pymongo import MongoClient
 from pprint import pprint
@@ -125,7 +126,7 @@ def get_filtros(words, date, accounts, polarities):
 def getIdsAccounts():
     return list(usersCollection)
 
-def saveTweetsMongo(tweets):
+def saveTweetsMongo(tweets, result):
     """
     Saves the tweets in a MongoDB collection
     :param collection: MongoDB collection object
@@ -151,7 +152,7 @@ def saveTweetsMongo(tweets):
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
                     'request_times': [datetime.now()],
-                    'polarity': "none"
+                    'polarity': result[tweets.index(t)]
             }
 
             else:
@@ -167,7 +168,7 @@ def saveTweetsMongo(tweets):
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
                     'request_times': [datetime.now()],
-                    'polarity': "none"
+                    'polarity':result[tweets.index(t)]
             }
         else:
             newTweet = {
@@ -179,7 +180,7 @@ def saveTweetsMongo(tweets):
                 'retweet_count': [t['retweet_count']],
                 'favorite_count': [t['favorite_count']],
                 'request_times': [datetime.now()],
-                'polarity': "none"
+                'polarity': result[tweets.index(t)]
             }
         try:
             print(newTweet)
@@ -197,7 +198,7 @@ def saveTweetsMongo(tweets):
     return(cnt)
 
 
-def saveTweetsMongoOne(t):
+def saveTweetsMongoOne(t, result):
     """
     Saves the tweets in a MongoDB collection
     :param collection: MongoDB collection object
@@ -211,7 +212,8 @@ def saveTweetsMongoOne(t):
         follow.append(str(a['_id']))
 
     date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y') - timedelta(hours=5)
-
+    #pprint(t)
+    #result = model_stream(t)
     newTweet ={}
 
     if t['user']['id'] in follow:
@@ -227,7 +229,7 @@ def saveTweetsMongoOne(t):
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
                     'request_times': [datetime.now()],
-                    'polarity': "none"
+                    'polarity': result
                 }
 
             else:
@@ -243,7 +245,7 @@ def saveTweetsMongoOne(t):
                     'retweet_count': [t['retweet_count']],
                     'favorite_count': [t['favorite_count']],
                     'request_times': [datetime.now()],
-                    'polarity': "none"
+                    'polarity': result
                 }
         else:
             newTweet = {
@@ -255,11 +257,11 @@ def saveTweetsMongoOne(t):
                 'retweet_count': [t['retweet_count']],
                 'favorite_count': [t['favorite_count']],
                 'request_times': [datetime.now()],
-                'polarity': "none"
+                'polarity': result
             }
-    try:    
-        tweetsCollection.insert_one(newTweet)
+    try:
         print(newTweet)
+        tweetsCollection.insert_one(newTweet)
         print("Added: {}".format(t['_id']))
         cnt += 1
 
@@ -289,3 +291,4 @@ def deleteUserAndTweets(userId):
 def x(t):
 
     xCollection.insert(t)
+

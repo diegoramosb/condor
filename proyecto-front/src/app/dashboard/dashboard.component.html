@@ -41,10 +41,10 @@
             <mat-card class="graphCard">
               <mat-card-header>
                 <mat-card-title *ngIf="showingGraph" class="cardTitle">
-                  <!-- Evolución de retweets y likes -->
+                  Palabras usadas por varias cuentas
                 </mat-card-title>
               </mat-card-header>
-              <app-graph *ngIf="showingGraph"></app-graph>
+              <app-graph *ngIf="showingGraph" [height]="graphHeight" [width]="graphWidth"></app-graph>
               <h2 style="color: grey; text-align: center;" *ngIf="!showingGraph">No has configurado el gráfico
               </h2>
               <mat-card-actions>

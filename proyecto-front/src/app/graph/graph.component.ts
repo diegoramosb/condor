@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnChanges, OnDestroy, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { path, select } from 'd3';
 import { group } from '@angular/animations';
@@ -16,18 +16,26 @@ export interface GraphData {
   styleUrls: ['./graph.component.scss']
 })
 
-export class GraphComponent implements OnChanges, AfterViewInit {
+export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
   @Input() graphData: GraphData[];
 
   @ViewChild('chart')
   private chartContainer: ElementRef;
 
-  height = (window.innerHeight * 70) / 100;
+  @Input() height: number;
 
-  width = (window.innerWidth * 60) / 100;
+  @Input() width: number;
 
-  constructor() { }
+  constructor() {
+  }
+
+  ngOnInit(): void {
+    var data = JSON.parse(localStorage.getItem('graphData'));
+    if(data != null) {
+      this.graphData = data['graphData'];
+    }
+  }
 
   ngOnChanges(): void {
     if (!this.graphData) {
@@ -42,12 +50,19 @@ export class GraphComponent implements OnChanges, AfterViewInit {
     this.createChart();
   }
 
+  ngOnDestroy(): void {
+    var json = {'graphData': this.graphData};
+    localStorage.setItem('graphData', JSON.stringify(json));
+  }
+
   onResize() {
     this.createChart();
   }
 
   private createChart(): void {
     var element = this.chartContainer.nativeElement;
+
+    d3.select('svg').remove();
 
     var svg = d3.select(element)
       .append('svg')

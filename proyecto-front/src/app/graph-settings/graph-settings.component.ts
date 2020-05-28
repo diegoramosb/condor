@@ -22,32 +22,36 @@ export class GraphSettingsComponent implements OnInit {
   public graphData = [
     {
       name: "a",
-      words: ["a1", "a2", "a3"]
+      words: ["1", "2", "3"]
     },
     {
       name: "b",
-      words: ["b2", "b3"]
+      words: ["2", "3"]
     },
     {
       name: "c",
-      words: ["c1", "c2", "c3", "c4", "c5"]
+      words: ["3"]
     }
   ]
+
+  graphHeight = (window.innerHeight * 70) / 100;
+
+  graphWidth = (window.innerWidth * 60) / 100;
 
   ngOnInit(): void {
   }
 
   constructor(private apiService: ApiService) {
-    this.apiService.getAccounts().subscribe(response => {
-      this.accounts = response;
-    });
-    var filterData = JSON.parse(localStorage.getItem('graphFilters'));
-    if (filterData != null) {
-      this.selectedWords = filterData.words;
-      this.selectedAccounts = filterData.accounts;
-      this.selectedDate = filterData.date != "null"? moment(filterData.date, "YYYY-MM-DD"): null;
-      this.applyFilters();
-    }
+    // this.apiService.getAccounts().subscribe(response => {
+    //   this.accounts = response;
+    // });
+    // var filterData = JSON.parse(localStorage.getItem('graphFilters'));
+    // if (filterData != null) {
+    //   this.selectedWords = filterData.words;
+    //   this.selectedAccounts = filterData.accounts;
+    //   this.selectedDate = filterData.date != "null" ? moment(filterData.date, "YYYY-MM-DD") : null;
+    //   this.applyFilters();
+    // }
   }
 
   addAccount(account: string) {
@@ -84,7 +88,26 @@ export class GraphSettingsComponent implements OnInit {
 
   applyFilters() {
     this.graphData = [
+      {
+        name: "asdfasdf",
+        words: ["1", "2", "3"]
+      },
+      {
+        name: "b",
+        words: ["2", "3"]
+      },
+      {
+        name: "c",
+        words: ["3"]
+      }
     ]
+
+    localStorage.setItem('showingGraph', "true");
+    localStorage.setItem('graphFilters', JSON.stringify({
+      'words': this.selectedWords,
+      'accounts': this.selectedAccounts,
+      'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+    }));
   }
 
 }

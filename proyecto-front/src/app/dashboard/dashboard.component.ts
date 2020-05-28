@@ -16,8 +16,11 @@ export class DashboardComponent implements OnInit {
   public showingGraph: boolean;
   public showingFreq: boolean;
 
-  constructor(private snackBar: MatSnackBar, private apiService: ApiService, private dialog: MatDialog) { }
+  graphHeight = (window.innerHeight * 64) / 100;
 
+  graphWidth = (window.innerWidth * 32) / 100;
+
+  constructor(private snackBar: MatSnackBar, private apiService: ApiService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.showingHistoric = localStorage.getItem('showingHistoric') == 'true' ? true : false;

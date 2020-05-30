@@ -119,7 +119,13 @@ def get_filtros(words, date, accounts, polarities):
             p['$or'].append({'polarity': pol})    
         arr.append(p)
 
-    return list(tweetsCollection.find({'$and': arr}))
+    if len(arr) > 0:
+        return list(tweetsCollection.find({'$and': arr}))
+    
+    else:
+        return return_tweets()
+
+
 
 def getIdsAccounts():
     return list(usersCollection)
@@ -207,3 +213,4 @@ def updatePolarity(tweetId, polarity):
 def deleteUserAndTweets(userId):
     tweetsCollection.delete_many({"userId": int(userId)})
     usersCollection.delete_one({"_id": int(userId)})
+

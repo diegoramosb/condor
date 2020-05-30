@@ -1,7 +1,7 @@
 import parser
 
 import matplotlib.pyplot as plt
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import numpy as np
 import utils
 import nltk
@@ -186,64 +186,78 @@ def show_grafo_cuentas_palabras():
     accounts = request.args.getlist('account')
     polaridad = request.args.getlist('polaridad')
 
+    tweets = get_filtros(words, date, accounts, polaridad)
 
-    #pprint(words)
-    tweets = []
+    userIds = []
+    for tweet in tweets:
+        userId = tweet['userId']
+        if userId not in userIds:
+            userIds.append(userId)
 
-    m =[]
-    accounts = []
-    for w in words:
-        userNames = []
-        userIds = []
-        word = []
+    users = []
+    users2 = []
 
-        tweets_by_word = search_by_keywords(w)
-        tweets += tweets_by_word
-
-        for t in tweets_by_word:
-
-            if t['userId'] not in userIds:
-                userIds.append(t['userId'])
-
-
-            word.append(w)
-        #pprint(userIds)
-        #pprint(word)
-        if len(userIds)>1:
-            for i in range(len(userIds)):
-                usr = searchUserId(userIds[i])
-                for username in usr:
-                    userNames.append(username['name'])
-                    if username['name'] not in accounts:
-                        accounts.append(username['name'])
+    for userId in userIds:
+        userInfo = searchUserId(userId)
+        if len(userInfo) > 0:
+            userTweets = []
+            for tweet in tweets:
+                if userId == tweet['userId']:
+                    userTweets.append(tweet['text'])
+            users.append({'user': '@' + userInfo[0]['screen_name'], 'tweets': userTweets})
             
-            usersComb = combinations(userNames, 2)
-            for a in usersComb:
-                m += [{"cuenta1": a[0], "cuenta2": a[1], "palabra": w}]
+    for user in users:
+        userWords = []
+        for tweet in user['tweets']:
+            for word in words:
+                if word in tweet and word not in userWords:
+                    userWords.append(word)
+        users2.append({'name': user['user'], 'words': userWords})
+    
+    return {'tweets': tweets, 'data': users2}
 
-    n = len(accounts)
-    r = 4
-    nodes = []
-    for i in range(n):
-        x = (sin(i / (n + 1) * 2 * pi) * r + 10)
-        y = (cos(i / (n + 1) * 2 * pi) * r + 10)
-        nodo = {"cuenta": accounts[i], "x": x, "y": y}
-        nodes.append(nodo)
-        for link in m:
-            if link['cuenta1'] == nodo['cuenta']:
-                link['origen'] = {'x': x, 'y': y}
-            elif link['cuenta2'] == nodo['cuenta']:
-                link['destino'] = {'x': x, 'y': y}
-    # pprint(m)  
-    # pprint(json.dumps(m))
-    q = json.dumps({"nodes": nodes, "links": m})
-    tuits = get_filtros(words, date, accounts, polaridad)
 
-    p = [{"info": q} for q in zip(m)]
-    users = get_tweets_with_its_user(tweets)
-    n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
 
-    return {"tweets": n, "data": p}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # filteredTweets = []
+    # for tweet in tweets:
+    #     text = tweet['text'].split(' ')
+    #     filteredText = []
+    #     for word in text:
+    #         for word2 in words:
+    #             print(word, word2)
+    #             if word.lower() == word2.lower():
+    #                     print(tweet['_id'])
+    #                     filteredText.append(word2)
+    #     filteredTweets.append({'userId': tweet['userId'], 'words':filteredText})
+    
+    # usersWords = []
+    # for i in range(len(filteredTweets)):
+    #     for j in range(len(filteredTweets)):
+    #         if i != j and filteredTweets[i]['userId'] == filteredTweets[j]['userId']:
+    #             words = []
+    #             for word in filteredTweets[i]['words']:
+    #                 if word not in words:
+    #                     words.append(word)
+    #             for word in filteredTweets[j]['words']:
+    #                 if word not in words:
+    #                     words.append(word)
+    #             usersWords.append({'userId': filteredTweets[i]['userId'], 'words': words})
+        
 
 
     

@@ -1,0 +1,24 @@
+#chart {
+  font: 10px sans-serif;
+}
+
+.chord path {
+  fill-opacity: .67;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+
+#circle:hover path.fade {
+  display: none;
+}
+
+#control {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+}

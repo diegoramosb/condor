@@ -19,20 +19,7 @@ export class GraphSettingsComponent implements OnInit {
 
   public maxDate = moment();
 
-  public graphData = [
-    {
-      name: "a",
-      words: ["1", "2", "3"]
-    },
-    {
-      name: "b",
-      words: ["2", "3"]
-    },
-    {
-      name: "c",
-      words: ["3"]
-    }
-  ]
+  public graphData = [];
 
   graphHeight = (window.innerHeight * 70) / 100;
 
@@ -42,16 +29,16 @@ export class GraphSettingsComponent implements OnInit {
   }
 
   constructor(private apiService: ApiService) {
-    // this.apiService.getAccounts().subscribe(response => {
-    //   this.accounts = response;
-    // });
-    // var filterData = JSON.parse(localStorage.getItem('graphFilters'));
-    // if (filterData != null) {
-    //   this.selectedWords = filterData.words;
-    //   this.selectedAccounts = filterData.accounts;
-    //   this.selectedDate = filterData.date != "null" ? moment(filterData.date, "YYYY-MM-DD") : null;
-    //   this.applyFilters();
-    // }
+    this.apiService.getAccounts().subscribe(response => {
+      this.accounts = response;
+    });
+    var filterData = JSON.parse(localStorage.getItem('graphFilters'));
+    if (filterData != null) {
+      this.selectedWords = filterData.words;
+      this.selectedAccounts = filterData.accounts;
+      this.selectedDate = filterData.date != "null" ? moment(filterData.date, "YYYY-MM-DD") : null;
+      this.applyFilters();
+    }
   }
 
   addAccount(account: string) {
@@ -87,20 +74,11 @@ export class GraphSettingsComponent implements OnInit {
   }
 
   applyFilters() {
-    this.graphData = [
-      {
-        name: "asdfasdf",
-        words: ["1", "2", "3"]
-      },
-      {
-        name: "b",
-        words: ["2", "3"]
-      },
-      {
-        name: "c",
-        words: ["3"]
-      }
-    ]
+    this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      // this.tweets = data['tweets'];
+
+      this.graphData = data['data'];
+    })
 
     localStorage.setItem('showingGraph', "true");
     localStorage.setItem('graphFilters', JSON.stringify({

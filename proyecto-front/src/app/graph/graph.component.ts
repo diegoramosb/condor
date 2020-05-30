@@ -38,15 +38,12 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngOnChanges(): void {
-    if (!this.graphData) {
-      return;
-    }
-    if (this.chartContainer != undefined) {
-      this.createChart();
-    }
+    console.log("on changes");
+    this.createChart();
   }
 
   ngAfterViewInit(): void {
+    console.log("afterViewInit");
     this.createChart();
   }
 
@@ -55,14 +52,10 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     localStorage.setItem('graphData', JSON.stringify(json));
   }
 
-  onResize() {
-    this.createChart();
-  }
-
-  private createChart(): void {
+  private createChart(): void {   
     var element = this.chartContainer.nativeElement;
 
-    d3.select('svg').remove();
+    d3.selectAll('svg').remove();
 
     var svg = d3.select(element)
       .append('svg')
@@ -84,6 +77,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         .attr('transform', `rotate(${account['label']['rot']} ${account['label']['x']} ${account['label']['y']})`)
         .text(account['label']['text'])
         .style('font-size', '1em')
+        .style('fill', 'grey')
     });
 
     words.forEach(word => {
@@ -95,6 +89,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         .attr('transform', `rotate(${word['label']['rot']}, ${word['label']['x']}, ${word['label']['y']})`)
         .text(word['label']['text'])
         .style('font-size', '1em')
+        .style('fill', 'grey')
     })
 
     var quadraticCurve = (x1, y1, x2, y2) => {
@@ -115,7 +110,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
           group.append('path')
             .attr('class', "word-" + words[i]['label']['text'])
             .attr('d', quadraticCurve(x1, y1, x2, y2))
-            .attr('stroke', 'black')
+            .attr('stroke', 'grey')
             .attr('stroke-width', '0.2em')
             .attr('fill', 'none')
         }
@@ -132,8 +127,8 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       .on('mouseout', () => {
         var c = d3.select(d3.event.currentTarget).attr('class');
         var selection = d3.selectAll("." + c.toString());
-        selection.filter(d3.matcher('text')).style('fill', 'black');
-        selection.filter(d3.matcher('path')).attr('stroke', 'black');
+        selection.filter(d3.matcher('text')).style('fill', 'grey');
+        selection.filter(d3.matcher('path')).attr('stroke', 'grey');
       })
     
     svg.selectAll('text')
@@ -149,16 +144,14 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       var c = d3.select(d3.event.currentTarget).attr('class');
       if(c != null) {
         var selection = d3.selectAll("." + c.toString());
-        selection.filter(d3.matcher('text')).style('fill', 'black');
-        selection.filter(d3.matcher('path')).attr('stroke', 'black');
+        selection.filter(d3.matcher('text')).style('fill', 'grey');
+        selection.filter(d3.matcher('path')).attr('stroke', 'grey');
       }
     })
-
-    // svg.append('path').attr('d', bezierCurve(100, 100, 100, 200, 200, 100, 200, 200)).attr('stroke', 'black').attr('fill', 'none');
-  }
+   }
 
   calculateWordRadius() {
-    return 150;
+    return this.height/4;
   }
 
   calculateAccountRadius(words) {
@@ -168,7 +161,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         longestWord = word;
       }
     });
-    return this.calculateWordRadius() + longestWord.length * 15;
+    return this.calculateWordRadius() + longestWord.length * 10;
   }
 
   calculateRotation(x, y) {

@@ -54,18 +54,19 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/nube`, {params: params});
   }
 
-  public getGraphData(words: string[]) {
-    var params = "?";
-    for(var i = 0; i < words.length; i++) {
-      if(i < words.length - 1) {
-        params += "words=" + words[i] + "&";
-      }
-      else {
-        params += "words=" + words[i];
-      }
+  public getGraphData(words: string[], accounts: string[], date: moment.Moment) {
+    var params = new HttpParams();
+    words.forEach(word => {
+      params = params.append("word", word);
+    });
+    accounts.forEach(account => {
+      params = params.append("account", account);
+    });
+    if(date != null) {
+      params = params.append("date", date.format('YYYY-MM-DD'))
     }
 
-    return this.httpClient.get(`${this.apiUrl}/grafo` + params);
+    return this.httpClient.get(`${this.apiUrl}/grafo`, {params: params});
 
   }
 

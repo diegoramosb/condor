@@ -1,169 +1,293 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color } from 'ng2-charts';
-import { ApiService } from '../api.service';
+import { Component, ElementRef, Input, OnInit, OnChanges, OnDestroy, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import * as d3 from 'd3';
+import { path, select } from 'd3';
+import { group } from '@angular/animations';
+import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
+
+export interface GraphData {
+  name: string;
+  words: string[];
+}
 
 @Component({
   selector: 'app-graph',
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './graph.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['./graph.component.scss']
 })
-export class GraphComponent implements OnInit {
 
-  public showing = false;
+export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
-  public barChartColors: Color[] = [
-    {
-      backgroundColor: "rgba(29, 161, 243, 1)"
-    },
-    {
-      backgroundColor: "rgba(25, 207, 134, 1)"
-    },
-    {
-      backgroundColor: "rgba(232, 28, 79, 1)"
-    },
-    {
-      backgroundColor: "rgba(250, 28, 79, 1)"
-    }
-  ];
+  @Input() graphData: GraphData[];
 
-  public scatterChartOptions: ChartOptions = {
-    responsive: true,
-    legend: {
-      display: false
-    },
-    tooltips: {
-      intersect: false,
-      mode: "nearest"
-    },
-    scales: {
-      xAxes: [{
-        gridLines: {
-          display: false
-        },
-        ticks: {
-          min: 0,
-          max: 20,
-          display: false
-        }
-      }],
-      yAxes: [{
-        gridLines: {
-          display: false
-        },
-        ticks: {
-          min: 0,
-          max: 20,
-          display: false
-        }
-      }]
-    }
-  };
+  @ViewChild('chart')
+  private chartContainer: ElementRef;
 
-  public scatterChartData: ChartDataSets[] = [
-    { data: [] }
-    // {
-    //   data: [
-    //     { x: 10, y: 5, r: 10 },
-    //   ],
-    //   label: 'Cuenta1',
-    //   backgroundColor: "rgba(29, 161, 243, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [
-    //     { x: 20, y: 3, r: 10 },
-    //   ],
-    //   label: 'Cuenta2',
-    //   backgroundColor: "rgba(25, 207, 134, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [
-    //     { x: 30, y: 7, r: 10 },
-    //   ],
-    //   label: 'Cuenta3',
-    //   backgroundColor: "rgba(232, 28, 79, 1)",
-    //   type: 'bubble'
-    // },
-    // {
-    //   data: [{ x: 10, y: 5 }, { x: 20, y: 3 }],
-    //   label: 'Palabra1',
-    //   type: 'line',
-    //   fill: false,
-    //   borderColor: "grey",
-    //   pointBackgroundColor: "rgba(0, 0, 0, 0)",
-    //   pointRadius: 0
-    // },
-    // {
-    //   data: [{ x: 20, y: 3 }, { x: 30, y: 7 }],
-    //   label: 'Palabra2',
-    //   type: 'line',
-    //   fill: false,
-    //   borderColor: "grey",
-    //   pointBackgroundColor: "rgba(0, 0, 0, 0)",
-    //   pointRadius: 0
-    // },
-  ];
-  public scatterChartType: ChartType = 'bubble';
+  @Input() height: number;
 
-  public words: string[] = [];
+  @Input() width: number;
 
-  constructor(private apiService: ApiService) { }
-
-  ngOnInit() {
+  constructor() {
   }
 
-  onEnter(word: string) {
-    this.words.push(word)
-    this.getWords(this.words);
-  }
-
-  wordGroup() {
-    var group = [];
-    for (var i = 0, j = 0; i < this.words.length; i++) {
-      if (i >= 2 && i % 2 == 0) {
-        j++
-      }
-      group[j] = group[j] || [];
-      group[j].push(this.words[i])
+  ngOnInit(): void {
+    var data = JSON.parse(localStorage.getItem('graphData'));
+    if(data != null) {
+      this.graphData = data['graphData'];
     }
-    return group;
   }
 
-  getWords(words: string[]) {
+  ngOnChanges(): void {
+    console.log("on changes");
+    this.createChart();
+  }
 
-    this.apiService.getGraphData(words).subscribe((result: []) => {
-      var graph = []
-      var i = 0;
-      result['nodes'].forEach(node => {
-        graph.push({
-          data: [
-            { x: node['x'], y: node['y'], r: 10 }
-          ],
-          label: node['cuenta'],
-          type: 'bubble',
-          backgroundColor: this.barChartColors[i]
-        })
-        i++;
-      });
-      result['links'].forEach(link => {
-        graph.push({
-          data: [
-            { x: link['origen']['x'], y: link['origen']['y'] },
-            { x: link['destino']['x'], y: link['destino']['y'] },
-          ],
-          label: link['palabra'],
-          pointRadius: 0,
-          type: "line",
-          fill: false,
-          borderColor: "grey"
-        })
-      })
+  ngAfterViewInit(): void {
+    console.log("afterViewInit");
+    this.createChart();
+  }
 
-      this.scatterChartData = graph;
-      console.log(graph);
+  ngOnDestroy(): void {
+    var json = {'graphData': this.graphData};
+    localStorage.setItem('graphData', JSON.stringify(json));
+  }
+
+  private createChart(): void {   
+    var element = this.chartContainer.nativeElement;
+
+    d3.selectAll('svg').remove();
+
+    var svg = d3.select(element)
+      .append('svg')
+      .attr("height", this.height)
+      .attr("width", this.width)
+
+    var nodes = this.calculateNodes()
+    var words = nodes[0];
+    var accounts = nodes[1];
+
+    var group = svg.append('g')
+      .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
+
+    accounts.forEach(account => {
+      group.append('text')
+        .attr('x', account['label']['x'])
+        .attr('y', account['label']['y'])
+        .attr('text-anchor', account['label']['anchor'])
+        .attr('transform', `rotate(${account['label']['rot']} ${account['label']['x']} ${account['label']['y']})`)
+        .text(account['label']['text'])
+        .style('font-size', '1em')
+        .style('fill', 'grey')
     });
+
+    words.forEach(word => {
+      group.append('text')
+        .attr('class', 'word-' + word['label']['text'])
+        .attr('x', word['label']['x'])
+        .attr('y', word['label']['y'])
+        .attr('text-anchor', word['label']['anchor'])
+        .attr('transform', `rotate(${word['label']['rot']}, ${word['label']['x']}, ${word['label']['y']})`)
+        .text(word['label']['text'])
+        .style('font-size', '1em')
+        .style('fill', 'grey')
+    })
+
+    var quadraticCurve = (x1, y1, x2, y2) => {
+      var path = d3.path();
+      path.moveTo(x1, y1);
+      path.quadraticCurveTo(0, 0, x2, y2);
+      return path.toString();
+    }
+
+    for (var i = 0; i < words.length; i++) {
+      var x1 = words[i]['x'];
+      var y1 = words[i]['y'];
+
+      for (var j = 0; j < words.length; j++) {
+        var x2 = words[j]['x'];
+        var y2 = words[j]['y'];
+        if (i != j && words[i]['label']['text'] == words[j]['label']['text']) {
+          group.append('path')
+            .attr('class', "word-" + words[i]['label']['text'])
+            .attr('d', quadraticCurve(x1, y1, x2, y2))
+            .attr('stroke', 'grey')
+            .attr('stroke-width', '0.2em')
+            .attr('fill', 'none')
+        }
+      }
+    }
+
+    svg.selectAll('path')
+      .on('mouseover', () => {
+        var c = d3.select(d3.event.currentTarget).attr('class');
+        var selection = d3.selectAll("." + c.toString());
+        selection.filter(d3.matcher('text')).style('fill', 'blue');
+        selection.filter(d3.matcher('path')).attr('stroke', 'blue');
+      })
+      .on('mouseout', () => {
+        var c = d3.select(d3.event.currentTarget).attr('class');
+        var selection = d3.selectAll("." + c.toString());
+        selection.filter(d3.matcher('text')).style('fill', 'grey');
+        selection.filter(d3.matcher('path')).attr('stroke', 'grey');
+      })
+    
+    svg.selectAll('text')
+    .on('mouseover', () => {
+      var c = d3.select(d3.event.currentTarget).attr('class');
+      if(c != null) {
+        var selection = d3.selectAll("." + c.toString());
+        selection.filter(d3.matcher('text')).style('fill', 'blue');
+        selection.filter(d3.matcher('path')).attr('stroke', 'blue');
+      }
+    })
+    .on('mouseout', () => {
+      var c = d3.select(d3.event.currentTarget).attr('class');
+      if(c != null) {
+        var selection = d3.selectAll("." + c.toString());
+        selection.filter(d3.matcher('text')).style('fill', 'grey');
+        selection.filter(d3.matcher('path')).attr('stroke', 'grey');
+      }
+    })
+   }
+
+  calculateWordRadius() {
+    return this.height/4;
   }
 
+  calculateAccountRadius(words) {
+    var longestWord = ""
+    words.forEach(word => {
+      if (word.length > longestWord.length) {
+        longestWord = word;
+      }
+    });
+    return this.calculateWordRadius() + longestWord.length * 10;
+  }
+
+  calculateRotation(x, y) {
+    var textRotation = 0;
+    if (x > 0) {
+      if (y >= 0) {
+        textRotation = Math.atan2(y, x);
+      }
+      else {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+    }
+    else {
+      if (y > 0) {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+      else {
+        textRotation = Math.atan2(y, x) - Math.PI;
+      }
+    }
+    return textRotation * (360 / (2 * Math.PI));
+  }
+
+  calculateAnchor(x, y) {
+    if (x > 0) {
+      if (y >= 0) {
+        return "start"
+      }
+      else {
+        return "end"
+      }
+    }
+    else {
+      if (y > 0) {
+        return "end"
+      }
+      else {
+        return "end"
+      }
+    }
+  }
+
+  calculateNodes() {
+    var words = [];
+    var accounts = [];
+    var accountScale = d3.scaleLinear()
+      .domain([0, this.graphData.length])
+      .range([0, 2 * Math.PI]);
+
+    var rotation = (accountScale(1) - accountScale(0)) / 2;
+    var wordRadius = this.calculateWordRadius();
+    var allWords = [];
+    this.graphData.forEach(account => {
+      account.words.forEach(word => {
+        allWords.push(word);
+      })
+    });
+    var accountRadius = this.calculateAccountRadius(allWords);
+
+    for (var i = 0; i < this.graphData.length; i++) {
+      var account = this.graphData[i];
+
+      var theta = accountScale(i) + rotation;
+      var xAccount = (accountRadius + 5) * Math.sin(theta);
+      var yAccount = (accountRadius + 5) * Math.cos(theta);
+
+      var start = accountScale(i);
+      var end = accountScale((i + 1) % this.graphData.length) != 0 ? accountScale((i + 1) % this.graphData.length) : 2 * Math.PI;
+      var mid = (end - start) / 2;
+      var trueStart = start + 1.8 * (mid / account.words.length);
+      var trueEnd = end - 1.8 * (mid / account.words.length);
+      var increment = (trueEnd - trueStart) / (account.words.length - 1);
+
+      if (account.words.length > 1) {
+        for (var j = 0; j < account.words.length; j++) {
+          var alpha = trueStart + j * increment;
+          var xWord = (wordRadius + 5) * Math.sin(alpha);
+          var yWord = (wordRadius + 5) * Math.cos(alpha);
+          words.push(
+            {
+              'label': {
+                'text': account.words[j],
+                'x': xWord,
+                'y': yWord,
+                'rot': this.calculateRotation(xWord, yWord),
+                'anchor': this.calculateAnchor(xWord, yWord)
+              },
+              'x': wordRadius * Math.sin(alpha),
+              'y': wordRadius * Math.cos(alpha)
+            }
+          );
+        }
+      }
+      else if (account.words.length == 1) {
+        var xWord = (wordRadius + 5) * Math.sin(theta);
+        var yWord = (wordRadius + 5) * Math.cos(theta);
+        words.push(
+          {
+            'label': {
+              'text': account.words[0],
+              'x': xWord,
+              'y': yWord,
+              'rot': this.calculateRotation(xWord, yWord),
+              'anchor': this.calculateAnchor(xWord, yWord)
+            },
+            'x': wordRadius * Math.sin(theta),
+            'y': wordRadius * Math.cos(theta)
+          }
+        );
+      }
+
+      accounts.push(
+        {
+          'label': {
+            'text': account.name,
+            'x': xAccount,
+            'y': yAccount,
+            'rot': this.calculateRotation(xAccount, yAccount),
+            'anchor': this.calculateAnchor(xAccount, yAccount)
+          },
+          'x': accountRadius * Math.sin(theta),
+          'y': accountRadius * Math.cos(theta)
+        }
+      );
+    }
+
+    return [words, accounts];
+  }
 }

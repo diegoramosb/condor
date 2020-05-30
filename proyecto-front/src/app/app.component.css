@@ -111,3 +111,8 @@ h1 {
     color: #465775;
     margin-top: 2vw;
 }
+
+app-graph {
+    width: 20px;
+    height: 50vh;
+}

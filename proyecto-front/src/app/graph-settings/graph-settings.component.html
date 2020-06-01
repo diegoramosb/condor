@@ -5,7 +5,7 @@
         <mat-card *ngFor="let tweet of tweets" class="tweetCardNone">
           <mat-card-header>
             <div mat-card-avatar>
-              <img matListAvatar src="{{tweet['user']['profile_image']}}">
+              <img matListAvatar style="border-radius: 50%;" src="{{tweet['user']['profile_image']}}">
             </div>
             <mat-card-title style="color: #465775">{{tweet['user']['name']}}</mat-card-title>
             <mat-card-subtitle>@{{tweet['user']['screen_name']}}</mat-card-subtitle>
@@ -40,7 +40,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-1">
-          <button mat-icon-button routerLink="" style="color: #465775;">
+          <button mat-icon-button routerLink="" style="color: #465775; position: fixed">
             <mat-icon>arrow_back</mat-icon>
           </button>
         </div>

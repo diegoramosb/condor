@@ -76,16 +76,16 @@ export class GraphSettingsComponent implements OnInit {
   applyFilters() {
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
       // this.tweets = data['tweets'];
-
       this.graphData = data['data'];
-    })
+      console.log(data)
+      localStorage.setItem('showingGraph', "true");
+      localStorage.setItem('graphFilters', JSON.stringify({
+        'words': this.selectedWords,
+        'accounts': this.selectedAccounts,
+        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+      }));
+    });
 
-    localStorage.setItem('showingGraph', "true");
-    localStorage.setItem('graphFilters', JSON.stringify({
-      'words': this.selectedWords,
-      'accounts': this.selectedAccounts,
-      'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-    }));
   }
 
 }

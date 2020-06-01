@@ -1,8 +1,5 @@
 import { Component, ElementRef, Input, OnInit, OnChanges, OnDestroy, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
-import { path, select } from 'd3';
-import { group } from '@angular/animations';
-import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
 
 export interface GraphData {
   name: string;
@@ -38,13 +35,15 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngOnChanges(): void {
-    console.log("on changes");
-    this.createChart();
+    if(this.chartContainer != undefined) {
+      this.createChart();
+    }
   }
 
   ngAfterViewInit(): void {
-    console.log("afterViewInit");
-    this.createChart();
+    if(this.graphData != undefined) {
+      this.createChart();
+    }
   }
 
   ngOnDestroy(): void {

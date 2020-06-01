@@ -64,6 +64,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     var nodes = this.calculateNodes()
     var words = nodes[0];
     var accounts = nodes[1];
+    console.log(accounts)
 
     var group = svg.append('g')
       .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
@@ -116,12 +117,14 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       }
     }
 
+    var hoverColor = d3.rgb(29, 161, 243)
+    
     svg.selectAll('path')
       .on('mouseover', () => {
         var c = d3.select(d3.event.currentTarget).attr('class');
         var selection = d3.selectAll("." + c.toString());
-        selection.filter(d3.matcher('text')).style('fill', 'blue');
-        selection.filter(d3.matcher('path')).attr('stroke', 'blue');
+        selection.filter(d3.matcher('text')).style('fill', hoverColor.toString());
+        selection.filter(d3.matcher('path')).attr('stroke', hoverColor.toString());
       })
       .on('mouseout', () => {
         var c = d3.select(d3.event.currentTarget).attr('class');
@@ -135,8 +138,8 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       var c = d3.select(d3.event.currentTarget).attr('class');
       if(c != null) {
         var selection = d3.selectAll("." + c.toString());
-        selection.filter(d3.matcher('text')).style('fill', 'blue');
-        selection.filter(d3.matcher('path')).attr('stroke', 'blue');
+        selection.filter(d3.matcher('text')).style('fill', hoverColor.toString());
+        selection.filter(d3.matcher('path')).attr('stroke', hoverColor.toString());
       }
     })
     .on('mouseout', () => {
@@ -149,18 +152,26 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     })
    }
 
-  calculateWordRadius() {
-    return this.height/4;
-  }
-
-  calculateAccountRadius(words) {
+  calculateWordRadius(words) {
+    // return this.height/4;
     var longestWord = ""
     words.forEach(word => {
       if (word.length > longestWord.length) {
         longestWord = word;
       }
     });
-    return this.calculateWordRadius() + longestWord.length * 10;
+    return this.calculateAccountRadius() - longestWord.length * this.height/50;
+  }
+
+  calculateAccountRadius() {
+    // var longestWord = ""
+    // words.forEach(word => {
+    //   if (word.length > longestWord.length) {
+    //     longestWord = word;
+    //   }
+    // });
+    // return this.calculateWordRadius() + longestWord.length * 10;
+    return this.height/3;
   }
 
   calculateRotation(x, y) {
@@ -170,7 +181,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         textRotation = Math.atan2(y, x);
       }
       else {
-        textRotation = Math.atan2(y, x) - Math.PI;
+        textRotation = Math.atan2(y, x);
       }
     }
     else {
@@ -190,7 +201,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         return "start"
       }
       else {
-        return "end"
+        return "start"
       }
     }
     else {
@@ -211,14 +222,14 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       .range([0, 2 * Math.PI]);
 
     var rotation = (accountScale(1) - accountScale(0)) / 2;
-    var wordRadius = this.calculateWordRadius();
     var allWords = [];
     this.graphData.forEach(account => {
       account.words.forEach(word => {
         allWords.push(word);
       })
     });
-    var accountRadius = this.calculateAccountRadius(allWords);
+    var wordRadius = this.calculateWordRadius(allWords);
+    var accountRadius = this.calculateAccountRadius();
 
     for (var i = 0; i < this.graphData.length; i++) {
       var account = this.graphData[i];

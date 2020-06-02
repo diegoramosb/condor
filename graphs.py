@@ -1,18 +1,13 @@
 import parser
 
-import matplotlib.pyplot as plt
 from flask import Blueprint, request, jsonify
 import numpy as np
 from nltk.corpus import stopwords
 
 import utils
-import nltk
 
-from statistics import mean
 from db import *
 import json
-from itertools import combinations
-from math import sin, cos, pi
 import nltk
 
 from extract_tweets import searchTweetById, extractTweetsApi

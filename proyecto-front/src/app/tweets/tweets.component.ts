@@ -92,7 +92,6 @@ export class TweetsComponent implements OnInit {
   getTweets() {
     this.apiService.getTweets().subscribe((response: []) => {
       this.tweets = response;
-      console.log(response);
     })
   }
 

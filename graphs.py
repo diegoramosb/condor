@@ -181,7 +181,7 @@ def show_frecuencia():
 @graph.route('/grafo3', methods=['GET'])
 def show_grafo():
 
-    words = request.args.getlist('words')
+    words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
     polaridad = request.args.getlist('polaridad')

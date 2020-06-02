@@ -71,7 +71,7 @@
       </div>
     </div>
   </mat-drawer>
-  <mat-drawer-content>
+  <mat-drawer-content>  
     <div class="container">
       <div class="row">
         <div class="col-md-2">
@@ -80,49 +80,51 @@
           </button>
         </div>
         <div class="col-md-8">
-          <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'positive',
-          'tweetCardNegative': tweet['tweet']['polarity'] == 'negative', 
-          'tweetCardNeutral': tweet['tweet']['polarity'] == 'neutral', 
-          'tweetCardNone': tweet['tweet']['polarity'] == 'none'}" *ngFor="let tweet of tweets">
-            <mat-card-header>
-              <div mat-card-avatar>
-                <img matListAvatar style="border-radius: 50%;" src="{{tweet['account'][0]['profile_image']}}">
-              </div>
-              <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
-              <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <p>
-                {{tweet['tweet']['text']}}
-              </p>
-            </mat-card-content>
-            <div class="row">
-              <div class="col-md-1">
-                <div class="row">
-                  <mat-icon>favorite</mat-icon>
-                  <p>{{tweet['tweet']['favorite_count'][0]}}</p>
+          <cdk-virtual-scroll-viewport itemSize="200" style="height: 100vh; width: 60vw;">
+            <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'positive',
+            'tweetCardNegative': tweet['tweet']['polarity'] == 'negative', 
+            'tweetCardNeutral': tweet['tweet']['polarity'] == 'neutral', 
+            'tweetCardNone': tweet['tweet']['polarity'] == 'none'}" *cdkVirtualFor="let tweet of tweets">
+              <mat-card-header>
+                <div mat-card-avatar>
+                  <img matListAvatar style="border-radius: 50%;" src="{{tweet['account'][0]['profile_image']}}">
+                </div>
+                <mat-card-title style="color: #465775">{{tweet['account'][0]['name']}}</mat-card-title>
+                <mat-card-subtitle>@{{tweet['account'][0]['screen_name']}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p>
+                  {{tweet['tweet']['text']}}
+                </p>
+              </mat-card-content>
+              <div class="row">
+                <div class="col-md-1">
+                  <div class="row">
+                    <mat-icon>favorite</mat-icon>
+                    <p>{{tweet['tweet']['favorite_count'][0]}}</p>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="row">
+                    <mat-icon>refresh</mat-icon>
+                    <p>{{tweet['tweet']['retweet_count'][0]}}</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-3">
+                  <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #465775">Cambiar polaridad</button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'positive')">Positiva</button>
+                    <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'negative')">Negativa</button>
+                    <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'neutral')">Neutra</button>
+                  </mat-menu>
                 </div>
               </div>
-              <div class="col-md-1">
-                <div class="row">
-                  <mat-icon>refresh</mat-icon>
-                  <p>{{tweet['tweet']['retweet_count'][0]}}</p>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
-              </div>
-              <div class="col-md-4"></div>
-              <div class="col-md-3">
-                <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #465775">Cambiar polaridad</button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'positive')">Positiva</button>
-                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'negative')">Negativa</button>
-                  <button mat-menu-item (click)="setPolarity(tweet['tweet']['_id'], 'neutral')">Neutra</button>
-                </mat-menu>
-              </div>
-            </div>
-          </mat-card>
+            </mat-card>
+          </cdk-virtual-scroll-viewport>
         </div>
         <div class="col-md-2">
 

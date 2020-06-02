@@ -21,7 +21,7 @@ export class GraphSettingsComponent implements OnInit {
 
   public graphData = [];
 
-  graphHeight = (window.innerHeight * 70) / 100;
+  graphHeight = (window.innerHeight * 80) / 100;
 
   graphWidth = (window.innerWidth * 60) / 100;
 
@@ -76,16 +76,15 @@ export class GraphSettingsComponent implements OnInit {
   applyFilters() {
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
       // this.tweets = data['tweets'];
-
       this.graphData = data['data'];
-    })
+      localStorage.setItem('showingGraph', "true");
+      localStorage.setItem('graphFilters', JSON.stringify({
+        'words': this.selectedWords,
+        'accounts': this.selectedAccounts,
+        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+      }));
+    });
 
-    localStorage.setItem('showingGraph', "true");
-    localStorage.setItem('graphFilters', JSON.stringify({
-      'words': this.selectedWords,
-      'accounts': this.selectedAccounts,
-      'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-    }));
   }
 
 }

@@ -11,7 +11,7 @@ from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
 
 from joblib import load
-from extract_tweets import searchTweetById, extractTweetsApi, extract, lookup_user
+from extract_tweets import searchTweetById, extractTweetsApi, extract, lookup_user, updateTweetsByAccount
 from util.Preprocessor import Preprocessor
 from graphs import graph
 from flask_cors import CORS
@@ -125,4 +125,5 @@ def search_user():
 if __name__ == '__main__':
 
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)
+
 

@@ -3,6 +3,8 @@ import parser
 import matplotlib.pyplot as plt
 from flask import Blueprint, request, jsonify
 import numpy as np
+from nltk.corpus import stopwords
+
 import utils
 import nltk
 
@@ -123,7 +125,7 @@ def show_chart():
                 rtTotal = rtTotal + rt[i]
                 likeTotal = likeTotal + fav[i]
                 data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
-        
+
     dataList = []
     for item in data.items():
         dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
@@ -176,10 +178,8 @@ def show_frecuencia():
     return {"tweets": n, "data": ans2}
 
 
-
-#Se pasan las palabras
-@graph.route('/grafo', methods=['GET'])
-def show_grafo_cuentas_palabras():
+@graph.route('/grafo3', methods=['GET'])
+def show_grafo():
 
     words = request.args.getlist('words')
     date = request.args.get('date')
@@ -188,6 +188,7 @@ def show_grafo_cuentas_palabras():
 
     tweets = get_filtros(words, date, accounts, polaridad)
 
+    # usuarios de los tweets
     userIds = []
     for tweet in tweets:
         userId = tweet['userId']
@@ -205,63 +206,28 @@ def show_grafo_cuentas_palabras():
                 if userId == tweet['userId']:
                     userTweets.append(tweet['text'])
             users.append({'user': '@' + userInfo[0]['screen_name'], 'tweets': userTweets})
-            
+
+    #pprint(users)
+    filtered = []
+
     for user in users:
-        userWords = []
+        pprint(user['user'])
         for tweet in user['tweets']:
-            for word in words:
-                if word in tweet and word not in userWords:
-                    userWords.append(word)
-        users2.append({'name': user['user'], 'words': userWords})
-    
+            words_text = list(tweet.split(" "))
+            filtered.append(utils.remove_stop_words(words_text))
+            palabras = filtered1(filtered)
+
+        users2.append({'name': user['user'], 'words': palabras})
+
     return {'tweets': tweets, 'data': users2}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # filteredTweets = []
-    # for tweet in tweets:
-    #     text = tweet['text'].split(' ')
-    #     filteredText = []
-    #     for word in text:
-    #         for word2 in words:
-    #             print(word, word2)
-    #             if word.lower() == word2.lower():
-    #                     print(tweet['_id'])
-    #                     filteredText.append(word2)
-    #     filteredTweets.append({'userId': tweet['userId'], 'words':filteredText})
-    
-    # usersWords = []
-    # for i in range(len(filteredTweets)):
-    #     for j in range(len(filteredTweets)):
-    #         if i != j and filteredTweets[i]['userId'] == filteredTweets[j]['userId']:
-    #             words = []
-    #             for word in filteredTweets[i]['words']:
-    #                 if word not in words:
-    #                     words.append(word)
-    #             for word in filteredTweets[j]['words']:
-    #                 if word not in words:
-    #                     words.append(word)
-    #             usersWords.append({'userId': filteredTweets[i]['userId'], 'words': words})
-        
-
-
-    
-
+def filtered1(lista):
+    lista_palabras = []
+    for sublist in lista:
+        for item in sublist:
+            lista_palabras.append(item)
+    return lista_palabras
 
 
 

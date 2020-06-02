@@ -17,7 +17,7 @@ db = client['proyecto20203']
 
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']
-xCollection = db['textCollection']
+
 
 def return_accounts():
     return usersCollection.find()
@@ -107,10 +107,10 @@ def get_filtros(words, date, accounts, polarities):
     o = {'$text': {'$search': ""}}
     if len(words) > 0:
         for w in words:
-            o['$text']['$search'] = o['$text']['$search'] + '"' + w + '"' + ' '
+            o['$text']['$search'] = o['$text']['$search'] + w + ' '
         o['$text']['$search'] = o['$text']['$search'].strip()
         arr.append(o)
-
+    #print(o)
     if date is not None:
         dt = parser.parse(date)
         arr.append({"date": {"$gte": dt}})
@@ -126,7 +126,6 @@ def get_filtros(words, date, accounts, polarities):
     
     else:
         return return_tweets()
-
 
 
 def getIdsAccounts():
@@ -294,7 +293,43 @@ def deleteUserAndTweets(userId):
     tweetsCollection.delete_many({"userId": int(userId)})
     usersCollection.delete_one({"_id": int(userId)})
 
-def x(t):
 
-    xCollection.insert(t)
+def get_filtros_or(words, date, accounts, polarities):
+    arr = []
+    us = []
+
+    if len(accounts) > 0:
+        for a in accounts:
+            idm = usersCollection.find_one({"screen_name": a})
+            if idm is not None:
+                us.append(idm['_id'])
+
+        p = {'$or': []}
+        for u in us:
+            p['$or'].append({'userId': u})
+
+        arr.append(p)
+
+    o = {'$text': {'$search': ""}}
+    if len(words) > 0:
+        for w in words:
+            o['$text']['$search'] = o['$text']['$search'] + '"' + w + '"' + ' '
+        o['$text']['$search'] = o['$text']['$search'].strip()
+        arr.append(o)
+
+    if date is not None:
+        dt = parser.parse(date)
+        arr.append({"date": {"$gte": dt}})
+
+    if len(polarities) > 0:
+        p = {'$or': []}
+        for pol in polarities:
+            p['$or'].append({'polarity': pol})
+        arr.append(p)
+
+    if len(arr) > 0:
+        return list(tweetsCollection.find({'$and': arr}))
+
+    else:
+        return return_tweets()
 

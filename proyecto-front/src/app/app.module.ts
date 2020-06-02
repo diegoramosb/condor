@@ -24,6 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
+import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { BarHistoricComponent } from './bar-historic/bar-historic.component';
 import { BubbleComponent } from './bubble/bubble.component';
 import { GraphComponent } from './graph/graph.component';
@@ -76,7 +77,8 @@ import { SettingsComponent } from './settings/settings.component';
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    LayoutModule
+    LayoutModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

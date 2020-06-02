@@ -1,4 +1,6 @@
 from datetime import date, datetime
+from pprint import pprint
+
 from flask import Response
 from nltk.corpus import stopwords
 import json
@@ -23,7 +25,16 @@ def list_to_json(lista):
 
 def remove_stop_words(list):
     stopWords = set(stopwords.words('spanish'))
-    return([item for item in list if not item in stopWords])
+    #pprint(stopWords)
+    union = []
+
+    with open('C:/Users/maria/PycharmProjects/proyecto20201/stopword.txt') as json_file:
+        data = json.load(json_file)
+        for p in data['words']:
+            union.append(p)
+            union.append(stopWords)
+            
+    return([item for item in list if not item in union])
 
 
 class DateTimeEncoder(json.JSONEncoder):

@@ -11,7 +11,7 @@ import json
 from flask import Blueprint, request
 
 
-from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne, x
+from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne
 
 extract = Blueprint('extract', __name__)
 
@@ -29,7 +29,7 @@ auth.set_access_token(twitterKeys['accessTokenKey'], twitterKeys['accesTokenSecr
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
-def extractTweetsApi(accounts, nTweets):
+def extractTweetsApi(accounts, number):
     """
     Extracts tweets from the selected accounts and returns a dict array containing them
     :param accounts: string array with the account names. e.g. '@Uniandes'
@@ -39,7 +39,7 @@ def extractTweetsApi(accounts, nTweets):
 
     jsons = []
     for id in accounts:
-        for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(nTweets):
+        for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(number):
             jsonStr = json.dumps(status._json)
             parsed = json.loads(jsonStr)
             jsons.append(parsed)
@@ -108,7 +108,7 @@ listener = MyStreamListener()
 myStream = Stream(auth, listener)
 
 
-@extract.route('/updateTweetsByAccount', methods=['GET'])
+#@extract.route('/updateTweetsByAccount', methods=['GET'])
 def updateTweetsByAccount():
 
     follow = []

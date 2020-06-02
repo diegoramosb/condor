@@ -12,7 +12,7 @@ from utils import isAccount
 
 username = 'mongodb username here'
 mongodb mongodb_mongodb_password_here_here here = '&Si93JSSWh%udMqV1rtu'
-client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, mongodb mongodb_mongodb_password_here_here here))
+client = MongoClient('mongodb://{}:{}@localhost:27017'.format(username, mongodb mongodb_mongodb_password_here_here here))
 db = client['proyecto20203']
 
 tweetsCollection = db['tweets']

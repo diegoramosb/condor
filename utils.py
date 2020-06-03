@@ -28,7 +28,7 @@ def remove_stop_words(list):
     #pprint(stopWords)
     union = []
 
-    with open('C:/Users/maria/PycharmProjects/proyecto20201/stopword.txt') as json_file:
+    with open('stopword.txt') as json_file:
         data = json.load(json_file)
         for p in data['words']:
             union.append(p)

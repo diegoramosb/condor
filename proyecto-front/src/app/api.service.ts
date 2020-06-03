@@ -7,7 +7,7 @@ import * as moment from 'moment';
 })
 export class ApiService {
 
-  apiUrl: string = 'http://localhost:9090'
+  apiUrl: string = 'http://10.128.0.3:9090'
 
   constructor(private httpClient: HttpClient) { }
 

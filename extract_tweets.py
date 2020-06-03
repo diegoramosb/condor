@@ -93,7 +93,7 @@ class MyStreamListener(StreamListener):
         try:
             if not is_ret and is_account is True:
                 result = model_stream([status.text])
-                saveTweetsMongoOne(status._json, result)
+                saveTweetsMongo(status._json, result)
                 pprint('ok')
             else:
                 print('nada')

@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 
 import utils
 
-from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
+from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne, searchId
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
 
 from joblib import load
@@ -83,6 +83,21 @@ def get_all_tweets():
     tweets_response = utils.list_to_json(o)
 
     return utils.JSONResponse(tweets_response)
+
+@app.route('/getu', methods=['GET'])
+def getu():
+    id = '1268235732814049281'
+    tweets = searchId(id)
+    users = []
+    for t in tweets:
+        t["_id"] = str(t["_id"])
+        users.append(searchUserId(t['userId']))
+    # merged_list = tuple(zip(users, tweets))
+    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
+    tweets_response = utils.list_to_json(o)
+
+    return utils.JSONResponse(tweets_response)
+
 
 
 @app.route('/unsubscribe', methods=['DELETE'])

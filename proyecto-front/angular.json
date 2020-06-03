@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "proyecto-front"
+  "defaultProject": "proyecto-front",
+  "cli": {
+    "analytics": "bdbaba40-1ea3-44ad-8ca1-542bba59b8d5"
+  }
 }

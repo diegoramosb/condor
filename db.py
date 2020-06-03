@@ -10,7 +10,7 @@ from utils import isAccount
 
 """MongoDB connection"""
 
-client = MongoClient('mongodb://{}:{}@localhost:27017')
+client = MongoClient('localhost:27017')
 db = client['proyecto20203']
 
 tweetsCollection = db['tweets']

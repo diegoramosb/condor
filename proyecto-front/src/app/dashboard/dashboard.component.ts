@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
     this.showingBubble = localStorage.getItem('showingBubble') == 'true' ? true : false;
     this.showingGraph = localStorage.getItem('showingGraph') == 'true' ? true : false;
     this.showingFreq = localStorage.getItem('showingFreq') == 'true' ? true : false;
+    this.apiService.automaticTweets().subscribe();
   }
 
   getAccounts() {

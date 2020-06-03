@@ -106,6 +106,7 @@ class MyStreamListener(StreamListener):
 
 listener = MyStreamListener()
 myStream = Stream(auth, listener)
+listening = False
 
 
 @extract.route('/updateTweetsByAccount', methods=['GET'])
@@ -114,15 +115,15 @@ def updateTweetsByAccount():
     follow = []
     for a in return_accounts():
         follow.append(str(a['_id']))
-    pprint(follow)
 
     try:
-        tuits = myStream.filter(follow=follow)
-        pprint(tuits)
-
+        if not listening:
+            tuits = myStream.filter(follow=follow)
+            pprint(tuits)
+            listening = True
         return {}, 200
-    except:
-
+    except Exception as e:
+        print(e)
         return {}, 500
 
 

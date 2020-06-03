@@ -118,6 +118,12 @@ def set_polarity():
     updatePolarity(request.get_json()['tweetId'], request.get_json()['polarity'])
     return {}, 200
 
+@app.route('/delete', methods=['GET'])
+def delete():
+    userId = '916474355084857350'
+    deleteUserAndTweets(userId)
+    return {}, 200
+
 @app.route('/searchUser', methods=['GET'])
 def search_user():
     return jsonify(lookup_user(request.args.get('screenName'))), 200

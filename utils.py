@@ -33,7 +33,7 @@ def remove_stop_words(list):
         for p in data['words']:
             union.append(p)
             union.append(stopWords)
-            
+
     return([item for item in list if not item in union])
 
 

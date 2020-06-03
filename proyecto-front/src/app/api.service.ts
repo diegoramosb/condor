@@ -134,4 +134,8 @@ export class ApiService {
       return []
     }
   }
+
+  public automaticTweets() {
+    return this.httpClient.get(`${this.apiUrl}/updateTweetsByAccount`)
+  }
 }

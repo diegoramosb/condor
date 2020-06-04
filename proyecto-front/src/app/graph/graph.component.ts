@@ -158,7 +158,8 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         longestWord = word;
       }
     });
-    return this.calculateAccountRadius() - longestWord.length * this.height/100;
+    var min = Math.min(this.height, this.width);
+    return this.calculateAccountRadius() - longestWord.length * min/100;
   }
 
   calculateAccountRadius() {

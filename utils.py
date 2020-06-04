@@ -98,7 +98,7 @@ def signos(list):
 def https(list):
     new_list = []
     for item in list:
-        if not item.startswith('https'):
+        if not item.startswith('http'):
             new_list.append(item)
 
     return new_list

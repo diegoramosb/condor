@@ -132,5 +132,5 @@ def updateTweetsByAccount():
 def model_stream(tweet_text):
     pipeline = joblib.load(open('util/filename.joblib', 'rb'))
     result = pipeline.predict(tweet_text)
-    print(result)
-    return result
+    print(result[0])
+    return result[0]

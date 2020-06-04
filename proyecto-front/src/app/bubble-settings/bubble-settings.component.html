@@ -14,24 +14,24 @@
             <p style="text-align: left;">
               {{tweet['tweet']['text']}}
             </p>
-          </mat-card-content>
-          <div class="row">
-            <div class="col-md-1">
-              <div class="row">
-                <mat-icon>favorite</mat-icon>
-                <p>{{tweet['tweet']['favorite_count'][0]}}</p>
+            <div class="row" style="margin-left: 0.5vw;">
+              <div class="col-md-1">
+                <div class="row">
+                  <img src="../../assets/like.png" class="tweetIconBig">
+                  <p>{{tweet['tweet']['favorite_count'][tweet['tweet']['favorite_count'].length-1]}}</p>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <div class="row">
+                  <img src="../../assets/retweet.png" class="tweetIconBig">
+                  <p>{{tweet['tweet']['retweet_count'][tweet['tweet']['retweet_count'].length-1]}}</p>
+                </div>
               </div>
             </div>
-            <div class="col-md-1">
-              <div class="row">
-                <mat-icon>refresh</mat-icon>
-                <p>{{tweet['tweet']['retweet_count'][0]}}</p>
-              </div>
-            </div>
-            <div class="col-md-10">
+            <div class="row" style="margin-left: 0.5vw;">
               <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
             </div>
-          </div>
+          </mat-card-content>
         </mat-card>
       </div>
     </div>

@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 
 import utils
 
-from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne, searchId
+from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
 
 from joblib import load

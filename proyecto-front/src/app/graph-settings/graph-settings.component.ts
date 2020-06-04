@@ -21,7 +21,7 @@ export class GraphSettingsComponent implements OnInit {
 
   public graphData = [];
 
-  graphHeight = (window.innerHeight * 80) / 100;
+  graphHeight = (window.innerHeight * 100) / 100;
 
   graphWidth = (window.innerWidth * 60) / 100;
 
@@ -75,7 +75,7 @@ export class GraphSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      // this.tweets = data['tweets'];
+      this.tweets = data['tweets'];
       this.graphData = data['data'];
       localStorage.setItem('showingGraph', "true");
       localStorage.setItem('graphFilters', JSON.stringify({

@@ -32,7 +32,7 @@ def updateTweetsToday():
     updatedTweets = []
     for t in tweets:
         updatedTweets.append(searchTweetById(t["_id"]))
-    response = updateTweets(updatedTweets)
+        response = updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
     return {'nUpdated': len(tweets)}, 200

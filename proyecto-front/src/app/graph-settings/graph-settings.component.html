@@ -12,24 +12,24 @@
           </mat-card-header>
           <mat-card-content>
             <p style="text-align: left;">
-              {{tweet['tweet']['text']}}
+              {{tweet['tweets']['text']}}
             </p>
           </mat-card-content>
           <div class="row">
             <div class="col-md-1">
               <div class="row">
                 <mat-icon>favorite</mat-icon>
-                <p>{{tweet['tweet']['favorite_count'][0]}}</p>
+                <p>{{tweet['tweets']['favorite_count'][0]}}</p>
               </div>
             </div>
             <div class="col-md-1">
               <div class="row">
                 <mat-icon>refresh</mat-icon>
-                <p>{{tweet['tweet']['retweet_count'][0]}}</p>
+                <p>{{tweet['tweets']['retweet_count'][0]}}</p>
               </div>
             </div>
             <div class="col-md-10">
-              <p>{{tweet['tweet']['date'] | date:'d/M/yy h:mm a'}}</p>
+              <p>{{tweet['tweets']['date'] | date:'d/M/yy h:mm a'}}</p>
             </div>
           </div>
         </mat-card>

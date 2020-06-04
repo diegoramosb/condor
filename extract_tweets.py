@@ -106,7 +106,6 @@ class MyStreamListener(StreamListener):
 
 listener = MyStreamListener()
 myStream = Stream(auth, listener)
-listening = False
 
 
 @extract.route('/updateTweetsByAccount', methods=['GET'])
@@ -115,20 +114,19 @@ def updateTweetsByAccount():
     follow = []
     for a in return_accounts():
         follow.append(str(a['_id']))
+    pprint(follow)
 
     try:
-        if not listening:
-            tuits = myStream.filter(follow=follow)
-            pprint(tuits)
-            listening = True
+        tuits = myStream.filter(follow=follow)
+        pprint(tuits)
+
         return {}, 200
-    except Exception as e:
-        print(e)
+    except:
         return {}, 500
 
 
 def model_stream(tweet_text):
     pipeline = joblib.load(open('util/filename.joblib', 'rb'))
     result = pipeline.predict(tweet_text)
-    print(result[0])
-    return result[0]
+    print(result)
+    return result

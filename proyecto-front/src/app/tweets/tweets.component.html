@@ -81,10 +81,10 @@
         </div>
         <div class="col-md-8">
           <cdk-virtual-scroll-viewport itemSize="200" style="height: 100vh; width: 60vw;">
-            <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'positive',
-            'tweetCardNegative': tweet['tweet']['polarity'] == 'negative', 
-            'tweetCardNeutral': tweet['tweet']['polarity'] == 'neutral', 
-            'tweetCardNone': tweet['tweet']['polarity'] == 'none'}" *cdkVirtualFor="let tweet of tweets">
+            <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'P',
+            'tweetCardNegative': tweet['tweet']['polarity'] == 'N', 
+            'tweetCardNeutral': tweet['tweet']['polarity'] == 'NEU', 
+            'tweetCardNone': tweet['tweet']['polarity'] == 'NONE'}" *cdkVirtualFor="let tweet of tweets">
               <mat-card-header>
                 <div mat-card-avatar>
                   <img matListAvatar style="border-radius: 50%;" src="{{tweet['account'][0]['profile_image']}}">

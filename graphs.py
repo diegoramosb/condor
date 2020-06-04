@@ -151,8 +151,10 @@ def show_frecuencia():
     for obj in words:
         ids.append(obj['_id'].lower())
     sin_num = utils.numbers(ids)
-    sin_imag= utils.numbers(sin_num)
-    filtered = utils.remove_stop_words(sin_imag)
+    sin_imag= utils.https(sin_num)
+    sin_puntos = utils.signos(sin_imag)
+    sin_emojis = utils.emoji(sin_puntos)
+    filtered = utils.remove_stop_words(sin_emojis)
     ans = []
     for obj in words:
         if obj['_id'].lower() in filtered:
@@ -165,7 +167,7 @@ def show_frecuencia():
 
         #pprint(word[ans.index(item)])
             #pprint(item['_id'])
-        if item['count'] >= 1 and word[0] not in item['_id']:
+        if item['count'] >= 2 and word[0] not in item['_id']:
             ans2.append(item)
 
 
@@ -221,8 +223,11 @@ def show_grafo():
             words_text = list(tweet.split(" "))
             filtered.append(utils.remove_stop_words(words_text))
             palabras = filtered1(filtered)
-            sinNum = utils.numbers(palabras)
-        users2.append({'name': user['user'], 'words': sinNum})
+            sin_num = utils.numbers(palabras)
+            sin_imag = utils.https(sin_num)
+            sin_puntos = utils.signos(sin_imag)
+            sin_emojis = utils.emoji(sin_puntos)
+        users2.append({'name': user['user'], 'words': sin_emojis})
 
     users3 = []
     for i in range(len(users2)):
@@ -235,7 +240,10 @@ def show_grafo():
                     for word2 in user2['words']:
                         if word.lower() == word2.lower() and word.lower() not in words and word != "":
                             words.append(word.lower())
+
         users3.append({'name': user1['name'], 'words': words})
+
+
 
     return {'tweets': n, 'data': users3}
 

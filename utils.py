@@ -73,9 +73,10 @@ def is_date(string, fuzzy=False):
 def numbers(list):
     new_list = []
     for item in list:
-        array = re.findall(r'[0-9]+', item)
+        #array = re.findall(r'[0-9]+', item)
+        array = bool(re.search(r'\d', item))
         #array = re.match(r"[a-zA-z]+", item)
-        if item not in array:
+        if array is False:
             new_list.append(item)
 
     #pprint(new_list)
@@ -83,15 +84,38 @@ def numbers(list):
 
     # Driver code
 
-def http(list):
+def signos(list):
     new_list = []
     for item in list:
-        array = re.search(r'^https?:\/\/[^.]*.(.*)$', item).group(1)
+        array = re.sub(r"(?<!\d)[.,;:?¿!¡–-](?!\d)", " ", item, 0)
         # array = re.match(r"[a-zA-z]+", item)
-        if item not in array:
+        if item in array:
             new_list.append(item)
 
     # pprint(new_list)
+    return new_list
+
+def https(list):
+    new_list = []
+    for item in list:
+        if not item.startswith('https'):
+            new_list.append(item)
+
+    return new_list
+
+def emoji(list):
+    new_list = []
+    for item in list:
+        emoji_pattern = re.compile("["
+                                   u"\U0001F600-\U0001F64F"  # emoticons
+                                   u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+                                   u"\U0001F680-\U0001F6FF"  # transport & map symbols
+                                   u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                                   u"\U00002702-\U000027B0"
+                                   u"\U000024C2-\U0001F251"
+                                   "]+", flags=re.UNICODE)
+        array = (emoji_pattern.sub(r'', item))
+        new_list.append(array)
     return new_list
 
 

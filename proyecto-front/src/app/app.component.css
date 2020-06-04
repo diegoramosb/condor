@@ -49,6 +49,12 @@
     margin: 10px;
 }
 
+.tweetIconBig {
+    width: 24px;
+    height: 24px;
+    margin-right: 2px;
+}
+
 /* .settingsCard {
     margin-l
 } */

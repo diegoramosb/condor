@@ -150,18 +150,22 @@ def show_frecuencia():
     ids = []
     for obj in words:
         ids.append(obj['_id'].lower())
-    filtered = utils.remove_stop_words(ids)
+    sin_num = utils.numbers(ids)
+    sin_imag= utils.numbers(sin_num)
+    filtered = utils.remove_stop_words(sin_imag)
     ans = []
     for obj in words:
         if obj['_id'].lower() in filtered:
             ans.append(obj)
+    #pprint(ans)
+    #sinNum = utils.numbers(ans)
     ans2 = []
 
     for item in ans:
 
         #pprint(word[ans.index(item)])
             #pprint(item['_id'])
-        if item['count'] >= 3 and word[0] not in item['_id']:
+        if item['count'] >= 1 and word[0] not in item['_id']:
             ans2.append(item)
 
 
@@ -217,8 +221,8 @@ def show_grafo():
             words_text = list(tweet.split(" "))
             filtered.append(utils.remove_stop_words(words_text))
             palabras = filtered1(filtered)
-
-        users2.append({'name': user['user'], 'words': palabras})
+            sinNum = utils.numbers(palabras)
+        users2.append({'name': user['user'], 'words': sinNum})
 
     users3 = []
     for i in range(len(users2)):

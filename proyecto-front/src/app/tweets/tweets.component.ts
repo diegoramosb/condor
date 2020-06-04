@@ -111,7 +111,6 @@ export class TweetsComponent implements OnInit {
     }
     this.apiService.getTweetsFilters(this.selectedWords, this.selectedAccounts, this.selectedDate, selectedPolarities).subscribe((response: []) => {
       this.tweets = response;
-      console.log(response);
     });
     localStorage.setItem('tweetFilters', JSON.stringify({
       'words': this.selectedWords,

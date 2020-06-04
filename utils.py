@@ -1,3 +1,4 @@
+import re
 from datetime import date, datetime
 from pprint import pprint
 
@@ -68,5 +69,29 @@ def is_date(string, fuzzy=False):
     except ValueError:
         return False
 
+
+def numbers(list):
+    new_list = []
+    for item in list:
+        array = re.findall(r'[0-9]+', item)
+        #array = re.match(r"[a-zA-z]+", item)
+        if item not in array:
+            new_list.append(item)
+
+    #pprint(new_list)
+    return new_list
+
+    # Driver code
+
+def http(list):
+    new_list = []
+    for item in list:
+        array = re.search(r'^https?:\/\/[^.]*.(.*)$', item).group(1)
+        # array = re.match(r"[a-zA-z]+", item)
+        if item not in array:
+            new_list.append(item)
+
+    # pprint(new_list)
+    return new_list
 
 

@@ -34,7 +34,7 @@ def remove_stop_words(list):
             union.append(p)
             union.append(stopWords)
 
-    return([item for item in list if not item in union])
+    return([item for item in list if not item.lower() in union])
 
 
 class DateTimeEncoder(json.JSONEncoder):

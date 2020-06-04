@@ -64,7 +64,6 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     var nodes = this.calculateNodes()
     var words = nodes[0];
     var accounts = nodes[1];
-    console.log(accounts)
 
     var group = svg.append('g')
       .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
@@ -153,24 +152,16 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
    }
 
   calculateWordRadius(words) {
-    // return this.height/4;
     var longestWord = ""
     words.forEach(word => {
       if (word.length > longestWord.length) {
         longestWord = word;
       }
     });
-    return this.calculateAccountRadius() - longestWord.length * this.height/50;
+    return this.calculateAccountRadius() - longestWord.length * this.height/100;
   }
 
   calculateAccountRadius() {
-    // var longestWord = ""
-    // words.forEach(word => {
-    //   if (word.length > longestWord.length) {
-    //     longestWord = word;
-    //   }
-    // });
-    // return this.calculateWordRadius() + longestWord.length * 10;
     return this.height/3;
   }
 

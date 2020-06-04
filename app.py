@@ -35,7 +35,7 @@ def updateTweetsToday():
     response = updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return {'nUpdated': len(response)}, 200
+    return {'nUpdated': len(tweets)}, 200
 
 
 @app.route('/extractTweets', methods=['GET'])
@@ -83,21 +83,6 @@ def get_all_tweets():
     tweets_response = utils.list_to_json(o)
 
     return utils.JSONResponse(tweets_response)
-
-@app.route('/getu', methods=['GET'])
-def getu():
-    id = '1268235732814049281'
-    tweets = searchId(id)
-    users = []
-    for t in tweets:
-        t["_id"] = str(t["_id"])
-        users.append(searchUserId(t['userId']))
-    # merged_list = tuple(zip(users, tweets))
-    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-    tweets_response = utils.list_to_json(o)
-
-    return utils.JSONResponse(tweets_response)
-
 
 
 @app.route('/unsubscribe', methods=['DELETE'])

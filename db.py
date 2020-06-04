@@ -97,10 +97,10 @@ def get_filtros(words, date, accounts, polarities):
                 us.append(idm['_id'])
 
         p = {'$or': []}
-        for u in us:
-            p['$or'].append({'userId': u})
-
-        arr.append(p)
+        if len(us) > 0:
+            for u in us:
+                p['$or'].append({'userId': u})
+            arr.append(p)
 
     o = {'$text': {'$search': ""}}
     if len(words) > 0:
@@ -108,7 +108,6 @@ def get_filtros(words, date, accounts, polarities):
             o['$text']['$search'] = o['$text']['$search'] + w + ' '
         o['$text']['$search'] = o['$text']['$search'].strip()
         arr.append(o)
-    #print(o)
     if date is not None:
         dt = parser.parse(date)
         arr.append({"date": {"$gte": dt}})
@@ -272,7 +271,6 @@ def updateTweets(tweets):
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"retweet_count": t["retweet_count"]}})
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"favorite_count": t["favorite_count"]}})
         tweetsCollection.update({"_id": t["id"]}, {"$push": {"request_times": datetime.now()}})
-    return({'updatedTweets': len(tweets)})
 
 def updatePolarity(tweetId, polarity):
     tweetsCollection.update_one({"_id": int(tweetId)}, {"$set": {"polarity": polarity}})

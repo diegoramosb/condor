@@ -178,7 +178,7 @@ def show_frecuencia():
     return {"tweets": n, "data": ans2}
 
 
-@graph.route('/grafo3', methods=['GET'])
+@graph.route('/grafo', methods=['GET'])
 def show_grafo():
 
     words = request.args.getlist('word')

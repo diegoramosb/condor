@@ -93,12 +93,13 @@ class MyStreamListener(StreamListener):
         try:
             if not is_ret and is_account is True:
                 result = model_stream([status.text])
-                saveTweetsMongo(status._json, result)
+                saveTweetsMongoOne(status._json, result)
                 pprint('ok')
             else:
                 print('nada')
         except Exception as e:
             print(e)
+
             print('error')
 
         return True
@@ -108,7 +109,7 @@ listener = MyStreamListener()
 myStream = Stream(auth, listener)
 
 
-#@extract.route('/updateTweetsByAccount', methods=['GET'])
+@extract.route('/updateTweetsByAccount', methods=['GET'])
 def updateTweetsByAccount():
 
     follow = []
@@ -121,8 +122,11 @@ def updateTweetsByAccount():
         pprint(tuits)
 
         return {}, 200
-    except:
-        return {}, 500
+    except Exception as e:
+        #print(e)
+        if str(e) == "Stream object already connected!":
+            return {}, 200
+        else: return {}, 500
 
 
 def model_stream(tweet_text):

@@ -173,7 +173,7 @@ def show_frecuencia():
     return {"tweets": n, "data": ans2}
 
 
-@graph.route('/grafo3', methods=['GET'])
+@graph.route('/grafo', methods=['GET'])
 def show_grafo():
 
     words = request.args.getlist('word')
@@ -183,6 +183,9 @@ def show_grafo():
 
     tweets = get_filtros(words, date, accounts, polaridad)
 
+    tweets_users = get_tweets_with_its_user(tweets)
+    n = [{"tweets": t, "user": u} for t, u in zip(tweets, tweets_users)]
+
     # usuarios de los tweets
     userIds = []
     for tweet in tweets:
@@ -191,7 +194,6 @@ def show_grafo():
             userIds.append(userId)
 
     users = []
-    users2 = []
 
     for userId in userIds:
         userInfo = searchUserId(userId)
@@ -202,11 +204,10 @@ def show_grafo():
                     userTweets.append(tweet['text'])
             users.append({'user': '@' + userInfo[0]['screen_name'], 'tweets': userTweets})
 
-    #pprint(users)
-    filtered = []
+    users2 = []
 
     for user in users:
-        pprint(user['user'])
+        filtered = []
         for tweet in user['tweets']:
             words_text = list(tweet.split(" "))
             filtered.append(utils.remove_stop_words(words_text))
@@ -214,7 +215,20 @@ def show_grafo():
 
         users2.append({'name': user['user'], 'words': palabras})
 
-    return {'tweets': tweets, 'data': users2}
+    users3 = []
+    for i in range(len(users2)):
+        user1 = users2[i]
+        words = []
+        for j in range(len(users2)):
+            user2 = users2[j]
+            if i != j:
+                for word in user1['words']:
+                    for word2 in user2['words']:
+                        if word.lower() == word2.lower() and word.lower() not in words and word != "":
+                            words.append(word.lower())
+        users3.append({'name': user1['name'], 'words': words})
+
+    return {'tweets': n, 'data': users3}
 
 
 def filtered1(lista):

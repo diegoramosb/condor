@@ -98,16 +98,16 @@ export class TweetsComponent implements OnInit {
   applyFilters() {
     var selectedPolarities = [];
     if(this.positive) {
-      selectedPolarities.push("positive")
+      selectedPolarities.push("P")
     }
     if(this.negative) {
-      selectedPolarities.push("negative")
+      selectedPolarities.push("N")
     }
     if(this.neutral) {
-      selectedPolarities.push("neutral")
+      selectedPolarities.push("NEU")
     }
     if(this.none) {
-      selectedPolarities.push("none")
+      selectedPolarities.push("NONE")
     }
     this.apiService.getTweetsFilters(this.selectedWords, this.selectedAccounts, this.selectedDate, selectedPolarities).subscribe((response: []) => {
       this.tweets = response;

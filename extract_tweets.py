@@ -58,7 +58,10 @@ def extractTweetsSinceId(account, nTweets, id):
 
 
 def searchTweetById(id):
-    return api.get_status(id)._json
+    try: 
+        return api.get_status(id)._json
+    except Exception as e:
+        print(e)
 
 def lookup_user(screenName):
     users = []

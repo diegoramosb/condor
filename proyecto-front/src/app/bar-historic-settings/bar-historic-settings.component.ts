@@ -4,6 +4,8 @@ import { ChartDataSets } from 'chart.js';
 import { ApiService } from '../api.service';
 import { Label } from 'ng2-charts';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-bar-historic-settings',
@@ -29,7 +31,7 @@ export class BarHistoricSettingsComponent implements OnInit {
 
   public barChartLabels: Label[] = [];
 
-  constructor(private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar, private apiService: ApiService) {
     this.apiService.getAccounts().subscribe(response => {
       this.accounts = response;
     });
@@ -101,8 +103,11 @@ export class BarHistoricSettingsComponent implements OnInit {
   }
 
   updateData() {
+    this.snackBar.open("Actualizando retweets y likes de hoy. Esto puede tardar unos segundos.", "Aceptar");
     this.apiService.updateTweets().subscribe(response => {
       this.applyFilters();
+      this.snackBar.dismiss();
+      this.snackBar.open("Retweets y likes de hoy actualizados.", "Aceptar")
     });
   }
 }

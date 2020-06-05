@@ -4,7 +4,7 @@ import pickle
 
 from nltk.tag.stanford import StanfordPOSTagger
 
-os.environ['JAVAHOME'] = "C:/Program Files (x86)/Java/jre1.8.0_161/bin/java.exe"
+os.environ['JAVAHOME'] = "C:/Program Files/Java/jre1.8.0_231/bin/java.exe"
 
 class PartsOfSpeechHelper:
 

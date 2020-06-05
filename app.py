@@ -49,7 +49,6 @@ def extractTweetsByAccount():
     accounts = request.args.getlist('account')
     tweets = extractTweetsApi(accounts, number)
     result = model(tweets)
-    #print(tweets)
     newCount = saveTweetsMongo(tweets, result)
     
     return {'newTweets': newCount}, 200
@@ -118,12 +117,6 @@ def filters_db():
 @app.route('/setPolarity', methods=['PUT'])
 def set_polarity():
     updatePolarity(request.get_json()['tweetId'], request.get_json()['polarity'])
-    return {}, 200
-
-@app.route('/delete', methods=['GET'])
-def delete():
-    userId = '916474355084857350'
-    deleteUserAndTweets(userId)
     return {}, 200
 
 @app.route('/searchUser', methods=['GET'])

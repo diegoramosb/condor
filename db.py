@@ -109,7 +109,7 @@ def get_filtros(words, date, accounts, polarities):
         o['$text']['$search'] = o['$text']['$search'].strip()
         arr.append(o)
     if date is not None:
-        dt = parser.parse(date)
+        dt = datetime.strptime(date, "%Y-%m-%d")
         arr.append({"date": {"$gte": dt}})
 
     if len(polarities)>0:

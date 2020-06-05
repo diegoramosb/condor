@@ -109,30 +109,60 @@ def show_chart():
     polaridad = request.args.getlist('polaridad')
 
     tweets = get_filtros(words, date, accounts, polaridad)
-    data = {}
-    rtTotal = 0
-    likeTotal = 0
     #todos los tweets y retweets y likes de las horas - suma de todos los tweets,
 
-    for t in tweets:
+    requestTimes = []
+    sumLikes = []
+    sumRts = []
+    for t in tweets: 
         if date is None or t['date'].strftime("%Y-%m-%d") == date:
             requests = t['request_times']
-            rt = t['retweet_count']
-            fav = t['favorite_count']
+            rts = t['retweet_count']
+            likes = t['favorite_count']
+            pprint(requests)
+            # print(likes)
+            # print(rts)
             for i in range(len(requests)):
-                timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
-                rtTotal = rtTotal + rt[i]
-                likeTotal = likeTotal + fav[i]
-                data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
+                requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M') 
+                if requestTime not in requestTimes:
+                    requestTimes.append(requestTime)
+                    sumRts.append(rts[i])
+                    sumLikes.append(likes[i])
+                # else:
+                #     index = requestTimes.index(requestTime)
+                #     sumRts[index] += rts[i]
+                #     sumLikes[index] += likes[i]
 
-    dataList = []
-    for item in data.items():
-        dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
-    dataList = sorted(dataList,
-    key=lambda x: datetime.strptime(x['time'], '%d/%m/%Y %H:%M'), reverse=False)
+    requestTimes = sorted(requestTimes, key= lambda x: x, reverse=False)
+
+    # print(requestTimes)
+    # print(sumLikes)
+    # print(sumRts)
+
+    sumLikes2 = []
+    sumRts2 = []
+    maxLikes = 0
+    maxRts = 0
+    for i in range(len(requestTimes)):
+        if sumLikes[i] > maxLikes:
+            sumLikes2.append(sumLikes[i])
+            maxLikes = sumLikes[i]
+        else:
+            sumLikes2.append(maxLikes)
+        if sumRts[i] > maxRts:
+            sumRts2.append(sumRts[i])
+            maxRts = sumRts[i]
+        else:
+            sumRts2.append(maxRts)
+
+    data = []
+    for i in range(len(requestTimes)):
+        data.append({"time": requestTimes[i], "sum_like": sumRts2[i], "sum_rt": sumLikes2[i]})
+
+
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
-    return {"tweets": n, "data": dataList}
+    return {"tweets": n, "data": data}
 
 
 

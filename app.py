@@ -34,10 +34,10 @@ def updateTweetsToday():
         updated = searchTweetById(t["_id"])
         if updated is not None:
             updatedTweets.append(updated)
-            response = updateTweets(updatedTweets)
+    updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return {'nUpdated': len(tweets)}, 200
+    return {'nUpdated': len(updatedTweets)}, 200
 
 
 @app.route('/extractTweets', methods=['GET'])

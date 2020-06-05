@@ -51,7 +51,9 @@ export class DashboardComponent implements OnInit {
             );
           });
           if (result.newAccounts.length > 0) {
+            this.snackBar.open("Descargando tweets de las nuevas cuentas. Esto puede tardar unos minutos", "Aceptar");
             this.apiService.extractTweets(result.newAccounts).subscribe(response => {
+              this.snackBar.dismiss()
               this.snackBar.open(`Descargados ${response['newTweets']} tweets de las nuevas cuentas`, "Aceptar");
             });
           }

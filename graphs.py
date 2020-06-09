@@ -105,33 +105,74 @@ def show_chart():
     date = request.args.get('date')
     accounts = request.args.getlist('account')
     polaridad = request.args.getlist('polaridad')
-    id = request.args.get('idTweet')
 
     tweets = get_filtros(words, date, accounts, polaridad)
-    data = {}
-    rtTotal = 0
-    likeTotal = 0
     #todos los tweets y retweets y likes de las horas - suma de todos los tweets,
 
-    for t in tweets:
+    requestTimes = []
+    sumLikes = []
+    sumRts = []
+    for t in tweets: 
         if date is None or t['date'].strftime("%Y-%m-%d") == date:
             requests = t['request_times']
-            rt = t['retweet_count']
-            fav = t['favorite_count']
+            rts = t['retweet_count']
+            likes = t['favorite_count']
+            pprint(requests)
+            # print(likes)
+            # print(rts)
             for i in range(len(requests)):
-                timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
-                rtTotal = rtTotal + rt[i]
-                likeTotal = likeTotal + fav[i]
-                data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
-    #pprint(data.items())
-    dataList = []
-    for item in data.items():
-        dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
-    dataList = sorted(dataList,
-    key=lambda x: datetime.strptime(x['time'], '%d/%m/%Y %H:%M'), reverse=False)
+    #
+    #             timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
+    #             rtTotal = rtTotal + rt[i]
+    #             likeTotal = likeTotal + fav[i]
+    #             data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
+    # #pprint(data.items())
+    # dataList = []
+    # for item in data.items():
+    #     dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
+    # dataList = sorted(dataList,
+    # key=lambda x: datetime.strptime(x['time'], '%d/%m/%Y %H:%M'), reverse=False)
+
+                requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M') 
+                if requestTime not in requestTimes:
+                    requestTimes.append(requestTime)
+                    sumRts.append(rts[i])
+                    sumLikes.append(likes[i])
+                # else:
+                #     index = requestTimes.index(requestTime)
+                #     sumRts[index] += rts[i]
+                #     sumLikes[index] += likes[i]
+
+    requestTimes = sorted(requestTimes, key= lambda x: x, reverse=False)
+
+    # print(requestTimes)
+    # print(sumLikes)
+    # print(sumRts)
+
+    sumLikes2 = []
+    sumRts2 = []
+    maxLikes = 0
+    maxRts = 0
+    for i in range(len(requestTimes)):
+        if sumLikes[i] > maxLikes:
+            sumLikes2.append(sumLikes[i])
+            maxLikes = sumLikes[i]
+        else:
+            sumLikes2.append(maxLikes)
+        if sumRts[i] > maxRts:
+            sumRts2.append(sumRts[i])
+            maxRts = sumRts[i]
+        else:
+            sumRts2.append(maxRts)
+
+    data = []
+    for i in range(len(requestTimes)):
+        data.append({"time": requestTimes[i], "sum_like": sumRts2[i], "sum_rt": sumLikes2[i]})
+
+    
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
-    return {"tweets": n, "data": dataList}
+    return {"tweets": n, "data": data}
 
 
 
@@ -139,45 +180,34 @@ def show_chart():
 @graph.route('/nube', methods=['GET'])
 def show_frecuencia():
 
-    word = request.args.getlist('word')
-    words = []
-
-    for w in word:
-        words += search_most_common_words(w)
-
-    ids = []
-    for obj in words:
-        ids.append(obj['_id'].lower())
-    sin_num = utils.numbers(ids)
-    sin_imag= utils.https(sin_num)
-    sin_puntos = utils.signos(sin_imag)
-    sin_emojis = utils.emoji(sin_puntos)
-    filtered = utils.remove_stop_words(sin_emojis)
-    ans = []
-    for obj in words:
-        if obj['_id'].lower() in filtered:
-            ans.append(obj)
-    #pprint(ans)
-    #sinNum = utils.numbers(ans)
-    ans2 = []
-
-    for item in ans:
-
-        #pprint(word[ans.index(item)])
-            #pprint(item['_id'])
-        if item['count'] >= 2 and word[0] not in item['_id']:
-            ans2.append(item)
-
-
-    #pprint(ans2)
+    words = request.args.getlist('word')
     date = request.args.get('date')
     accounts = request.args.getlist('account')
     polaridad = request.args.getlist('polaridad')
 
-    tweets = get_filtros(word, date, accounts, polaridad)
-
+    tweets = get_filtros(words, date, accounts, polaridad)
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
+
+    words3 = []
+    counts = []
+    for tweet in n:
+        words2 = tweet["tweets"]["text"].split(" ")
+        processedWords = utils.remove_stop_words(utils.emoji(utils.signos(utils.https(utils.numbers(words2)))))
+        for word in processedWords:
+            if word.lower() not in words3:
+                words3.append(word.lower())
+                counts.append(1)
+            else:
+                index = words3.index(word.lower())
+                counts[index]+=1
+
+    ans = [{"_id": word, "count": count} for word, count in zip(words3, counts)]
+
+    ans2 = []
+    for item in ans:
+        if item['count'] >= 2 and item['_id'] not in words:
+            ans2.append(item)
 
     return {"tweets": n, "data": ans2}
 

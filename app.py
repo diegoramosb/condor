@@ -31,11 +31,13 @@ def updateTweetsToday():
     tweets = search_tweets_after(date)
     updatedTweets = []
     for t in tweets:
-        updatedTweets.append(searchTweetById(t["_id"]))
-    response = updateTweets(updatedTweets)
+        updated = searchTweetById(t["_id"])
+        if updated is not None:
+            updatedTweets.append(updated)
+    updateTweets(updatedTweets)
     for t in updatedTweets:
         print(t["id"])
-    return {'nUpdated': len(response)}, 200
+    return {'nUpdated': len(updatedTweets)}, 200
 
 
 @app.route('/extractTweets', methods=['GET'])
@@ -47,7 +49,6 @@ def extractTweetsByAccount():
     accounts = request.args.getlist('account')
     tweets = extractTweetsApi(accounts, number)
     result = model(tweets)
-    #print(tweets)
     newCount = saveTweetsMongo(tweets, result)
     
     return {'newTweets': newCount}, 200
@@ -84,21 +85,6 @@ def get_all_tweets():
 
     return utils.JSONResponse(tweets_response)
 
-@app.route('/getu', methods=['GET'])
-def getu():
-    id = '1268235732814049281'
-    tweets = searchId(id)
-    users = []
-    for t in tweets:
-        t["_id"] = str(t["_id"])
-        users.append(searchUserId(t['userId']))
-    # merged_list = tuple(zip(users, tweets))
-    o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-    tweets_response = utils.list_to_json(o)
-
-    return utils.JSONResponse(tweets_response)
-
-
 
 @app.route('/unsubscribe', methods=['DELETE'])
 def delete_tweets_byAccount():
@@ -131,12 +117,6 @@ def filters_db():
 @app.route('/setPolarity', methods=['PUT'])
 def set_polarity():
     updatePolarity(request.get_json()['tweetId'], request.get_json()['polarity'])
-    return {}, 200
-
-@app.route('/delete', methods=['GET'])
-def delete():
-    userId = '916474355084857350'
-    deleteUserAndTweets(userId)
     return {}, 200
 
 @app.route('/searchUser', methods=['GET'])

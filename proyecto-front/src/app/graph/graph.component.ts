@@ -47,8 +47,10 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngOnDestroy(): void {
-    var json = {'graphData': this.graphData};
-    localStorage.setItem('graphData', JSON.stringify(json));
+    if(localStorage.getItem('showingGraph') == 'true') {
+      var json = {'graphData': this.graphData};
+      localStorage.setItem('graphData', JSON.stringify(json));
+    }
   }
 
   private createChart(): void {   
@@ -158,7 +160,8 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         longestWord = word;
       }
     });
-    return this.calculateAccountRadius() - longestWord.length * this.height/100;
+    var min = Math.min(this.height, this.width);
+    return this.calculateAccountRadius() - longestWord.length * min/100;
   }
 
   calculateAccountRadius() {

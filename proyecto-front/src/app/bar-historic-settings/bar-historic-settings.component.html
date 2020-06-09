@@ -39,12 +39,7 @@
   <mat-drawer-content>
     <div class="container">
       <div class="row">
-        <div class="col-md-1">
-          <button mat-icon-button routerLink="" style="color: #465775; position: fixed">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class="filtersCard" style="margin-top: 10px;">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Filtros</mat-card-title>
@@ -100,22 +95,19 @@
             </mat-card-actions>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class=" detailGraphCard">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Histórico de retweets y likes</mat-card-title>
             </mat-card-header>
             <app-bar-historic [barChartData]="barChartData" [barChartLabels]="barChartLabels"></app-bar-historic>
             <mat-card-actions>
-              <button mat-button (click)="updateData()" style="color: #465775;">Actualizar datos</button>
+              <button mat-button (click)="updateData()" style="color: #465775;">Actualizar retweets y likes de tweets de hoy</button>
             </mat-card-actions>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
     </div>
   </mat-drawer-content>

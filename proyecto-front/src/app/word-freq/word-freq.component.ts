@@ -56,7 +56,7 @@ export class WordFreqComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     var data = JSON.parse(localStorage.getItem('freqData'));
-    if(data['freqChartData'] != null) {
+    if(data != null) {
       this.freqChartData = data['freqChartData'];
       this.freqChartLabels = data['freqChartLabels'];
     }
@@ -64,8 +64,10 @@ export class WordFreqComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    var json = {'freqChartData': this.freqChartData, 'freqChartLabels': this.freqChartLabels};
-    localStorage.setItem('freqData', JSON.stringify(json));
+    if(localStorage.getItem('showingFreq') == 'true') {
+      var json = {'freqChartData': this.freqChartData, 'freqChartLabels': this.freqChartLabels};
+      localStorage.setItem('freqData', JSON.stringify(json));
+    }
   }
 
   

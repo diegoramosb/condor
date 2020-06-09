@@ -62,9 +62,7 @@ def show_favs_rts():
     userIds = []
     usage = []
     sumFavs = []
-    mediaFavs = []
     sumRts= []
-    mediaRts = []
     userNames = []
     for tweet in tweets:
 
@@ -125,7 +123,7 @@ def show_chart():
                 rtTotal = rtTotal + rt[i]
                 likeTotal = likeTotal + fav[i]
                 data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
-
+    #pprint(data.items())
     dataList = []
     for item in data.items():
         dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})

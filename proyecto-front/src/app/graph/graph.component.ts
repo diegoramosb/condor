@@ -47,8 +47,10 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngOnDestroy(): void {
-    var json = {'graphData': this.graphData};
-    localStorage.setItem('graphData', JSON.stringify(json));
+    if(localStorage.getItem('showingGraph') == 'true') {
+      var json = {'graphData': this.graphData};
+      localStorage.setItem('graphData', JSON.stringify(json));
+    }
   }
 
   private createChart(): void {   

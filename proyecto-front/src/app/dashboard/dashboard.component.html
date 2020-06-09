@@ -4,7 +4,6 @@
       <div class="col-sm">
         <div class="row justify-content-center">
           <h1>Cóndor</h1>
-
         </div>
         <div class="row justify-content-center">
           <button mat-flat-button routerLink="/tweets" style="background-color: #465775; color: white; margin-bottom: 2vh; margin-top:
@@ -35,6 +34,7 @@
               <h2 style="color: grey; text-align: center;" *ngIf="!showingHistoric">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="/config-historico" style="color: #465775;">Configurar</button>
+                <button mat-button (click)="resetChart('Historic')" style="color: #465775;">Reiniciar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -50,6 +50,7 @@
               </h2>
               <mat-card-actions>
                 <button mat-button routerLink="/config-grafo" style="color: #465775;">Configurar</button>
+                <button mat-button (click)="resetChart('Graph')" style="color: #465775;">Reiniciar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -66,6 +67,7 @@
               <h2 style="color: grey; text-align: center;" *ngIf="!showingBubble">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="config-burbuja" style="color: #465775;">Configurar</button>
+                <button mat-button (click)="resetChart('Bubble')" style="color: #465775;">Reiniciar</button>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -80,6 +82,7 @@
               <h2 style="color: grey; text-align: center;" *ngIf="!showingFreq">No has configurado el gráfico</h2>
               <mat-card-actions>
                 <button mat-button routerLink="config-frecuencia" style="color: #465775;">Configurar</button>
+                <button mat-button (click)="resetChart('Freq')" style="color: #465775;">Reiniciar</button>
               </mat-card-actions>
             </mat-card>
           </div>

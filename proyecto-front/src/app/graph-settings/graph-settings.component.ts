@@ -23,7 +23,7 @@ export class GraphSettingsComponent implements OnInit {
 
   graphHeight = (window.innerHeight * 100) / 100;
 
-  graphWidth = (window.innerWidth * 60) / 100;
+  graphWidth = (window.innerWidth * 70) / 100;
 
   ngOnInit(): void {
   }

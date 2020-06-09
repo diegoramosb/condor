@@ -34,6 +34,25 @@ export class DashboardComponent implements OnInit {
     return this.apiService.getAccounts();
   }
 
+  resetChart(name: string) {
+    var name2 = name.toLowerCase()
+    localStorage.setItem('showing' + name, 'false');
+    localStorage.removeItem(name2 + 'Filters');
+    localStorage.removeItem(name2 + 'Data');
+    if(name == "Historic") {
+      this.showingHistoric = false;
+    }
+    else if(name == "Bubble") {
+      this.showingBubble = false;
+    }
+    else if(name == "Graph") {
+      this.showingGraph = false;
+    }
+    else if(name == "Freq") {
+      this.showingFreq = false;
+    }
+  }
+
   openSettings() {
     this.getAccounts().subscribe((response: []) => {
       let accounts: string[] = response
@@ -51,7 +70,9 @@ export class DashboardComponent implements OnInit {
             );
           });
           if (result.newAccounts.length > 0) {
+            this.snackBar.open("Descargando tweets de las nuevas cuentas. Esto puede tardar unos segundos.", "Aceptar");
             this.apiService.extractTweets(result.newAccounts).subscribe(response => {
+              this.snackBar.dismiss()
               this.snackBar.open(`Descargados ${response['newTweets']} tweets de las nuevas cuentas`, "Aceptar");
             });
           }

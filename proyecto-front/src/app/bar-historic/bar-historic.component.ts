@@ -58,7 +58,9 @@ export class BarHistoricComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    var json = {'historicData': this.barChartData, 'historicLabels': this.barChartLabels};
-    localStorage.setItem('historicData', JSON.stringify(json));
+    if(localStorage.getItem('showingHistoric') == 'true') {
+      var json = {'historicData': this.barChartData, 'historicLabels': this.barChartLabels};
+      localStorage.setItem('historicData', JSON.stringify(json));
+    }
   }
 }

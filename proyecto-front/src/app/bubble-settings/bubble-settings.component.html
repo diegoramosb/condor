@@ -39,12 +39,7 @@
   <mat-drawer-content>
     <div class="container">
       <div class="row">
-        <div class="col-md-1">
-          <button mat-icon-button routerLink="" style="color: #465775; position: fixed">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class="filtersCard" style="margin-top: 10px;">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Filtros</mat-card-title>
@@ -99,11 +94,9 @@
             </mat-card-actions>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class="detailGraphCard">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Likes, retweets y número de tweets</mat-card-title>
@@ -111,7 +104,6 @@
             <app-bubble [bubbleChartData]="bubbleChartData"></app-bubble>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
     </div>
   </mat-drawer-content>

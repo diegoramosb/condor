@@ -49,6 +49,11 @@
     margin: 10px;
 }
 
+.tweetCardSmall {
+    width: 15vw;
+    margin: 5px
+}
+
 .tweetIconBig {
     width: 24px;
     height: 24px;

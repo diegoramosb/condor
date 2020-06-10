@@ -9,8 +9,13 @@ import { Label, Color } from 'ng2-charts';
 })
 export class WordFreqComponent implements OnInit, OnDestroy {
 
+  getHeight() {
+    return this.freqChartData[0].data.length * 30;
+  }
+
   public freqChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     legend: {
       display: false
     },
@@ -22,17 +27,8 @@ export class WordFreqComponent implements OnInit, OnDestroy {
         },
         ticks: {
           min: 0,
-
         }
-
-      }],
-      yAxes: [
-        {
-          ticks: {
-            min: 0
-          }
-        }
-      ]
+      }]
     }
   };
   public showing = false;

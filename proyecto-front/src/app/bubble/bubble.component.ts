@@ -1,13 +1,15 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { BaseChartDirective} from 'ng2-charts'
 
 @Component({
   selector: 'app-bubble',
   templateUrl: './bubble.component.html',
   styleUrls: ['../app.component.css']
 })
-export class BubbleComponent implements OnInit, OnDestroy {
+export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
 
   public bubbleChartOptions: ChartOptions = {
     responsive: true,
@@ -18,8 +20,6 @@ export class BubbleComponent implements OnInit, OnDestroy {
           labelString: "Retweets"
         },
         ticks: {
-          min: 0,
-
         }
       }],
       yAxes: [{
@@ -28,10 +28,24 @@ export class BubbleComponent implements OnInit, OnDestroy {
           labelString: "Likes"
         },
         ticks: {
-          min: 0,
-
+         
         }
       }]
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          var label = data.datasets[tooltipItem.datasetIndex].label || '';
+          if(label) {
+            label += " ";
+          }
+          var x = data.datasets[tooltipItem.datasetIndex].data[0]['x'];
+          var y = data.datasets[tooltipItem.datasetIndex].data[0]['y'];
+          var r = data.datasets[tooltipItem.datasetIndex].data[0]['z'];
+          label += "retweets: " + x + ", likes: " + y + ", tweets: " + r;
+          return label; 
+        }
+      }
     }
   };
   public bubbleChartType: ChartType = 'bubble';
@@ -55,6 +69,12 @@ export class BubbleComponent implements OnInit, OnDestroy {
 
   @Input() bubbleChartData: ChartDataSets[];
 
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective;
+
+  constructor() {
+    console.log(this.chart)
+  }
+
   ngOnInit() {
     var data = JSON.parse(localStorage.getItem('bubbleData'));
     if(data != null) {
@@ -68,3 +88,80 @@ export class BubbleComponent implements OnInit, OnDestroy {
       localStorage.setItem('bubbleData', JSON.stringify(json));
     }
   }
+
+  ngOnChanges() {
+    if(this.chart != undefined) {
+      this.chart.chart.config.options.scales.xAxes[0].ticks.min = 0;
+      this.chart.chart.config.options.scales.xAxes[0].ticks.max = this.maxX();
+      this.chart.chart.config.options.scales.yAxes[0].ticks.max = 0;
+      this.chart.chart.config.options.scales.yAxes[0].ticks.max = this.maxY();
+    }
+  } 
+  
+
+  minX() {
+    // var minX = Infinity;
+    // var maxR = 0;
+    // this.bubbleChartData.forEach(element => {
+    //   var x = element['data']['0']['x']
+    //   var r = element['data']['0']['r']
+    //   if(r >= maxR) {
+    //     maxR = r;
+    //   }
+    //   if(x <= minX) {
+    //     minX = x;
+    //   }
+    // });
+    // return minX - maxR;
+    return 0;
+  }
+
+  maxX() {
+    var maxX = 0;
+    var maxR = 0;
+    this.bubbleChartData.forEach(element => {
+      var x = element['data']['0']['x']
+      var r = element['data']['0']['z']
+      if(r >= maxR) {
+        maxR = r;
+      }
+      if(x >= maxX) {
+        maxX = x;
+      }
+    });
+    return (maxX + maxR);
+  }
+
+  minY() {
+    // var minY = Infinity;
+    // var maxR = 0;
+    // this.bubbleChartData.forEach(element => {
+    //   var x = element['data']['0']['y']
+    //   var r = element['data']['0']['r']
+    //   if(r >= maxR) {
+    //     maxR = r;
+    //   }
+    //   if(x <= minY) {
+    //     minY = x;
+    //   }
+    // });
+    // return minY - maxR;
+    return 0;
+  }
+
+  maxY() {
+    var maxY = 0;
+    var maxR = 0;
+    this.bubbleChartData.forEach(element => {
+      var x = element['data']['0']['y']
+      var r = element['data']['0']['z']
+      if(r >= maxR) {
+        maxR = r;
+      }
+      if(x >= maxY) {
+        maxY = x;
+      }
+    });
+    return (maxY + maxR);
+  }
+}

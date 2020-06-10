@@ -1,5 +1,5 @@
-<div style="position: relative;">
-  <canvas baseChart responsive=true mantainAspectRatio=false [datasets]="freqChartData" [options]="freqChartOptions"
+<div [ngStyle]="{'height.px': getHeight()}">
+  <canvas baseChart [datasets]="freqChartData" [options]="freqChartOptions"
     [legend]="freqChartLegend" [chartType]="freqChartType" [labels]="freqChartLabels" [colors]="freqChartColors"
     [plugins]="freqChartPlugins">
   </canvas>

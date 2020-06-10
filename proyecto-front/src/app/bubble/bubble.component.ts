@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color } from 'ng2-charts';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { BaseChartDirective} from 'ng2-charts'
 
 @Component({
@@ -19,17 +18,12 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
           display: true,
           labelString: "Retweets"
         },
-        ticks: {
-        }
       }],
       yAxes: [{
         scaleLabel: {
           display: true,
           labelString: "Likes"
         },
-        ticks: {
-         
-        }
       }]
     },
     tooltips: {

@@ -57,14 +57,15 @@ export class BubbleComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     var data = JSON.parse(localStorage.getItem('bubbleData'));
-    if(data != null) {
+    if (data != null) {
       this.bubbleChartData = data['bubbleData'];
     }
   }
 
   ngOnDestroy() {
-    if(localStorage.getItem('showingBubble') == 'true') {
+    if (localStorage.getItem('showingBubble') == 'true') {
       var json = {'bubbleData': this.bubbleChartData};
       localStorage.setItem('bubbleData', JSON.stringify(json));
     }
   }
+}

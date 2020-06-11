@@ -8,8 +8,7 @@ from tweepy import Stream
 import tweepy
 import json
 
-from flask import Blueprint, request
-
+from flask import Blueprint, request, abort
 
 from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne
 
@@ -36,15 +35,18 @@ def extractTweetsApi(accounts, number):
     :param nTweets: maximum number of tweets to extract from each account
     :return: dict array with the tweets
     """
+    try:
+        jsons = []
+        for id in accounts:
+            for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(number):
+                jsonStr = json.dumps(status._json)
+                parsed = json.loads(jsonStr)
+                jsons.append(parsed)
 
-    jsons = []
-    for id in accounts:
-        for status in tweepy.Cursor(api.user_timeline, screen_name=id, tweet_mode="extended").items(number):
-            jsonStr = json.dumps(status._json)
-            parsed = json.loads(jsonStr)
-            jsons.append(parsed)
+        return jsons
+    except Exception:
+        abort(500)
 
-    return jsons
 
 
 def extractTweetsSinceId(account, nTweets, id):
@@ -77,7 +79,7 @@ def lookup_user(screenName):
 
 class MyStreamListener(StreamListener):
     def on_status(self, status):
-
+        #pprint(status)
         is_ret = False
         is_account = False
 
@@ -102,7 +104,6 @@ class MyStreamListener(StreamListener):
                 print('nada')
         except Exception as e:
             print(e)
-
             print('error')
 
         return True

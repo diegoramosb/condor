@@ -21,7 +21,7 @@ export class BubbleSettingsComponent implements OnInit {
   public maxDate = moment();
 
   public bubbleChartData: ChartDataSets[] = [
-    { data: [], label: '' },
+    {data: [], label: ''}
   ];
 
   ngOnInit(): void {
@@ -74,21 +74,22 @@ export class BubbleSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-
       this.tweets = data['tweets'];
-
-      var x: number;
+      console.log(data)
       var info = [];
+      var x: number;
       var y: number;
       var r: number;
+      var z: number;
       data['bubbles'].forEach((element) => {
-        x = (element['data']['x'])
-        y = element['data']['y']
-        r = element['data']['z']
+        x = element['data']['x'];
+        y = element['data']['y'];
+        r = element['data']['w'];
+        z = element['data']['z']
 
-        info.push({ data: [{ x: x, y: y, r: r }], label: element['label'] })
+        info.push({ data: [{ x: x, y: y, r: r, z: z }], label: element['label'] });
       });
-      this.bubbleChartData = info
+      this.bubbleChartData = info;
 
       localStorage.setItem('showingBubble', "true");
       localStorage.setItem('bubbleFilters', JSON.stringify({

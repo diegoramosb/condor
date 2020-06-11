@@ -57,9 +57,7 @@ def show_favs_rts():
     userIds = []
     usage = []
     sumFavs = []
-    mediaFavs = []
     sumRts= []
-    mediaRts = []
     userNames = []
     for tweet in tweets:
 
@@ -80,13 +78,17 @@ def show_favs_rts():
 
             r = tweet['retweet_count']
             sumRts[userIds.index(tweet['userId'])] += r[-1]
-
+    
+    scaledUsage = []
+    if len(usage) > 0:
+        scaledUsage = [((40*(x - min(usage)) / (max(usage) - min(usage))) + 5) for x in usage]
+        
     for userId in userIds:
         usr = searchUserId(userId)
         for username in usr:
             userNames.append(username['name'])
 
-    o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
+    o = [{"x": x, "y": y, "z": z, "w": w} for x,y,z,w in zip(sumRts, sumFavs, usage, scaledUsage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
     users = get_tweets_with_its_user(tweets)
     n = [{"tweet": t, "user": u} for t, u in zip(tweets, users)]
@@ -118,6 +120,18 @@ def show_chart():
             # print(likes)
             # print(rts)
             for i in range(len(requests)):
+    #
+    #             timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
+    #             rtTotal = rtTotal + rt[i]
+    #             likeTotal = likeTotal + fav[i]
+    #             data[timeStr] = {"sum_rt": rtTotal, "sum_like": likeTotal}
+    # #pprint(data.items())
+    # dataList = []
+    # for item in data.items():
+    #     dataList.append({"time":item[0], "sum_rt": item[1]["sum_rt"], "sum_like": item[1]["sum_like"]})
+    # dataList = sorted(dataList,
+    # key=lambda x: datetime.strptime(x['time'], '%d/%m/%Y %H:%M'), reverse=False)
+
                 requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M') 
                 if requestTime not in requestTimes:
                     requestTimes.append(requestTime)
@@ -152,7 +166,7 @@ def show_chart():
 
     data = []
     for i in range(len(requestTimes)):
-        data.append({"time": requestTimes[i], "sum_like": sumRts2[i], "sum_rt": sumLikes2[i]})
+        data.append({"time": requestTimes[i], "sum_like": sumLikes2[i] , "sum_rt": sumRts2[i]})
 
 
     users = get_tweets_with_its_user(tweets)
@@ -179,13 +193,16 @@ def show_frecuencia():
     for tweet in n:
         words2 = tweet["tweets"]["text"].split(" ")
         processedWords = utils.remove_stop_words(utils.emoji(utils.signos(utils.https(utils.numbers(words2)))))
+        #pprint(processedWords)
         for word in processedWords:
-            if word.lower() not in words3:
-                words3.append(word.lower())
-                counts.append(1)
-            else:
-                index = words3.index(word.lower())
-                counts[index]+=1
+            if word != '':
+                if (word.lower() not in words3):
+                    words3.append(word.lower())
+                    counts.append(1)
+
+                else:
+                    index = words3.index(word.lower())
+                    counts[index] += 1
 
     ans = [{"_id": word, "count": count} for word, count in zip(words3, counts)]
 

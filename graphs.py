@@ -167,9 +167,9 @@ def show_chart():
 
     data = []
     for i in range(len(requestTimes)):
-        data.append({"time": requestTimes[i], "sum_like": sumRts2[i], "sum_rt": sumLikes2[i]})
+        data.append({"time": requestTimes[i], "sum_like": sumLikes2[i] , "sum_rt": sumRts2[i]})
 
-    
+
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
     return {"tweets": n, "data": data}
@@ -194,13 +194,16 @@ def show_frecuencia():
     for tweet in n:
         words2 = tweet["tweets"]["text"].split(" ")
         processedWords = utils.remove_stop_words(utils.emoji(utils.signos(utils.https(utils.numbers(words2)))))
+        #pprint(processedWords)
         for word in processedWords:
-            if word.lower() not in words3:
-                words3.append(word.lower())
-                counts.append(1)
-            else:
-                index = words3.index(word.lower())
-                counts[index]+=1
+            if word != '':
+                if (word.lower() not in words3):
+                    words3.append(word.lower())
+                    counts.append(1)
+
+                else:
+                    index = words3.index(word.lower())
+                    counts[index] += 1
 
     ans = [{"_id": word, "count": count} for word, count in zip(words3, counts)]
 

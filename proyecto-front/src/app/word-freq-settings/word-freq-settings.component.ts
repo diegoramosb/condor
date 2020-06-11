@@ -81,7 +81,7 @@ export class WordFreqSettingsComponent implements OnInit {
     var count = [];
     this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
       this.tweets = data['tweets'];
-
+      console.log(data['data'])
       data['data'].forEach(element => {
         words.push(element['_id'])
         count.push(element['count'])

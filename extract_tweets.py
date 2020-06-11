@@ -79,7 +79,7 @@ def lookup_user(screenName):
 
 class MyStreamListener(StreamListener):
     def on_status(self, status):
-        #pprint(status)
+
         is_ret = False
         is_account = False
 
@@ -89,17 +89,16 @@ class MyStreamListener(StreamListener):
         follow = []
         for a in return_accounts():
             follow.append(str(a['_id']))
-        #pprint(follow)
-        #pprint(status.user.id)
+
         if str(status.user.id) in follow:
             is_account = True
-            #pprint(is_account)
+
 
         try:
             if not is_ret and is_account is True:
                 result = model_stream([status.text])
                 saveTweetsMongoOne(status._json, result)
-                pprint('ok')
+
             else:
                 print('nada')
         except Exception as e:
@@ -119,11 +118,11 @@ def updateTweetsByAccount():
     follow = []
     for a in return_accounts():
         follow.append(str(a['_id']))
-    pprint(follow)
+
 
     try:
         tuits = myStream.filter(follow=follow)
-        pprint(tuits)
+
 
         return {}, 200
     except Exception as e:
@@ -136,5 +135,5 @@ def updateTweetsByAccount():
 def model_stream(tweet_text):
     pipeline = joblib.load(open('util/filename.joblib', 'rb'))
     result = pipeline.predict(tweet_text)
-    print(result[0])
+
     return result[0]

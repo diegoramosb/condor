@@ -66,7 +66,6 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
   constructor() {
-    console.log(this.chart)
   }
 
   ngOnInit() {

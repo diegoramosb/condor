@@ -83,13 +83,17 @@ def show_favs_rts():
 
             r = tweet['retweet_count']
             sumRts[userIds.index(tweet['userId'])] += r[-1]
-
+    
+    scaledUsage = []
+    if len(usage) > 0:
+        scaledUsage = [((40*(x - min(usage)) / (max(usage) - min(usage))) + 5) for x in usage]
+        
     for userId in userIds:
         usr = searchUserId(userId)
         for username in usr:
             userNames.append(username['name'])
 
-    o = [{"x": x, "y": y, "z": z} for x,y,z in zip(sumRts, sumFavs, usage)]
+    o = [{"x": x, "y": y, "z": z, "w": w} for x,y,z,w in zip(sumRts, sumFavs, usage, scaledUsage)]
     m = [{"label": l, "data": d} for l, d in zip(userNames, o)]
     users = get_tweets_with_its_user(tweets)
     n = [{"tweet": t, "user": u} for t, u in zip(tweets, users)]

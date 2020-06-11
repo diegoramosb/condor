@@ -7,7 +7,7 @@ import { map, startWith, debounce, debounceTime, switchMap } from 'rxjs/operator
 
 export interface DialogData {
   accounts: User[];
-  removedAccounts: number[];
+  removedAccounts: User[];
   newAccounts: string[];
 }
 
@@ -69,7 +69,7 @@ export class SettingsComponent implements OnInit {
   removeAccount(account: string) {
     for (var i = 0; i < this.data.accounts.length; i++) {
       if (this.data.accounts[i]['screen_name'] == account) {
-        this.data.removedAccounts.push(this.data.accounts[i]['_id']);
+        this.data.removedAccounts.push(this.data.accounts[i]);
         this.data.accounts.splice(i, 1);
       }
     }

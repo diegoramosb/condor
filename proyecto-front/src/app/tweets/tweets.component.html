@@ -65,8 +65,8 @@
           style="background-color: #465775; color: white; margin-bottom: 4vh;">
           Aplicar filtros
         </button>
-	  </div>
-	  <div class="row justify-content-center">
+      </div>
+      <div class="row justify-content-center">
         <button mat-flat-button (click)="removeFilters()" style="background-color: #465775; color: white;">
           Eiminar filtros
         </button>
@@ -76,13 +76,8 @@
   <mat-drawer-content>
     <div class="container">
       <div class="row">
-        <div class="col-md-2">
-          <button mat-icon-button routerLink="" style="color: #465775; position: fixed">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        <div class="col-md-8">
-          <cdk-virtual-scroll-viewport itemSize="200" style="height: 100vh; width: 60vw;">
+        <div class="col-md-12">
+          <cdk-virtual-scroll-viewport itemSize="164" style="height: 100vh; width: 75vw;">
             <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'P',
             'tweetCardNegative': tweet['tweet']['polarity'] == 'N', 
             'tweetCardNeutral': tweet['tweet']['polarity'] == 'NEU', 
@@ -128,9 +123,6 @@
               </mat-card-content>
             </mat-card>
           </cdk-virtual-scroll-viewport>
-        </div>
-        <div class="col-md-2">
-
         </div>
       </div>
     </div>

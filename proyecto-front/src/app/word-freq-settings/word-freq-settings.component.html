@@ -2,49 +2,46 @@
   <mat-drawer class="drawer" mode="side" opened>
     <div class="container">
       <div class="row">
-        <mat-card *ngFor="let tweet of tweets" class="tweetCardNone">
-          <mat-card-header>
-            <div mat-card-avatar>
-              <img matListAvatar style="border-radius: 50%;" src="{{tweet['user']['profile_image']}}">
-            </div>
-            <mat-card-title style="color: #465775">{{tweet['user']['name']}}</mat-card-title>
-            <mat-card-subtitle>@{{tweet['user']['screen_name']}}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p style="text-align: left;">
-              {{tweet['tweets']['text']}}
-            </p>
-            <div class="row" style="margin-left: 0.5vw;">
-              <div class="col-md-1">
-                <div class="row">
-                  <img src="../../assets/like.png" class="tweetIconBig">
-                  <p>{{tweet['tweets']['favorite_count'][tweet['tweets']['favorite_count'].length-1]}}</p>
+        <cdk-virtual-scroll-viewport itemSize="200" style="height: 96vh; width: 20vw;">
+          <mat-card *cdkVirtualFor="let tweet of tweets" class="tweetCardSmall">
+            <mat-card-header>
+              <div mat-card-avatar>
+                <img matListAvatar style="border-radius: 50%;" src="{{tweet['user']['profile_image']}}">
+              </div>
+              <mat-card-title style="color: #465775">{{tweet['user']['name']}}</mat-card-title>
+              <mat-card-subtitle>@{{tweet['user']['screen_name']}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p style="text-align: left;">
+                {{tweet['tweets']['text']}}
+              </p>
+              <div class="row" style="margin-left: 0.5vw;">
+                <div class="col-md-1">
+                  <div class="row">
+                    <img src="../../assets/like.png" class="tweetIconBig">
+                    <p>{{tweet['tweets']['favorite_count'][tweet['tweets']['favorite_count'].length-1]}}</p>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="row">
+                    <img src="../../assets/retweet.png" class="tweetIconBig">
+                    <p>{{tweet['tweets']['retweet_count'][tweet['tweets']['retweet_count'].length-1]}}</p>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-1">
-                <div class="row">
-                  <img src="../../assets/retweet.png" class="tweetIconBig">
-                  <p>{{tweet['tweets']['retweet_count'][tweet['tweets']['retweet_count'].length-1]}}</p>
-                </div>
+              <div class="row" style="margin-left: 0.5vw;">
+                <p>{{tweet['tweets']['date'] | date:'d/M/yy h:mm a'}}</p>
               </div>
-            </div>
-            <div class="row" style="margin-left: 0.5vw;">
-              <p>{{tweet['tweets']['date'] | date:'d/M/yy h:mm a'}}</p>
-            </div>
-          </mat-card-content>
-        </mat-card>
+            </mat-card-content>
+          </mat-card>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
   </mat-drawer>
   <mat-drawer-content>
     <div class="container">
       <div class="row">
-        <div class="col-md-1">
-          <button mat-icon-button routerLink="" style="color: #465775; position: fixed">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class="filtersCard" style="margin-top: 10px;">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Filtros</mat-card-title>
@@ -99,11 +96,9 @@
             </mat-card-actions>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <div class="col-md-12">
           <mat-card class="detailGraphCard">
             <mat-card-header>
               <mat-card-title style="color: #465775;">Frecuencia de las palabras relacionadas con la búsqueda
@@ -112,7 +107,6 @@
             <app-word-freq [freqChartData]="freqChartData" [freqChartLabels]="freqChartLabels"></app-word-freq>
           </mat-card>
         </div>
-        <div class="col-md-1"></div>
       </div>
     </div>
   </mat-drawer-content>

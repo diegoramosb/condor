@@ -20,6 +20,7 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(graph)
 app.register_blueprint(extract)
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 
 @app.route('/updateTweets', methods=['GET'])
@@ -123,8 +124,20 @@ def set_polarity():
 def search_user():
     return jsonify(lookup_user(request.args.get('screenName'))), 200
 
-if __name__ == '__main__':
 
+def register_error_handlers(app):
+    @app.errorhandler(500)
+    def internal_error(e):
+        return "500 error"
+    @app.errorhandler(404)
+    def not_found(e):
+        return "404  error"
+    @app.errorhandler(Exception)
+    def exception_handler(error):
+        return "!!!!" + repr(error)
+
+if __name__ == '__main__':
+    register_error_handlers(app)
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)
 
 

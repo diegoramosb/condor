@@ -74,9 +74,11 @@ def numbers(list):
     new_list = []
     for item in list:
         #array = re.findall(r'[0-9]+', item)
-        array = bool(re.search(r'\d', item))
+        array = re.search(r'\d', item)
+        #array = re.search(r'[0-9]+', item)
         #array = re.match(r"[a-zA-z]+", item)
-        if array is False:
+        pprint(array)
+        if array is None:
             new_list.append(item)
 
     #pprint(new_list)
@@ -87,12 +89,12 @@ def numbers(list):
 def signos(list):
     new_list = []
     for item in list:
-        array = re.sub(r"(?<!\d)[.,;:?¿!¡–-](?!\d)", " ", item, 0)
+        array = re.sub(r"(?<!\d)[.&,;:?'\"¿|!¡–\[\]-](?!\d)", "", item)
         # array = re.match(r"[a-zA-z]+", item)
-        if item in array:
-            new_list.append(item)
 
-    # pprint(new_list)
+        new_list.append(array)
+
+    #pprint(new_list)
     return new_list
 
 def https(list):

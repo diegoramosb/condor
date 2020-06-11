@@ -29,7 +29,7 @@ def remove_stop_words(list):
     #pprint(stopWords)
     union = []
 
-    with open('stopword.txt') as json_file:
+    with open('stopwords2.txt') as json_file:
         data = json.load(json_file)
         for p in data['words']:
             union.append(p)
@@ -77,7 +77,7 @@ def numbers(list):
         array = re.search(r'\d', item)
         #array = re.search(r'[0-9]+', item)
         #array = re.match(r"[a-zA-z]+", item)
-        pprint(array)
+
         if array is None:
             new_list.append(item)
 
@@ -89,7 +89,7 @@ def numbers(list):
 def signos(list):
     new_list = []
     for item in list:
-        array = re.sub(r"(?<!\d)[.&,;:?'\"¿|!¡–\[\]-](?!\d)", "", item)
+        array = re.sub(r"(?<!\d)[.&%,→;:?'\"¿|!¡–\[\]-](?!\d)", "", item)
         # array = re.match(r"[a-zA-z]+", item)
 
         new_list.append(array)

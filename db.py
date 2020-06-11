@@ -193,8 +193,8 @@ def saveTweetsMongo(tweets, result):
             cnt += 1
 
         except:
-            print('todo mal')
-            #print("{} already in DB".format(t['_id']))
+
+            print("{} already in DB".format(t['_id']))
 
         if (usersCollection.find_one({"_id": t['user']['id']})) is None:
             newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}

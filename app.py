@@ -20,7 +20,6 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(graph)
 app.register_blueprint(extract)
-app.config['PROPAGATE_EXCEPTIONS'] = True
 
 
 @app.route('/updateTweets', methods=['GET'])
@@ -36,8 +35,6 @@ def updateTweetsToday():
         if updated is not None:
             updatedTweets.append(updated)
     updateTweets(updatedTweets)
-    for t in updatedTweets:
-        print(t["id"])
     return {'nUpdated': len(updatedTweets)}, 200
 
 
@@ -60,7 +57,7 @@ def model(tweets):
     for t in tweets:
         tuits.append(t['full_text'])
     result = pipeline.predict(tuits)
-    print(result)
+
     return result
 
 
@@ -135,9 +132,9 @@ def register_error_handlers(app):
     @app.errorhandler(Exception)
     def exception_handler(error):
         return "!!!!" + repr(error)
-
+        #return "500 error"
 if __name__ == '__main__':
-    register_error_handlers(app)
+    #register_error_handlers(app)
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)
 
 

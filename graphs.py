@@ -65,8 +65,11 @@ def show_favs_rts():
     
     scaledUsage = []
     if len(usage) > 0:
-        scaledUsage = [((40*(x - min(usage)) / (max(usage) - min(usage))) + 5) for x in usage]
-        
+        if max(usage)- min(usage) != 0:
+            scaledUsage = [((40*(x - min(usage)) / (max(usage) - min(usage))) + 5) for x in usage]
+        else:
+            scaledUsage = [40 for x in usage]
+
     for userId in userIds:
         usr = searchUserId(userId)
         for username in usr:
@@ -100,9 +103,7 @@ def show_chart():
             requests = t['request_times']
             rts = t['retweet_count']
             likes = t['favorite_count']
-            pprint(requests)
-            # print(likes)
-            # print(rts)
+
             for i in range(len(requests)):
     #
     #             timeStr = requests[i].strftime("%d/%m/%Y %H:%M")
@@ -128,9 +129,6 @@ def show_chart():
 
     requestTimes = sorted(requestTimes, key= lambda x: x, reverse=False)
 
-    # print(requestTimes)
-    # print(sumLikes)
-    # print(sumRts)
 
     sumLikes2 = []
     sumRts2 = []
@@ -177,7 +175,7 @@ def show_frecuencia():
     for tweet in n:
         words2 = tweet["tweets"]["text"].split(" ")
         processedWords = utils.remove_stop_words(utils.emoji(utils.signos(utils.https(utils.numbers(words2)))))
-        #pprint(processedWords)
+
         for word in processedWords:
             if word != '':
                 if (word.lower() not in words3):
@@ -192,7 +190,7 @@ def show_frecuencia():
 
     ans2 = []
     for item in ans:
-        if item['count'] >= 2 and item['_id'] not in words:
+        if item['count'] >= 3 and item['_id'] not in words:
             ans2.append(item)
 
     return {"tweets": n, "data": ans2}

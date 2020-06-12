@@ -26,16 +26,16 @@ def list_to_json(lista):
 
 def remove_stop_words(list):
     stopWords = set(stopwords.words('spanish'))
-    #pprint(stopWords)
     union = []
+    file = open('stop-words.txt', 'r')
+    data = []
+    for p in file.readlines():
+        data.append(p.rstrip())
+    data.append(stopWords)
 
-    with open('stopwords2.txt') as json_file:
-        data = json.load(json_file)
-        for p in data['words']:
-            union.append(p)
-            union.append(stopWords)
+    file.close()
 
-    return([item for item in list if not item.lower() in union])
+    return([item for item in list if not item.lower() in data])
 
 
 class DateTimeEncoder(json.JSONEncoder):

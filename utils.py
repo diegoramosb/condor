@@ -27,7 +27,8 @@ def list_to_json(lista):
 def remove_stop_words(list):
     stopWords = set(stopwords.words('spanish'))
     union = []
-    file = open('stop-words.txt', 'r')
+    file = open('stop-words.txt', 'r', encoding='latin-1')
+    print(file)
     data = []
     for p in file.readlines():
         data.append(p.rstrip())

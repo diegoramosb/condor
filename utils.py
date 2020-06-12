@@ -89,9 +89,8 @@ def numbers(list):
 def signos(list):
     new_list = []
     for item in list:
-        array = re.sub(r"(?<!\d)[.&%,→;:?'\"¿|!¡–\[\]-](?!\d)", "", item)
+        array = re.sub(r"(?<!\d)[.&%,→;:?'\"¿|!¡“”’‘()…–\[\]-](?!\d)", "", item)
         # array = re.match(r"[a-zA-z]+", item)
-
         new_list.append(array)
 
     #pprint(new_list)

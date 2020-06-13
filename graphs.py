@@ -127,7 +127,7 @@ def show_chart():
                 sumRts[index] += rts[i]
                 sumLikes[index] += likes[i]
 
-    if sumLikes >0:
+    if len(sumLikes) >0:
         sumLikes2 = [sumLikes[0]]
         sumRts2 = [sumRts[0]]
         for i in range(1, len(requestTimes)):

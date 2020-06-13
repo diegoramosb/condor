@@ -1,21 +1,8 @@
-import parser
-
-import matplotlib.pyplot as plt
 from flask import Blueprint, request, jsonify
-import numpy as np
-from nltk.corpus import stopwords
-
 import utils
-import nltk
-
-from statistics import mean
 from db import *
-import json
-from itertools import combinations
-from math import sin, cos, pi
 import nltk
 
-from extract_tweets import searchTweetById, extractTweetsApi
 
 graph = Blueprint('graphs', __name__)
 nltk.download('stopwords')
@@ -98,12 +85,13 @@ def show_chart():
     requestTimes = []
     sumLikes = []
     sumRts = []
+
     for t in tweets: 
         requests = t['request_times']
         rts = t['retweet_count']
         likes = t['favorite_count']
 
-        for i in range(len(requests)):
+        for i in range(1, len(requests)):
             requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M') 
             if requestTime not in requestTimes:
                 if len(requestTimes) > 0:
@@ -113,6 +101,7 @@ def show_chart():
                             requestTimes[j+1] = requestTimes[j]
                             sumRts[j+1] = sumRts[j]
                             sumLikes[j+1] = sumLikes[j]
+
                         else: 
                             requestTimes.append(requestTimes[j])
                             sumRts.append(sumRts[j])
@@ -122,15 +111,18 @@ def show_chart():
                         requestTimes[j+1] = requestTime
                         sumRts[j+1] = rts[i]
                         sumLikes[j+1] = likes[i]
-                    else: 
+                    else:
                         requestTimes.append(requestTime)
                         sumRts.append(rts[i])
                         sumLikes.append(likes[i])
-                else: 
+
+                else:
+
                     requestTimes.append(requestTime)
                     sumRts.append(rts[i])
                     sumLikes.append(likes[i])
             else:
+
                 index = requestTimes.index(requestTime)
                 sumRts[index] += rts[i]
                 sumLikes[index] += likes[i]
@@ -149,6 +141,8 @@ def show_chart():
 
     users = get_tweets_with_its_user(tweets)
     n = [{"tweets": t, "user": u} for t, u in zip(tweets, users)]
+
+
     return {"tweets": n, "data": data}
 
 

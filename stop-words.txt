@@ -9,6 +9,8 @@
 8
 9
 _
+rt
+\n
 a
 actualmente
 acuerdo

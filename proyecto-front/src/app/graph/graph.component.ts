@@ -56,7 +56,7 @@ export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   private createChart(): void {   
     var element = this.chartContainer.nativeElement;
 
-    d3.selectAll('svg').remove();
+    d3.select(element).selectAll('svg').remove();
 
     var svg = d3.select(element)
       .append('svg')

@@ -1,20 +1,18 @@
 import pickle
 from datetime import datetime
-
 import joblib
 from flask import Flask, jsonify, request
-
+from flask_cors import CORS
+import logging, logging.config
 
 import utils
 
 from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
 
-from joblib import load
 from extract_tweets import searchTweetById, extractTweetsApi, extract, lookup_user, updateTweetsByAccount
 from util.Preprocessor import Preprocessor
 from graphs import graph
-from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -109,7 +107,6 @@ def filters_db():
     tweets_response = utils.list_to_json(o)
 
     return utils.JSONResponse(tweets_response)
-    #return {}, 200
 
 
 @app.route('/setPolarity', methods=['PUT'])
@@ -123,18 +120,32 @@ def search_user():
 
 
 def register_error_handlers(app):
+
     @app.errorhandler(500)
     def internal_error(e):
-        return "500 error"
+        logging.exception(e)
+        return "500 error", 500
+
     @app.errorhandler(404)
     def not_found(e):
-        return "404  error"
+        logging.error(e)
+        return "404  error", 404
+
     @app.errorhandler(Exception)
     def exception_handler(error):
-        return "!!!!" + repr(error)
-        #return "500 error"
+        logging.exception(error)
+        return {"error": repr(error)}, 500
 if __name__ == '__main__':
-    #register_error_handlers(app)
+    register_error_handlers(app)
+
+    logging.basicConfig(
+        level = logging.INFO,
+        format= "%(asctime)s [%(levelname)s] %(message)s",
+        handlers = [
+            logging.FileHandler('{}.log'.format(datetime.today().strftime('%Y-%m-%d'))),
+            logging.StreamHandler()
+        ]
+    )
     app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)
 
 

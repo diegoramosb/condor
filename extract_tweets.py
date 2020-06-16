@@ -1,14 +1,12 @@
 from datetime import datetime, timedelta
 from pprint import pprint
-
 import joblib
 from tweepy import StreamListener
 from tweepy import Stream
-
 import tweepy
 import json
-
-from flask import Blueprint, request, abort
+from flask import Blueprint, request
+import logging
 
 from db import return_accounts, saveTweetsMongo, saveTweetsMongoOne
 
@@ -44,8 +42,8 @@ def extractTweetsApi(accounts, number):
                 jsons.append(parsed)
 
         return jsons
-    except Exception:
-        abort(500)
+    except Exception as e:
+        logging.exception(e)
 
 
 
@@ -98,10 +96,10 @@ class MyStreamListener(StreamListener):
                 result = model_stream([status.text])
                 saveTweetsMongoOne(status, result)
             else:
-                print('nada')
+                logging.info('running')
 
         except Exception as e:
-            print(e)
+            logging.exception(e)
             print('error')
 
         return True
@@ -123,10 +121,11 @@ def updateTweetsByAccount():
         return {}, 200
 
     except Exception as e:
-        print(e)
         if str(e) == "Stream object already connected!":
             return {}, 200
-        else: return {}, 500
+        else: 
+            logging.exception(e)
+            return {}, 500
 
 
 def model_stream(tweet_text):

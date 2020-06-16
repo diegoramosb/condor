@@ -73,27 +73,20 @@ def is_date(string, fuzzy=False):
 def numbers(list):
     new_list = []
     for item in list:
-        #array = re.findall(r'[0-9]+', item)
         array = re.search(r'\d', item)
-        #array = re.search(r'[0-9]+', item)
-        #array = re.match(r"[a-zA-z]+", item)
 
         if array is None:
             new_list.append(item)
 
-    #pprint(new_list)
     return new_list
 
-    # Driver code
 
 def signos(list):
     new_list = []
     for item in list:
         array = re.sub(r"(?<!\d)[.&%,→;:?'\"¿|!¡“”’‘()…–\[\]-](?!\d)", "", item)
-        # array = re.match(r"[a-zA-z]+", item)
         new_list.append(array)
 
-    #pprint(new_list)
     return new_list
 
 def https(list):

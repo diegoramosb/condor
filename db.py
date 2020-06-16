@@ -5,6 +5,7 @@ from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 from dateutil import parser
+import logging
 
 from utils import isAccount
 
@@ -206,7 +207,6 @@ def saveTweetsMongoOne(t, result):
     :param collection: MongoDB collection object
     :param tweets: tweets to save
     """
-    #t['_id'] = t.id
 
     date = t.created_at -  timedelta(hours=5)
     newuser = {'_id': t.user.id, 'name': t.user.name, 'screen_name': t.user.screen_name,
@@ -224,7 +224,6 @@ def saveTweetsMongoOne(t, result):
             'request_times': [datetime.now()],
             'polarity': result
         }
-        #pprint(t['_id'])
         print('try', newTweet)
         return insert_tweet_mongo(newTweet, newuser)
 
@@ -249,14 +248,11 @@ def insert_tweet_mongo(tuit, user):
     success = False
     try:
         tweetsCollection.insert_one(tuit)
-        print("Added: {}".format(tuit['_id']))
-        # print(newTweet['text'])
+        logging.info("Added: {}".format(tuit['_id']))
         print(tuit)
         success = True
     except DuplicateKeyError:
-        print("{} already in DB".format(tuit['_id']))
-    if (usersCollection.find_one({"_id": tuit['userId']})) is None:
-        usersCollection.insert_one(user)
+        logging.info("{} already in DB".format(tuit['_id']))
     return (success)
 
 def updateTweets(tweets):

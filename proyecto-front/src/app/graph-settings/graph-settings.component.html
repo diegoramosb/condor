@@ -71,6 +71,7 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
+                  <p style="font-size: smaller; color: red;" *ngIf="selectedAccounts.length == 1">Si vas a filtrar por cuentas, debes elegir al menos dos</p>
                   <mat-list>
                     <mat-list-item *ngFor="let account of selectedAccounts">
                       <div mat-line>@{{account}}</div>
@@ -92,7 +93,7 @@
               </div>
             </div>
             <mat-card-actions>
-              <button mat-button (click)="applyFilters()" style="color: #465775;">Aplicar filtros</button>
+              <button mat-button [disabled]="selectedAccounts.length == 1" (click)="applyFilters()" [ngStyle]="{'color': (selectedAccounts.length != 1) ? '#465775': 'grey'}" [disabled]="selectedAccounts.length == 1">Aplicar filtros</button>
             </mat-card-actions>
           </mat-card>
         </div>

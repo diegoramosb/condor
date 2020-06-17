@@ -102,9 +102,8 @@ export class WordFreqSettingsComponent implements OnInit {
     var words = [];
     var count = [];
     this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
-      if(data['data'].length > 0) {
-        this.tweets = data['tweets'];
-  
+      this.tweets = data['tweets'];
+      if(data['tweets'].length > 0) {
         data['data'].forEach(element => {
           words.push(element['_id'])
           count.push(element['count'])
@@ -120,7 +119,7 @@ export class WordFreqSettingsComponent implements OnInit {
         }));
       }
       else { 
-        localStorage.setItem('showingHistoric', 'false')
+        localStorage.setItem('showingFreq', 'false')
         this.showChart = false;
       }
     });

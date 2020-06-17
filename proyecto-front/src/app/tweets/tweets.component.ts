@@ -2,19 +2,40 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import * as moment from 'moment';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'D/M/YYYY'
+  },
+  display: {
+    dateInput: 'D/M/YYYY'
+  }
+}
 
 @Component({
   selector: 'app-tweets',
   templateUrl: './tweets.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
+  ]
 })
+
 export class TweetsComponent implements OnInit {
 
+  public showTweets = true;
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
   public tweets = [];
-  public accounts: any;
+  public accounts = [];
 
   public maxDate = moment();
   positive = true;
@@ -24,14 +45,14 @@ export class TweetsComponent implements OnInit {
 
 
   constructor(private apiService: ApiService) {
-    this.apiService.getAccounts().subscribe(response => {
+    this.apiService.getAccounts().subscribe((response: []) => {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('tweetFilters'));
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
-      this.selectedDate = filterData.date != "null"? moment(filterData.date, "YYYY-MM-DD"): null;
+      this.selectedDate = filterData.date != "null" ? moment(filterData.date, "YYYY-MM-DD") : null;
       this.positive = filterData.positive;
       this.negative = filterData.negative;
       this.neutral = filterData.neutral;
@@ -80,7 +101,7 @@ export class TweetsComponent implements OnInit {
 
   setPolarity(tweetId: string, polarity: string) {
     this.apiService.setPolarity(tweetId, polarity).subscribe(response => {
-      if(localStorage.getItem('tweetFilters') != null) {
+      if (localStorage.getItem('tweetFilters') != null) {
         this.applyFilters();
       }
       else {
@@ -91,36 +112,47 @@ export class TweetsComponent implements OnInit {
 
   getTweets() {
     this.apiService.getTweets().subscribe((response: []) => {
-      this.tweets = response;
+      if (response.length > 0) {
+        this.tweets = response;
+      }
+      else {
+        this.showTweets = false;
+      }
     })
   }
 
   applyFilters() {
     var selectedPolarities = [];
-    if(this.positive) {
+    if (this.positive) {
       selectedPolarities.push("P")
     }
-    if(this.negative) {
+    if (this.negative) {
       selectedPolarities.push("N")
     }
-    if(this.neutral) {
+    if (this.neutral) {
       selectedPolarities.push("NEU")
     }
-    if(this.none) {
+    if (this.none) {
       selectedPolarities.push("NONE")
     }
     this.apiService.getTweetsFilters(this.selectedWords, this.selectedAccounts, this.selectedDate, selectedPolarities).subscribe((response: []) => {
-      this.tweets = response;
+      if (response.length > 0) {
+        this.tweets = response;
+        this.showTweets = true;
+        localStorage.setItem('tweetFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null',
+          'positive': this.positive,
+          'negative': this.negative,
+          'neutral': this.neutral,
+          'none': this.none,
+        }));
+      }
+      else {
+        this.showTweets = false;
+      }
     });
-    localStorage.setItem('tweetFilters', JSON.stringify({
-      'words': this.selectedWords,
-        'accounts': this.selectedAccounts,
-        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null',
-        'positive': this.positive,
-        'negative': this.negative,
-        'neutral': this.neutral,
-        'none': this.none,
-    }));
   }
 
   removeFilters() {

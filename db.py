@@ -19,7 +19,7 @@ usersCollection = db['usuarios']
 
 
 def return_accounts():
-    return usersCollection.find()
+    return list(usersCollection.find())
 
 def return_tweets():
     return list(tweetsCollection.find().sort([('date', -1)]))
@@ -137,15 +137,50 @@ def saveTweetsMongo(tweets, result):
     """
     cnt = 0
 
-    for t in tweets:
-        t['_id'] = t['id']
+    is_ret = False
+    is_account = False
 
-        date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y') - timedelta(hours=5)
+    if hasattr(tweets, 'retweeted_status'):
+        is_ret = True
 
+    if is_ret is False:
+        for t in tweets:
 
-        if t['entities'] is None:
-            if t['entities']['media'] is None:
+            t['_id'] = t['id']
 
+            date = datetime.strptime(t['created_at'], '%a %b %d %H:%M:%S %z %Y') - timedelta(hours=5)
+
+            if t['entities'] is None:
+                if t['entities']['media'] is None:
+
+                    newTweet = {
+                        '_id': t['id'],
+                        'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                        'text': t['full_text'],
+                        'date': date,
+                        'userId': t['user']['id'],
+                        'retweet_count': [t['retweet_count']],
+                        'favorite_count': [t['favorite_count']],
+                        'request_times': [datetime.now()],
+                        'polarity': result[tweets.index(t)]
+                    }
+
+                else:
+
+                    media = t['entities']['media'][0]['media_url']
+                    newTweet = {
+                        '_id': t['id'],
+                        'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
+                        'text': t['full_text'],
+                        'media_link': media,
+                        'date': date,
+                        'userId': t['user']['id'],
+                        'retweet_count': [t['retweet_count']],
+                        'favorite_count': [t['favorite_count']],
+                        'request_times': [datetime.now()],
+                        'polarity': result[tweets.index(t)]
+                    }
+            else:
                 newTweet = {
                     '_id': t['id'],
                     'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
@@ -156,47 +191,20 @@ def saveTweetsMongo(tweets, result):
                     'favorite_count': [t['favorite_count']],
                     'request_times': [datetime.now()],
                     'polarity': result[tweets.index(t)]
-            }
+                }
+            try:
 
-            else:
+                tweetsCollection.insert_one(newTweet)
+                logging.info("Added: {}".format(t['_id']))
+                cnt += 1
 
-                media = t['entities']['media'][0]['media_url']
-                newTweet = {
-                    '_id': t['id'],
-                    'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
-                    'text': t['full_text'],
-                    'media_link': media,
-                    'date': date,
-                    'userId': t['user']['id'],
-                    'retweet_count': [t['retweet_count']],
-                    'favorite_count': [t['favorite_count']],
-                    'request_times': [datetime.now()],
-                    'polarity':result[tweets.index(t)]
-            }
-        else:
-            newTweet = {
-                '_id': t['id'],
-                'url': 'twitter.com/{}/status/{}'.format(t['user']['screen_name'], t['id']),
-                'text': t['full_text'],
-                'date': date,
-                'userId': t['user']['id'],
-                'retweet_count': [t['retweet_count']],
-                'favorite_count': [t['favorite_count']],
-                'request_times': [datetime.now()],
-                'polarity': result[tweets.index(t)]
-            }
-        try:
+            except:
+                logging.info("{} already in DB".format(t['_id']))
 
-            tweetsCollection.insert_one(newTweet)
-            logging.info("Added: {}".format(t['_id']))
-            cnt += 1
-
-        except:
-            logging.info("{} already in DB".format(t['_id']))
-
-        if (usersCollection.find_one({"_id": t['user']['id']})) is None:
-            newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
-            usersCollection.insert_one(newuser)
+            if (usersCollection.find_one({"_id": t['user']['id']})) is None:
+                newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'],
+                           'profile_image': t['user']['profile_image_url_https']}
+                usersCollection.insert_one(newuser)
     return(cnt)
 
 

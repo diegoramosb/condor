@@ -59,13 +59,9 @@ def model(tweets):
     return result
 
 
-
-
 @app.route('/getAccounts', methods=['GET'])
 def getAccounts():
-    accounts = return_accounts()
-    accounts_response = utils.list_to_json(accounts)
-    return utils.JSONResponse(accounts_response)
+    return jsonify(return_accounts())
 
 
 @app.route('/tweets', methods=['GET'])
@@ -77,9 +73,7 @@ def get_all_tweets():
         users.append(searchUserId(t['userId']))
     #merged_list = tuple(zip(users, tweets))
     o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-    tweets_response = utils.list_to_json(o)
-
-    return utils.JSONResponse(tweets_response)
+    return jsonify(o)
 
 
 @app.route('/unsubscribe', methods=['DELETE'])
@@ -104,9 +98,7 @@ def filters_db():
         t["_id"] = str(t["_id"])
         users.append(searchUserId(t['userId']))
     o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
-    tweets_response = utils.list_to_json(o)
-
-    return utils.JSONResponse(tweets_response)
+    return jsonify(o)
 
 
 @app.route('/setPolarity', methods=['PUT'])

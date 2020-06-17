@@ -90,7 +90,7 @@ def show_chart():
         requests = t['request_times']
         rts = t['retweet_count']
         likes = t['favorite_count']
-        if rts == 0 and likes == 0:
+        if rts[0] == 0 and likes[0] == 0:
             for i in range(1, len(requests)):
                 requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M')
                 if requestTime not in requestTimes:

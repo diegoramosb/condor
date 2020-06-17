@@ -103,7 +103,8 @@
             <mat-card-header>
               <mat-card-title style="color: #465775;">Relaciones entre varias cuentas</mat-card-title>
             </mat-card-header>
-            <app-graph [graphData]="graphData" [height]="graphHeight" [width]="graphWidth"></app-graph>
+            <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+            <app-graph *ngIf="showChart" [graphData]="graphData" [height]="graphHeight" [width]="graphWidth"></app-graph>
           </mat-card>
         </div>
       </div>

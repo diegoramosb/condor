@@ -30,6 +30,7 @@ export const DATE_FORMAT = {
 
 export class TweetsComponent implements OnInit {
 
+  public loading: boolean;
   public showTweets = true;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -111,6 +112,7 @@ export class TweetsComponent implements OnInit {
   }
 
   getTweets() {
+    this.loading = true;
     this.apiService.getTweets().subscribe((response: []) => {
       if (response.length > 0) {
         this.tweets = response;
@@ -118,6 +120,7 @@ export class TweetsComponent implements OnInit {
       else {
         this.showTweets = false;
       }
+      this.loading = false;
     })
   }
 
@@ -135,6 +138,7 @@ export class TweetsComponent implements OnInit {
     if (this.none) {
       selectedPolarities.push("NONE")
     }
+    this.loading = true;
     this.apiService.getTweetsFilters(this.selectedWords, this.selectedAccounts, this.selectedDate, selectedPolarities).subscribe((response: []) => {
       if (response.length > 0) {
         this.tweets = response;
@@ -152,6 +156,7 @@ export class TweetsComponent implements OnInit {
       else {
         this.showTweets = false;
       }
+      this.loading = false;
     });
   }
 

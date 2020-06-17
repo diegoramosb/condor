@@ -90,44 +90,82 @@ def show_chart():
         requests = t['request_times']
         rts = t['retweet_count']
         likes = t['favorite_count']
+        if rts == 0 and likes == 0:
+            for i in range(1, len(requests)):
+                requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M')
+                if requestTime not in requestTimes:
 
-        for i in range(1, len(requests)):
-            requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M') 
-            if requestTime not in requestTimes:
-                if len(requestTimes) > 0:
-                    j = len(requestTimes) - 1
-                    while j >= 0 and requestTime < requestTimes[j]:
-                        if j+1 < len(requestTimes):
-                            requestTimes[j+1] = requestTimes[j]
-                            sumRts[j+1] = sumRts[j]
-                            sumLikes[j+1] = sumLikes[j]
+                    if len(requestTimes) > 0:
+                        j = len(requestTimes) - 1
+                        while j >= 0 and requestTime < requestTimes[j]:
+                            if j + 1 < len(requestTimes):
+                                requestTimes[j + 1] = requestTimes[j]
+                                sumRts[j + 1] = sumRts[j]
+                                sumLikes[j + 1] = sumLikes[j]
 
-                        else: 
-                            requestTimes.append(requestTimes[j])
-                            sumRts.append(sumRts[j])
-                            sumLikes.append(sumLikes[j])
-                        j-=1
-                    if j+1 < len(requestTimes):
-                        requestTimes[j+1] = requestTime
-                        sumRts[j+1] = rts[i]
-                        sumLikes[j+1] = likes[i]
+                            else:
+                                requestTimes.append(requestTimes[j])
+                                sumRts.append(sumRts[j])
+                                sumLikes.append(sumLikes[j])
+                            j -= 1
+                        if j + 1 < len(requestTimes):
+                            requestTimes[j + 1] = requestTime
+                            sumRts[j + 1] = rts[i]
+                            sumLikes[j + 1] = likes[i]
+                        else:
+                            requestTimes.append(requestTime)
+                            sumRts.append(rts[i])
+                            sumLikes.append(likes[i])
+
                     else:
+
                         requestTimes.append(requestTime)
                         sumRts.append(rts[i])
                         sumLikes.append(likes[i])
-
                 else:
 
-                    requestTimes.append(requestTime)
-                    sumRts.append(rts[i])
-                    sumLikes.append(likes[i])
-            else:
+                    index = requestTimes.index(requestTime)
+                    sumRts[index] += rts[i]
+                    sumLikes[index] += likes[i]
+        else:
+            for i in range(len(requests)):
+                requestTime = datetime.strftime(requests[i], '%d/%m/%Y %H:%M')
+                if requestTime not in requestTimes:
 
-                index = requestTimes.index(requestTime)
-                sumRts[index] += rts[i]
-                sumLikes[index] += likes[i]
+                    if len(requestTimes) > 0:
+                        j = len(requestTimes) - 1
+                        while j >= 0 and requestTime < requestTimes[j]:
+                            if j + 1 < len(requestTimes):
+                                requestTimes[j + 1] = requestTimes[j]
+                                sumRts[j + 1] = sumRts[j]
+                                sumLikes[j + 1] = sumLikes[j]
 
-    if len(sumLikes) >0:
+                            else:
+                                requestTimes.append(requestTimes[j])
+                                sumRts.append(sumRts[j])
+                                sumLikes.append(sumLikes[j])
+                            j -= 1
+                        if j + 1 < len(requestTimes):
+                            requestTimes[j + 1] = requestTime
+                            sumRts[j + 1] = rts[i]
+                            sumLikes[j + 1] = likes[i]
+                        else:
+                            requestTimes.append(requestTime)
+                            sumRts.append(rts[i])
+                            sumLikes.append(likes[i])
+
+                    else:
+
+                        requestTimes.append(requestTime)
+                        sumRts.append(rts[i])
+                        sumLikes.append(likes[i])
+                else:
+
+                    index = requestTimes.index(requestTime)
+                    sumRts[index] += rts[i]
+                    sumLikes[index] += likes[i]
+
+    if len(sumLikes) > 0:
         sumLikes2 = [sumLikes[0]]
         sumRts2 = [sumRts[0]]
         for i in range(1, len(requestTimes)):
@@ -136,7 +174,7 @@ def show_chart():
 
     data = []
     for i in range(len(requestTimes)):
-        data.append({"time": requestTimes[i], "sum_like": sumLikes2[i] , "sum_rt": sumRts2[i]})
+        data.append({"time": requestTimes[i], "sum_like": sumLikes2[i], "sum_rt": sumRts2[i]})
 
 
     users = get_tweets_with_its_user(tweets)

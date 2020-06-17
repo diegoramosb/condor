@@ -33,6 +33,7 @@ export const DATE_FORMAT = {
 
 export class BarHistoricSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -103,6 +104,7 @@ export class BarHistoricSettingsComponent implements OnInit {
     var labels = [];
     var likes = [];
     var retweets = [];
+    this.loading = true;
     this.apiService.getHistoricData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
       this.tweets = data['tweets'];
       if(data['tweets'].length > 0) {
@@ -113,6 +115,7 @@ export class BarHistoricSettingsComponent implements OnInit {
         });
         this.barChartLabels = labels;
         this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
+        console.log(this.barChartLabels)
         
         localStorage.setItem('showingHistoric', "true");
         this.showChart = true;
@@ -126,6 +129,7 @@ export class BarHistoricSettingsComponent implements OnInit {
         localStorage.setItem('showingHistoric', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
   }
 
@@ -135,6 +139,9 @@ export class BarHistoricSettingsComponent implements OnInit {
       this.applyFilters();
       this.snackBar.dismiss();
       this.snackBar.open("Retweets y likes de hoy actualizados.", "Aceptar")
+    },
+    error => {
+      this.snackBar.open("Error de conexión", "Aceptar")
     });
   }
 }

@@ -10,6 +10,8 @@
             <mat-label class="detailFormLabel">Buscar palabras</mat-label>
             <input matInput #wordInput (keyup.enter)="addWord(wordInput.value)">
           </mat-form-field>
+        </div>
+        <div class="row">
           <mat-list>
             <mat-list-item *ngFor="let word of selectedWords">
               <div mat-line style="align-self:flex-start;">{{word}}</div>
@@ -28,6 +30,8 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
+        <div class="row">
           <mat-list>
             <mat-list-item *ngFor="let account of selectedAccounts">
               <div mat-line style="align-self:flex-start;">@{{account}}</div>
@@ -46,7 +50,9 @@
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
-        <h2 style="text-align: left; color: #465775;">Polaridad</h2>
+        <div class="row">
+          <h2 style="text-align: left; color: #465775;">Polaridad</h2>
+        </div>
         <div class="row">
           <mat-checkbox [(ngModel)]="positive">positiva</mat-checkbox>
         </div>
@@ -77,7 +83,8 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <cdk-virtual-scroll-viewport itemSize="164" style="height: 100vh; width: 75vw;">
+          <h2 *ngIf="!showTweets" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+          <cdk-virtual-scroll-viewport *ngIf="showTweets" itemSize="164" style="height: 100vh; width: 75vw;">
             <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'P',
             'tweetCardNegative': tweet['tweet']['polarity'] == 'N', 
             'tweetCardNeutral': tweet['tweet']['polarity'] == 'NEU', 

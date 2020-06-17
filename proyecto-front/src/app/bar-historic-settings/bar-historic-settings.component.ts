@@ -5,13 +5,32 @@ import { ApiService } from '../api.service';
 import { Label } from 'ng2-charts';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'D/M/YYYY'
+  },
+  display: {
+    dateInput: 'D/M/YYYY'
+  }
+}
 
 @Component({
   selector: 'app-bar-historic-settings',
   templateUrl: './bar-historic-settings.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
+  ]
 })
+
 export class BarHistoricSettingsComponent implements OnInit {
 
   public showChart: boolean;

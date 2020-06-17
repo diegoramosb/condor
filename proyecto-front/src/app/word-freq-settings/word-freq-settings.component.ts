@@ -33,6 +33,7 @@ export const DATE_FORMAT = {
 
 export class WordFreqSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -101,6 +102,7 @@ export class WordFreqSettingsComponent implements OnInit {
   applyFilters() {
     var words = [];
     var count = [];
+    this.loading = true;
     this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
       this.tweets = data['tweets'];
       if(data['tweets'].length > 0) {
@@ -122,6 +124,7 @@ export class WordFreqSettingsComponent implements OnInit {
         localStorage.setItem('showingFreq', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
   }
 }

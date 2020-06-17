@@ -30,6 +30,7 @@ export const DATE_FORMAT = {
 
 export class GraphSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -96,6 +97,7 @@ export class GraphSettingsComponent implements OnInit {
   }
 
   applyFilters() {
+    this.loading = true;
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
       this.tweets = data['tweets'];
       if (data['tweets'].length > 0) {
@@ -112,6 +114,7 @@ export class GraphSettingsComponent implements OnInit {
         localStorage.setItem('showingGraph', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
   }
 }

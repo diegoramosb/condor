@@ -83,7 +83,8 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2 *ngIf="!showTweets" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+          <h2 *ngIf="!showTweets && accounts.length > 0" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+          <h2 *ngIf="!showTweets && accounts.length == 0" class="noContentMessage">No hay cuentas en la base de datos, sigue algunas para ver sus tweets</h2>
           <cdk-virtual-scroll-viewport *ngIf="showTweets" itemSize="164" style="height: 100vh; width: 75vw;">
             <mat-card [ngClass]="{'tweetCardPositive': tweet['tweet']['polarity'] == 'P',
             'tweetCardNegative': tweet['tweet']['polarity'] == 'N', 

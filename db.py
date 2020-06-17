@@ -21,7 +21,7 @@ usersCollection = db['usuarios']
 
 
 def return_accounts():
-    return usersCollection.find()
+    return list(usersCollection.find())
 
 def return_tweets():
     return list(tweetsCollection.find().sort([('date', -1)]))

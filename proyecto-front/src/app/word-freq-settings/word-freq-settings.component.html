@@ -104,8 +104,13 @@
               <mat-card-title style="color: #465775;">Frecuencia de las palabras relacionadas con la búsqueda
               </mat-card-title>
             </mat-card-header>
-            <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
-            <app-word-freq *ngIf="showChart" [freqChartData]="freqChartData" [freqChartLabels]="freqChartLabels"></app-word-freq>
+            <div class="row justify-content-center" *ngIf ="loading">
+              <mat-progress-bar mode="indeterminate" style="margin-top: 40vh; margin-bottom: 40vh; width: 40vw;"></mat-progress-bar>
+            </div>
+            <div [hidden]="loading">
+              <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+              <app-word-freq *ngIf="showChart" [freqChartData]="freqChartData" [freqChartLabels]="freqChartLabels"></app-word-freq>
+            </div>
           </mat-card>
         </div>
       </div>

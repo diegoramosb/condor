@@ -188,14 +188,13 @@ def saveTweetsMongo(tweets, result):
                 'polarity': result[tweets.index(t)]
             }
         try:
-            print(newTweet)
+
             tweetsCollection.insert_one(newTweet)
-            print("Added: {}".format(t['_id']))
+            logging.info("Added: {}".format(t['_id']))
             cnt += 1
 
         except:
-
-            print("{} already in DB".format(t['_id']))
+            logging.info("{} already in DB".format(t['_id']))
 
         if (usersCollection.find_one({"_id": t['user']['id']})) is None:
             newuser = {'_id': t['user']['id'], 'name': t['user']['name'], 'screen_name': t['user']['screen_name'], 'profile_image':  t['user']['profile_image_url_https']}
@@ -226,7 +225,7 @@ def saveTweetsMongoOne(t, result):
             'request_times': [datetime.now()],
             'polarity': result
         }
-        print('try', newTweet)
+
         return insert_tweet_mongo(newTweet, newuser)
 
     except AttributeError:
@@ -241,7 +240,7 @@ def saveTweetsMongoOne(t, result):
             'request_times': [datetime.now()],
             'polarity': result
         }
-        print('except', newTweet)
+
         return insert_tweet_mongo(newTweet, newuser)
 
 

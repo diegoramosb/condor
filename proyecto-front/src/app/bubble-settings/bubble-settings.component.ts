@@ -11,6 +11,7 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class BubbleSettingsComponent implements OnInit {
 
+  public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
@@ -32,6 +33,7 @@ export class BubbleSettingsComponent implements OnInit {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('bubbleFilters'));
+    this.showChart = localStorage.getItem('showingBubble') == 'true' ? true : false;
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
@@ -74,29 +76,35 @@ export class BubbleSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      this.tweets = data['tweets'];
-
-      var info = [];
-      var x: number;
-      var y: number;
-      var r: number;
-      var z: number;
-      data['bubbles'].forEach((element) => {
-        x = element['data']['x'];
-        y = element['data']['y'];
-        r = element['data']['w'];
-        z = element['data']['z']
-
-        info.push({ data: [{ x: x, y: y, r: r, z: z }], label: element['label'] });
-      });
-      this.bubbleChartData = info;
-
-      localStorage.setItem('showingBubble', "true");
-      localStorage.setItem('bubbleFilters', JSON.stringify({
-        'words': this.selectedWords,
-        'accounts': this.selectedAccounts,
-        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-      }));
+      if(data['tweets'].length > 0) { 
+        this.tweets = data['tweets'];
+  
+        var info = [];
+        var x: number;
+        var y: number;
+        var r: number;
+        var z: number;
+        data['bubbles'].forEach((element) => {
+          x = element['data']['x'];
+          y = element['data']['y'];
+          r = element['data']['w'];
+          z = element['data']['z']
+  
+          info.push({ data: [{ x: x, y: y, r: r, z: z }], label: element['label'] });
+        });
+        this.bubbleChartData = info;
+        this.showChart = true;
+        localStorage.setItem('showingBubble', "true");
+        localStorage.setItem('bubbleFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+      }
+      else {
+        localStorage.setItem('showingBubble', 'false')
+        this.showChart = false;
+      }
     });
   }
 }

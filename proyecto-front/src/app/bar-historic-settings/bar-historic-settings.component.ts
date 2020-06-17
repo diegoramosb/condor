@@ -104,8 +104,8 @@ export class BarHistoricSettingsComponent implements OnInit {
     var likes = [];
     var retweets = [];
     this.apiService.getHistoricData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      this.tweets = data['tweets'];
       if(data['tweets'].length > 0) {
-        this.tweets = data['tweets'];
         data['data'].forEach(element => {
           labels.push(element['time'])
           likes.push(element['sum_like'])
@@ -126,9 +126,6 @@ export class BarHistoricSettingsComponent implements OnInit {
         localStorage.setItem('showingHistoric', 'false')
         this.showChart = false;
       }
-    },
-    () => {
-      this.snackBar.open("Ocurrió un error en la aplicación", "Aceptar")
     });
   }
 

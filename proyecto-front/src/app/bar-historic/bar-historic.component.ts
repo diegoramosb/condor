@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 
@@ -7,7 +7,7 @@ import { Label, Color } from 'ng2-charts';
   templateUrl: './bar-historic.component.html',
   styleUrls: ['../app.component.css']
 })
-export class BarHistoricComponent implements OnInit {
+export class BarHistoricComponent implements OnInit, OnDestroy {
 
   public barChartOptions: ChartOptions = {
     responsive: true,

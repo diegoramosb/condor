@@ -10,6 +10,7 @@ import { ApiService } from '../api.service';
 })
 export class GraphSettingsComponent implements OnInit {
 
+  public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
@@ -33,6 +34,7 @@ export class GraphSettingsComponent implements OnInit {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('graphFilters'));
+    this.showChart = localStorage.getItem('showingGraph') == 'true' ? true : false;
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
@@ -75,14 +77,21 @@ export class GraphSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      this.tweets = data['tweets'];
-      this.graphData = data['data'];
-      localStorage.setItem('showingGraph', "true");
-      localStorage.setItem('graphFilters', JSON.stringify({
-        'words': this.selectedWords,
-        'accounts': this.selectedAccounts,
-        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-      }));
+      if(data['tweets'].length > 0) {
+        this.tweets = data['tweets'];
+        this.graphData = data['data'];
+        this.showChart = true;
+        localStorage.setItem('showingGraph', "true");
+        localStorage.setItem('graphFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+      }
+      else {
+        localStorage.setItem('showingGraph', 'false')
+        this.showChart = false;
+      }
     });
 
   }

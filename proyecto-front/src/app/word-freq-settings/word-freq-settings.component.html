@@ -104,7 +104,8 @@
               <mat-card-title style="color: #465775;">Frecuencia de las palabras relacionadas con la búsqueda
               </mat-card-title>
             </mat-card-header>
-            <app-word-freq [freqChartData]="freqChartData" [freqChartLabels]="freqChartLabels"></app-word-freq>
+            <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+            <app-word-freq *ngIf="showChart" [freqChartData]="freqChartData" [freqChartLabels]="freqChartLabels"></app-word-freq>
           </mat-card>
         </div>
       </div>

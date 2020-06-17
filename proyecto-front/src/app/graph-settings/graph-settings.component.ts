@@ -97,8 +97,8 @@ export class GraphSettingsComponent implements OnInit {
 
   applyFilters() {
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      if(data['tweets'].length > 0) {
-        this.tweets = data['tweets'];
+      this.tweets = data['tweets'];
+      if (data['tweets'].length > 0) {
         this.graphData = data['data'];
         this.showChart = true;
         localStorage.setItem('showingGraph', "true");
@@ -113,7 +113,5 @@ export class GraphSettingsComponent implements OnInit {
         this.showChart = false;
       }
     });
-
   }
-
 }

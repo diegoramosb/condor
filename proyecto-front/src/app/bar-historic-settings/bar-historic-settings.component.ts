@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class BarHistoricSettingsComponent implements OnInit {
 
-
+  public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
@@ -36,6 +36,7 @@ export class BarHistoricSettingsComponent implements OnInit {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('historicFilters'));
+    this.showChart = localStorage.getItem('showingHistoric') == 'true' ? true : false;
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
@@ -84,21 +85,31 @@ export class BarHistoricSettingsComponent implements OnInit {
     var likes = [];
     var retweets = [];
     this.apiService.getHistoricData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      this.tweets = data['tweets'];
-      data['data'].forEach(element => {
-        labels.push(element['time'])
-        likes.push(element['sum_like'])
-        retweets.push(element['sum_rt'])
-      });
-      this.barChartLabels = labels;
-      this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
-
-      localStorage.setItem('showingHistoric', "true");
-      localStorage.setItem('historicFilters', JSON.stringify({
-        'words': this.selectedWords,
-        'accounts': this.selectedAccounts,
-        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-      }));
+      if(data['tweets'].length > 0) {
+        this.tweets = data['tweets'];
+        data['data'].forEach(element => {
+          labels.push(element['time'])
+          likes.push(element['sum_like'])
+          retweets.push(element['sum_rt'])
+        });
+        this.barChartLabels = labels;
+        this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
+        
+        localStorage.setItem('showingHistoric', "true");
+        this.showChart = true;
+        localStorage.setItem('historicFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+      }
+      else {
+        localStorage.setItem('showingHistoric', 'false')
+        this.showChart = false;
+      }
+    },
+    () => {
+      this.snackBar.open("Ocurrió un error en la aplicación", "Aceptar")
     });
   }
 

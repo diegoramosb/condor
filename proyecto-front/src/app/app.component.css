@@ -1,10 +1,4 @@
 
-
-#asdf {
-    border-color: black;
-    border-style: solid;
-}
-
 .graphCard {
     margin-top: 2vh;
     margin-bottom: 2vh;
@@ -15,11 +9,6 @@
     /* width: inherit; */
 }
 
-/* .filtersCard {
-    margin: 10px;
-
-}
-*/
 .detailGraphCard {
     margin: 10px;
     margin-left: 0;
@@ -60,10 +49,6 @@
     margin-right: 2px;
 }
 
-/* .settingsCard {
-    margin-l
-} */
-
 .detailFormField {
     width: inherit;
 }
@@ -71,7 +56,6 @@
 .detailFormLabel {
     font-size: 1em;
 }
-
 
 .cardTitle {
     color: #465775;
@@ -81,6 +65,13 @@
     text-align: center;
     color: white;
     margin-left: 10px;
+}
+
+.noContentMessage {
+    text-align: center;
+    color: grey;
+    padding-top: 20vh;
+    padding-bottom: 20vh;
 }
 
 #graphCardHeader {

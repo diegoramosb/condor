@@ -126,93 +126,6 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
       backgroundColor: "rgba(0,255,255,0.5)",
       hoverBackgroundColor: "rgba(0,255,255,1)"
     }
-
-
-
-    // {
-    //   backgroundColor: "rgba(12,192,170,0.5)",
-    //   hoverBackgroundColor: "rgba(12,192,170,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(76,49,158,0.5)",
-    //   hoverBackgroundColor: "rgba(76,49,158,1)"
-    // },
-    // {
-    //   //amarillo
-    //   backgroundColor: "rgba(252,209,7,0.5)",
-    //   hoverBackgroundColor: "rgba(252,209,7,1)"
-    // },
-    // {
-    //   //rosado
-    //   backgroundColor: "rgba(251,84,113,0.5)",
-    //   hoverBackgroundColor: "rgba(251,84,113,1)"
-    // },
-    // {
-    //   //naranja
-    //   backgroundColor: "rgba(240,102,20,0.5)",
-    //   hoverBackgroundColor: "rgba(240,102,20,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(175,211,90,0.5)",
-    //   hoverBackgroundColor: "rgba(175,211,90,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(40,78,55,0.5)",
-    //   hoverBackgroundColor: "rgba(40,78,55,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(135,206,254,0.5)",
-    //   hoverBackgroundColor: "rgba(135,206,254,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(140,2,80,0.5)",
-    //   hoverBackgroundColor: "rgba(140,2,80,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(85,241,123,0.5)",
-    //   hoverBackgroundColor: "rgba(85,241,123,1)"
-    // },
-    // {
-    //   //azul
-    //   backgroundColor: "rgba(42,95,160,0.5)",
-    //   hoverBackgroundColor: "rgba(42,95,160,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(220,68,185,0.5)",
-    //   hoverBackgroundColor: "rgba(220,68,185,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(28,152,32,0.5)",
-    //   hoverBackgroundColor: "rgba(28,152,32,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(184,120,207,0.5)",
-    //   hoverBackgroundColor: "rgba(184,120,207,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(238,200,241,0.5)",
-    //   hoverBackgroundColor: "rgba(238,200,241,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(39,15,226,0.5)",
-    //   hoverBackgroundColor: "rgba(39,15,226,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(112,142,48,0.5)",
-    //   hoverBackgroundColor: "rgba(112,142,48,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(164,20,21,0.5)",
-    //   hoverBackgroundColor: "rgba(164,20,21,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(241,169,112,0.5)",
-    //   hoverBackgroundColor: "rgba(241,169,112,1)"
-    // },
-    // {
-    //   backgroundColor: "rgba(123,68,25,0.5)",
-    //   hoverBackgroundColor: "rgba(123,68,25,1)"
-    // }
   ];
 
   public showing = false;
@@ -239,7 +152,7 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
     if(this.chart != undefined) {
       this.chart.chart.config.options.scales.xAxes[0].ticks.min = 0;
       this.chart.chart.config.options.scales.xAxes[0].ticks.max = this.maxX();
-      this.chart.chart.config.options.scales.yAxes[0].ticks.max = 0;
+      this.chart.chart.config.options.scales.yAxes[0].ticks.min = 0;
       this.chart.chart.config.options.scales.yAxes[0].ticks.max = this.maxY();
     }
   }
@@ -258,7 +171,7 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
         maxX = x;
       }
     });
-    return (maxX + maxR);
+    return Math.ceil((maxX + maxR) * 1.1);
   }
 
   maxY() {
@@ -274,7 +187,7 @@ export class BubbleComponent implements OnInit, OnDestroy, OnChanges {
         maxY = x;
       }
     });
-    return (maxY + maxR);
+    return Math.ceil((maxY + maxR) * 1.1);
   }
 
 }

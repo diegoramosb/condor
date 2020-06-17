@@ -22,6 +22,7 @@
       </mat-form-field>
     </form>
     <mat-list>
+      <h2 *ngIf="data['accounts'].length == 0" class="noContentMessage" style="padding-top: 5vh; padding-bottom: 5vh;">No hay cuentas en la base de datos</h2>
       <mat-list-item *ngFor="let account of data['accounts']">
         <img matListAvatar src="{{account['profile_image']}}">
         <h3 matLine style="text-align: left;">{{account['name']}}</h3>

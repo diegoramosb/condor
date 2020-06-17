@@ -30,10 +30,6 @@ export class DashboardComponent implements OnInit {
     this.apiService.automaticTweets().subscribe();
   }
 
-  getAccounts() {
-    return this.apiService.getAccounts();
-  }
-
   resetChart(name: string) {
     var name2 = name.toLowerCase()
     localStorage.setItem('showing' + name, 'false');
@@ -54,8 +50,8 @@ export class DashboardComponent implements OnInit {
   }
 
   openSettings() {
-    this.getAccounts().subscribe((response: []) => {
-      let accounts: string[] = response
+    this.apiService.getAccounts().subscribe((response: []) => {
+      let accounts: string[] = response;
       const dialogRef = this.dialog.open(SettingsComponent, {
         width: '40vw',
         data: { accounts: accounts, newAccounts: [], removedAccounts: [] }

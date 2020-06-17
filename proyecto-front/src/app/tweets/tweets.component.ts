@@ -35,7 +35,7 @@ export class TweetsComponent implements OnInit {
   public selectedWords = [];
   public selectedDate = null;
   public tweets = [];
-  public accounts: any;
+  public accounts = [];
 
   public maxDate = moment();
   positive = true;
@@ -45,7 +45,7 @@ export class TweetsComponent implements OnInit {
 
 
   constructor(private apiService: ApiService) {
-    this.apiService.getAccounts().subscribe(response => {
+    this.apiService.getAccounts().subscribe((response: []) => {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('tweetFilters'));

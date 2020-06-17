@@ -100,7 +100,6 @@ class MyStreamListener(StreamListener):
 
         except Exception as e:
             logging.exception(e)
-            print('error')
 
         return True
 

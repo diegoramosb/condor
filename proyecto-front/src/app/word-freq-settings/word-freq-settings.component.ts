@@ -13,6 +13,7 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class WordFreqSettingsComponent implements OnInit {
 
+  public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
   public selectedDate = null;
@@ -33,6 +34,7 @@ export class WordFreqSettingsComponent implements OnInit {
       this.accounts = response;
     });
     var filterData = JSON.parse(localStorage.getItem('freqFilters'));
+    this.showChart = localStorage.getItem('showingFreq') == 'true' ? true : false;
     if (filterData != null) {
       this.selectedWords = filterData.words;
       this.selectedAccounts = filterData.accounts;
@@ -80,21 +82,27 @@ export class WordFreqSettingsComponent implements OnInit {
     var words = [];
     var count = [];
     this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
-      this.tweets = data['tweets'];
-
-      data['data'].forEach(element => {
-        words.push(element['_id'])
-        count.push(element['count'])
-      });
-      this.freqChartLabels = words;
-      this.freqChartData = [{ data: count, label: 'Frecuencia' }];
-
-      localStorage.setItem('showingFreq', "true");
-      localStorage.setItem('freqFilters', JSON.stringify({
-        'words': this.selectedWords,
-        'accounts': this.selectedAccounts,
-        'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
-      }));
+      if(data['data'].length > 0) {
+        this.tweets = data['tweets'];
+  
+        data['data'].forEach(element => {
+          words.push(element['_id'])
+          count.push(element['count'])
+        });
+        this.freqChartLabels = words;
+        this.freqChartData = [{ data: count, label: 'Frecuencia' }];
+        this.showChart = true;
+        localStorage.setItem('showingFreq', "true");
+        localStorage.setItem('freqFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+      }
+      else { 
+        localStorage.setItem('showingHistoric', 'false')
+        this.showChart = false;
+      }
     });
   }
 }

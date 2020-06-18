@@ -30,6 +30,7 @@ export const DATE_FORMAT = {
 
 export class TweetsComponent implements OnInit {
 
+  public visualizeCount = 4;
   public loading: boolean;
   public showTweets = true;
   public selectedAccounts = [];
@@ -172,4 +173,128 @@ export class TweetsComponent implements OnInit {
     this.getTweets();
   }
 
+  visualize() {
+    this.visualizeHistoric()
+    this.visualizeBubbles()
+    this.visualizeGraph()
+    this.visualizeFreq()
+  }
+
+  visualizeHistoric() {
+    this.visualizeCount--;
+    var labels = [];
+    var likes = [];
+    var retweets = [];
+    this.apiService.getHistoricData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      if(data['tweets'].length > 0) {
+        data['data'].forEach(element => {
+          labels.push(element['time'])
+          likes.push(element['sum_like'])
+          retweets.push(element['sum_rt'])
+        });
+        var barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
+        
+        localStorage.setItem('showingHistoric', "true");
+        localStorage.setItem('historicFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+
+        var json = {'historicData': barChartData, 'historicLabels': labels};
+        localStorage.setItem('historicData', JSON.stringify(json));
+      }
+      else {
+        localStorage.setItem('showingHistoric', 'false')
+      }
+      this.visualizeCount++;
+    });
+  }
+
+  visualizeBubbles() {
+    this.visualizeCount--;
+    this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      if (data['tweets'].length > 0) {
+        var info = [];
+        var x: number;
+        var y: number;
+        var r: number;
+        var z: number;
+        data['bubbles'].forEach((element) => {
+          x = element['data']['x'];
+          y = element['data']['y'];
+          r = element['data']['w'];
+          z = element['data']['z']
+
+          info.push({ data: [{ x: x, y: y, r: r, z: z }], label: element['label'] });
+        });
+        localStorage.setItem('showingBubble', "true");
+        localStorage.setItem('bubbleFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+
+        var json = {'bubbleData': info};
+        localStorage.setItem('bubbleData', JSON.stringify(json));
+      }
+      else {
+        localStorage.setItem('showingBubble', 'false')
+      }
+      this.visualizeCount++;
+    });
+  }
+
+  visualizeGraph() {
+    if(this.selectedAccounts.length != 1) {
+      this.visualizeCount--;
+      this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+        if (data['tweets'].length > 0) {
+          var graphData = data['data'];
+          localStorage.setItem('showingGraph', "true");
+          localStorage.setItem('graphFilters', JSON.stringify({
+            'words': this.selectedWords,
+            'accounts': this.selectedAccounts,
+            'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+          }));
+  
+          var json = {'graphData': graphData};
+          localStorage.setItem('graphData', JSON.stringify(json));
+        }
+        else {
+          localStorage.setItem('showingGraph', 'false');
+        }
+      });
+      this.visualizeCount++;
+    }
+  }
+
+  visualizeFreq() {
+    var words = [];
+    var count = [];
+    this.visualizeCount--;
+    this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
+      if(data['tweets'].length > 0) {
+        data['data'].forEach(element => {
+          words.push(element['_id'])
+          count.push(element['count'])
+        });
+        var freqChartLabels = words;
+        var freqChartData = [{ data: count, label: 'Frecuencia' }];
+        localStorage.setItem('showingFreq', "true");
+        localStorage.setItem('freqFilters', JSON.stringify({
+          'words': this.selectedWords,
+          'accounts': this.selectedAccounts,
+          'date': this.selectedDate != null ? this.selectedDate.format('YYYY-MM-DD') : 'null'
+        }));
+
+        var json = {'freqChartData': freqChartData, 'freqChartLabels': freqChartLabels};
+        localStorage.setItem('freqData', JSON.stringify(json));
+      }
+      else { 
+        localStorage.setItem('showingFreq', 'false')
+      }
+      this.visualizeCount++;
+    });
+  }
 }

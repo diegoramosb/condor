@@ -23,6 +23,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { MatAutocompleteModule } from '@angular/material/autocomplete'; 
 import { MatProgressBarModule } from '@angular/material/progress-bar'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling'; 
@@ -77,6 +78,7 @@ import { SettingsComponent } from './settings/settings.component';
     MatMenuModule,
     MatAutocompleteModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     LayoutModule,

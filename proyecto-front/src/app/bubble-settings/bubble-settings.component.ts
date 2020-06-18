@@ -99,7 +99,6 @@ export class BubbleSettingsComponent implements OnInit {
     this.loading = true;
     var info = [];
     this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      console.log(data)
       this.tweets = data['tweets'];
       if(data['tweets'].length > 0) { 
   

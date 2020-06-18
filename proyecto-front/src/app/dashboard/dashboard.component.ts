@@ -27,11 +27,7 @@ export class DashboardComponent implements OnInit {
     this.showingBubble = localStorage.getItem('showingBubble') == 'true' ? true : false;
     this.showingGraph = localStorage.getItem('showingGraph') == 'true' ? true : false;
     this.showingFreq = localStorage.getItem('showingFreq') == 'true' ? true : false;
-    this.apiService.automaticTweets().subscribe();
-  }
-
-  getAccounts() {
-    return this.apiService.getAccounts();
+    this.apiService.automaticTweets().subscribe(response => {}, error => {});
   }
 
   resetChart(name: string) {
@@ -54,8 +50,8 @@ export class DashboardComponent implements OnInit {
   }
 
   openSettings() {
-    this.getAccounts().subscribe((response: []) => {
-      let accounts: string[] = response
+    this.apiService.getAccounts().subscribe((response: []) => {
+      let accounts: string[] = response;
       const dialogRef = this.dialog.open(SettingsComponent, {
         width: '40vw',
         data: { accounts: accounts, newAccounts: [], removedAccounts: [] }
@@ -67,6 +63,9 @@ export class DashboardComponent implements OnInit {
             this.apiService.unsubscribeFromAccount(account['_id']).subscribe(() => {
               this.removeAccountStorage(account['screen_name']);
               this.snackBar.open("Eliminados tweets de las cuentas seleccionadas", "Aceptar")
+            },
+            error => {
+              this.snackBar.open("Error de conexión", "Aceptar")
             });
           });
           if (result.newAccounts.length > 0) {
@@ -74,6 +73,9 @@ export class DashboardComponent implements OnInit {
             this.apiService.extractTweets(result.newAccounts).subscribe(response => {
               this.snackBar.dismiss()
               this.snackBar.open(`Descargados ${response['newTweets']} tweets de las nuevas cuentas`, "Aceptar");
+            },
+            error => {
+              this.snackBar.open("Error de conexión", "Aceptar")
             });
           }
         }

@@ -4,15 +4,36 @@ import { ApiService } from "../api.service";
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
+
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'D/M/YYYY'
+  },
+  display: {
+    dateInput: 'D/M/YYYY'
+  }
+}
 
 @Component({
   selector: 'app-word-freq-settings',
   templateUrl: './word-freq-settings.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
+  ]
 })
+
 export class WordFreqSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -81,10 +102,10 @@ export class WordFreqSettingsComponent implements OnInit {
   applyFilters() {
     var words = [];
     var count = [];
+    this.loading = true;
     this.apiService.getFrecuencyChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe((data: []) => {
-      if(data['data'].length > 0) {
-        this.tweets = data['tweets'];
-  
+      this.tweets = data['tweets'];
+      if(data['tweets'].length > 0) {
         data['data'].forEach(element => {
           words.push(element['_id'])
           count.push(element['count'])
@@ -100,9 +121,10 @@ export class WordFreqSettingsComponent implements OnInit {
         }));
       }
       else { 
-        localStorage.setItem('showingHistoric', 'false')
+        localStorage.setItem('showingFreq', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
   }
 }

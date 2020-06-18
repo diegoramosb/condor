@@ -2,14 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import * as moment from 'moment';
 import { ApiService } from '../api.service';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'D/M/YYYY'
+  },
+  display: {
+    dateInput: 'D/M/YYYY'
+  }
+}
 
 @Component({
   selector: 'app-graph-settings',
   templateUrl: './graph-settings.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
+  ]
 })
+
 export class GraphSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -76,9 +97,10 @@ export class GraphSettingsComponent implements OnInit {
   }
 
   applyFilters() {
+    this.loading = true;
     this.apiService.getGraphData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
-      if(data['tweets'].length > 0) {
-        this.tweets = data['tweets'];
+      this.tweets = data['tweets'];
+      if (data['tweets'].length > 0) {
         this.graphData = data['data'];
         this.showChart = true;
         localStorage.setItem('showingGraph', "true");
@@ -92,8 +114,7 @@ export class GraphSettingsComponent implements OnInit {
         localStorage.setItem('showingGraph', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
-
   }
-
 }

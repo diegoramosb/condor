@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 import utils
 from db import *
 import nltk
+import numpy as np
 
 
 graph = Blueprint('graphs', __name__)
@@ -215,10 +216,25 @@ def show_frecuencia():
                     counts[index] += 1
 
     ans = [{"_id": word, "count": count} for word, count in zip(words3, counts)]
-
+    largo = len(words3)
+    fd = nltk.FreqDist(counts)
+    #fd.pop(1)
+    print(fd[2])
+    freqq = []
     ans2 = []
+    print(np.sum(counts))
+
     for item in ans:
-        if item['count'] >= 3 and item['_id'] not in words:
+        num = item['count']
+        t = num/np.sum(counts)
+        freqq.append(t)
+
+    print(np.std(freqq))
+    prom = np.mean(freqq)
+    de = np.std(freqq)
+    print(prom)
+    for item in ans:
+        if freqq[ans.index(item)] > prom+de*2 and item['_id'] not in words:
             ans2.append(item)
 
     return {"tweets": n, "data": ans2}

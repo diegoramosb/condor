@@ -103,8 +103,14 @@
             <mat-card-header>
               <mat-card-title style="color: #465775;">Likes, retweets y número de tweets</mat-card-title>
             </mat-card-header>
-            <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
-            <app-bubble *ngIf="showChart" [bubbleChartData]="bubbleChartData"></app-bubble>
+            <div class="row justify-content-center" *ngIf="loading">
+              <mat-progress-bar mode="indeterminate" style="margin-top: 40vh; margin-bottom: 40vh; width: 40vw;">
+              </mat-progress-bar>
+            </div>
+            <div [hidden]="loading">
+              <h2 *ngIf="!showChart" class="noContentMessage">No hay tweets que correspondan con los filtros</h2>
+              <app-bubble *ngIf="showChart" [bubbleChartData]="bubbleChartData"></app-bubble>
+            </div>
           </mat-card>
         </div>
       </div>

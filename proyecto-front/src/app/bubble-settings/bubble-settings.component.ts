@@ -3,14 +3,35 @@ import * as moment from 'moment';
 import { ApiService } from '../api.service';
 import { ChartDataSets } from 'chart.js';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'D/M/YYYY'
+  },
+  display: {
+    dateInput: 'D/M/YYYY'
+  }
+}
 
 @Component({
   selector: 'app-bubble-settings',
   templateUrl: './bubble-settings.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
+  ]
 })
+
 export class BubbleSettingsComponent implements OnInit {
 
+  public loading = false;
   public showChart: boolean;
   public selectedAccounts = [];
   public selectedWords = [];
@@ -75,11 +96,13 @@ export class BubbleSettingsComponent implements OnInit {
   }
 
   applyFilters() {
+    this.loading = true;
+    var info = [];
     this.apiService.getBubbleChartData(this.selectedWords, this.selectedAccounts, this.selectedDate).subscribe(data => {
+      console.log(data)
+      this.tweets = data['tweets'];
       if(data['tweets'].length > 0) { 
-        this.tweets = data['tweets'];
   
-        var info = [];
         var x: number;
         var y: number;
         var r: number;
@@ -105,6 +128,7 @@ export class BubbleSettingsComponent implements OnInit {
         localStorage.setItem('showingBubble', 'false')
         this.showChart = false;
       }
+      this.loading = false;
     });
   }
 }

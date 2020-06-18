@@ -5,18 +5,12 @@
     margin-left: 1vw;
     margin-right: 1vw;
     width: 38vw;
-    /* height: 280px; */
-    /* width: inherit; */
 }
 
 .detailGraphCard {
     margin: 10px;
     margin-left: 0;
     margin-right: 0;
-    /* background-color: #22344e; */
-    /* padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0; */
 }
 
 .tweetCardPositive {
@@ -70,8 +64,8 @@
 .noContentMessage {
     text-align: center;
     color: grey;
-    padding-top: 20vh;
-    padding-bottom: 20vh;
+    padding-top: 40vh;
+    padding-bottom: 40vh;
 }
 
 #graphCardHeader {

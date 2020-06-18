@@ -267,6 +267,10 @@ export class TweetsComponent implements OnInit {
       });
       this.visualizeCount++;
     }
+    else {
+      localStorage.removeItem('graphData');
+      localStorage.removeItem('graphFilters')
+    }
   }
 
   visualizeFreq() {

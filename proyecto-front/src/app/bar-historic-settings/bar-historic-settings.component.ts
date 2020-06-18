@@ -115,7 +115,6 @@ export class BarHistoricSettingsComponent implements OnInit {
         });
         this.barChartLabels = labels;
         this.barChartData = [{ data: retweets, label: 'Retweets' }, { data: likes, label: 'Likes' }];
-        console.log(this.barChartLabels)
         
         localStorage.setItem('showingHistoric', "true");
         this.showChart = true;

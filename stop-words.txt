@@ -11,6 +11,8 @@
 _
 rt
 \n
+gt
+gtgt
 a
 actualmente
 acuerdo

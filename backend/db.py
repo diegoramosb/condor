@@ -1,20 +1,14 @@
-import joblib
-from bson import ObjectId
 from pymongo import MongoClient
-from pprint import pprint
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timedelta
 from dateutil import parser
 import logging
 
-from utils import isAccount
-
 """MongoDB connection"""
-
-username = 'administrador'
-password = '&Si93JSSWh%udMqV1rtu'
+username = 'mongodb username here'
+password = 'mongodb password here'
 client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, password))
-db = client['proyecto20203']
+db = client['condor']
 
 tweetsCollection = db['tweets']
 usersCollection = db['usuarios']

@@ -14,10 +14,10 @@ extract = Blueprint('extract', __name__)
 
 """Twitter API keys"""
 twitterKeys = {
-    'apiKey': 'apiKey here',
-    'apiSecret': 'apiSecret here',
-    'accessTokenKey': 'accessTokenKey here',
-    'accesTokenSecret': 'accessTokenSecret here'
+    'apiKey': 'M56Sn5yP02MGwzJCbn47PrL47',
+    'apiSecret': 'NEO9ta8xgxqIWGKwW7IFjWdkDS6SMKDr2qZvbItJnPG3uEWIup',
+    'accessTokenKey': '360954747-mb8DGzHeqckGJrjrju60eLG9ipHDG5LsyNIoYx09',
+    'accesTokenSecret': '6MkOADmawkQqbP26douxoZ7cOMrpV4PgJfY6TLlzvQV1g'
 }
 
 """Twitter API authentication"""

@@ -48,3 +48,5 @@ Nota: Los tres componentes se tienen que ejecutar en ventanas de consola separad
 ![Historic chart](chart_images/frequency.png)
 4. El botón "Reiniciar" de cada tarjeta del dashboard reinicia los filtros de la gráfica correspondiente
 5. El botón "Visualizar" de la parte izquierda de la ventana de tweets aplica los filtros seleccionados a todas las gráficas
+
+La implementación del código para el preprocesamiento de los tweets que se encuentra en `backend/util` y en `backend/extractors` es tomada del proyecto [TFM - UOC - Análisis de sentimientos en Twitter](https://github.com/jcsobrino/TFM-Analisis_sentimientos_Twitter-UOC) de José Carlos Sobrino. El modelo de sentimientos que está serializado en el archivo `backend/util/model.joblib` también fue generado usando el mismo proyecto.

@@ -11,9 +11,9 @@ from utils import isAccount
 
 """MongoDB connection"""
 
-username = 'mongodb username here'
-mongodb mongodb_mongodb_password_here_here here = '&Si93JSSWh%udMqV1rtu'
-client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, mongodb mongodb_mongodb_password_here_here here))
+username = 'mongodb_username_here'
+mongodb_password_here = '&Si93JSSWh%udMqV1rtu'
+client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, mongodb_password_here))
 db = client['proyecto20203']
 
 tweetsCollection = db['tweets']

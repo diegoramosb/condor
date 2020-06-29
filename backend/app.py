@@ -1,11 +1,8 @@
-import pickle
 from datetime import datetime
 import joblib
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import logging, logging.config
-
-import utils
 
 from db import get_filtros, deleteUserAndTweets, saveTweetsMongoOne
 from db import search_tweets_after, updateTweets, updatePolarity, saveTweetsMongo, return_tweets, searchUserId, return_accounts
@@ -71,7 +68,6 @@ def get_all_tweets():
     for t in tweets:
         t["_id"] = str(t["_id"])
         users.append(searchUserId(t['userId']))
-    #merged_list = tuple(zip(users, tweets))
     o = [{"account": x, "tweet": y} for x, y in zip(users, tweets)]
     return jsonify(o)
 
@@ -138,6 +134,6 @@ if __name__ == '__main__':
             logging.StreamHandler()
         ]
     )
-    app.run(host="0.0.0.0", port=9090, debug=True, threaded=True)
+    app.run(host="0.0.0.0", port=9090, debug=False, threaded=True)
 
 

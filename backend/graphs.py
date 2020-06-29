@@ -228,7 +228,7 @@ def show_frecuencia():
     prom = np.mean(freqq)
     de = np.std(freqq)
     for item in ans:
-        if freqq[ans.index(item)] > prom+de*2 and item['_id'] not in words:
+        if freqq[ans.index(item)] > prom+de and item['_id'] not in words:
             ans2.append(item)
 
     return {"tweets": n, "data": ans2}

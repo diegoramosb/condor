@@ -39,8 +39,12 @@ Nota: Los tres componentes se tienen que ejecutar en ventanas de consola separad
 2. Se pueden explorar los tweets dando click en el botón de "Ver Tweets" de la parte izquierda de la pantalla
 3. Haciendo click en los botones de "Configurar" de las tarjetas del dashboard, se pueden configurar las gráficas. De izquierda a derecha y de arriba hacia abajo, las gráficas muestran:
 	- El histórico de retweets y likes de los tweets correspondientes con los filtros. Estos número se actualizan con el botón "Actualizar retweets y likes de hoy" de la parte inferior
+![Historic chart](chart_images/historic.png)
 	- El número de retweets, likes y número de tweets correspondientes con los filtros
+![Historic chart](chart_images/bubbles.png)
 	- Las palabras en común entre varias cuentas en los tweets correspondientes a los filtros
+![Historic chart](chart_images/graph.png)
 	- Las palabras más frecuentes en los tweets correspondientes con los filtros 
+![Historic chart](chart_images/frequency.png)
 4. El botón "Reiniciar" de cada tarjeta del dashboard reinicia los filtros de la gráfica correspondiente
 5. El botón "Visualizar" de la parte izquierda de la ventana de tweets aplica los filtros seleccionados a todas las gráficas

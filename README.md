@@ -13,14 +13,14 @@ La versión de Cóndor que está en este repositorio está configurada para ejec
 
 ### MongoDB
 1. En la máquina donde se van a almacenar los datos, instalar [MongoDB](https://www.mongodb.com/try/download/community)
-2. En MongoDB, crear un usuario mongodb_username_here, habilitar la autenticación y, si es necesario, crear un usuario adicional que tenga permisos de lectura y escritura en la base de datos del proyecto (que se creará en el siguiente paso). Para esto, seguir las instrucciones que se encuentran en [este enlace](https://docs.mongodb.com/manual/tutorial/enable-authentication/) 
+2. En MongoDB, crear un usuario administrador, habilitar la autenticación y, si es necesario, crear un usuario adicional que tenga permisos de lectura y escritura en la base de datos del proyecto (que se creará en el siguiente paso). Para esto, seguir las instrucciones que se encuentran en [este enlace](https://docs.mongodb.com/manual/tutorial/enable-authentication/) 
 3. Desde la consola de comandos, ejecutar `mongo` para entrar a la linea de comandos de MongoDB. Ingresar el comando `use [nombre_base_de_datos]` (por ejemplo `use condor`)para crear una base de datos para la aplicación.
 
 ### Python
 1. En la máquina donde se va a ejecutar el servidor web, instalar [Python 3](https://www.python.org/downloads/)
 2. Desde la consola de comandos, entrar al directorio `backend` y ejecutar el comando `python -m pip install -r requirements.txt`
 3. Abrir el archivo `backend/extract_tweets.py` en un editor y asignar las variables `apiKey`, `apiSecret`, `accessTokenKey` y `accessTokenSecret` a sus valores correspondientes que se pueden consultar en la plataforma de Twitter Developers
-4. Abrir el archivo `backend/db.py` en un editor y asignar las variables `username` y `mongodb_password_here` al usuario de MongoDB que se creó anteriormente y su contraseña. Asignar también el valor entre corchetes de la variable `db` al nombre de la base de datos en caso de que sea distinto de "condor"
+4. Abrir el archivo `backend/db.py` en un editor y asignar las variables `username` y `password` al usuario de MongoDB que se creó anteriormente y su contraseña. Asignar también el valor entre corchetes de la variable `db` al nombre de la base de datos en caso de que sea distinto de "condor"
 5. Opcionalmente, si la base de datos se va a ejecutar en una máquina o puerto distinto al 27017 que está configurado por defecto, abrir el archivo `backend/db.py` en un editor y cambiar **solamente** la dirección IP de la variable `client` por la deseada
 
 ### Node.js

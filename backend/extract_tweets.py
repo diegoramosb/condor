@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from pprint import pprint
 import joblib
 from tweepy import StreamListener
 from tweepy import Stream
@@ -14,10 +13,10 @@ extract = Blueprint('extract', __name__)
 
 """Twitter API keys"""
 twitterKeys = {
-    'apiKey': 'apiKey_here',
-    'apiSecret': 'apiSecret_here',
-    'accessTokenKey': 'accessTokenKey_here',
-    'accesTokenSecret': 'accessTokenSecret_here'
+    'apiKey': 'apiKey here',
+    'apiSecret': 'apiSecret here',
+    'accessTokenKey': 'accessTokenKey here',
+    'accesTokenSecret': 'accessTokenSecret here'
 }
 
 """Twitter API authentication"""

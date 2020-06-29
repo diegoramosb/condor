@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from pprint import pprint
 import joblib
 from tweepy import StreamListener
 from tweepy import Stream
@@ -128,7 +127,7 @@ def updateTweetsByAccount():
 
 
 def model_stream(tweet_text):
-    pipeline = joblib.load(open('util/filename.joblib', 'rb'))
+    pipeline = joblib.load(open('util/model.joblib', 'rb'))
     result = pipeline.predict(tweet_text)
 
     return result[0]

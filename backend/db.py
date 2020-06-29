@@ -6,8 +6,8 @@ import logging
 
 """MongoDB connection"""
 username = 'mongodb username here'
-password = 'mongodb password here'
-client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, password))
+mongodb_password_here = 'mongodb mongodb_password_here here'
+client = MongoClient('mongodb://{}:{}@172.24.99.115'.format(username, mongodb_password_here))
 db = client['condor']
 
 tweetsCollection = db['tweets']
